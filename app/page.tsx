@@ -36,11 +36,17 @@ function CustomCursor({ color }: { color: string | null }) {
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const PROJECTS = [
-  { id: "bintherestore", name: "BinThereStoreThat", tagline: "RFID-indexed workshop storage & retrieval", tags: ["IoT", "Hardware", "Web"], color: "#2d8a50", github: "https://github.com/switchhoff/Threadquarters" },
-  { id: "habitat", name: "Habitat", tagline: "Habit tracker — streaks, intent, accountability", tags: ["Mobile", "TypeScript", "UX"], color: "#2d6fa3", github: "https://github.com/switchhoff/LastYear" },
-  { id: "infraredlaser", name: "InfraredLaser", tagline: "Cave Disto laser measuring hardware system", tags: ["Firmware", "Hardware", "Optics"], color: "#b85c3a", github: "https://github.com/switchhoff/CaveDisto" },
-  { id: "hoffswitch", name: "HoffSwitch", tagline: "This portfolio — isometric workshop, point-and-click", tags: ["Next.js", "TypeScript", "Firebase"], color: "#3a5fbf", github: "https://github.com/switchhoff/Portfolio" },
-  { id: "launcher", name: "Minimalist Launcher", tagline: "Android launcher for intentional phone use", tags: ["Android", "Kotlin", "UX"], color: "#7a5ce0", github: "https://github.com/switchhoff/launcher" },
+  { id: "portfolio", name: "Portfolio", tagline: "This portfolio — isometric workshop, point-and-click", tags: ["Next.js", "TypeScript", "Three.js"], color: "#3a5fbf", github: "https://github.com/switchhoff/Portfolio" },
+  { id: "pawsbutton", name: "PawsButton", tagline: "TODO: Project description", tags: ["TODO"], color: "#e67e22", github: "https://github.com/switchhoff/PawsButton" },
+  { id: "benfl", name: "BeNFL", tagline: "TODO: Project description", tags: ["TODO"], color: "#27ae60", github: "https://github.com/switchhoff/BeNFL" },
+  { id: "minimise", name: "MiniMise", tagline: "Android launcher for intentional phone use", tags: ["Android", "Kotlin", "UX"], color: "#7a5ce0", github: "https://github.com/switchhoff/MiniMise" },
+  { id: "habitat", name: "Habitat", tagline: "Habit tracker — streaks, intent, accountability", tags: ["Mobile", "TypeScript", "UX"], color: "#2d6fa3", github: "https://github.com/switchhoff/Habitat" },
+  { id: "cavedisto", name: "CaveDisto", tagline: "Cave Disto laser measuring hardware system", tags: ["Firmware", "Hardware", "Optics"], color: "#b85c3a", github: "https://github.com/switchhoff/CaveDisto" },
+  { id: "lastyear", name: "LastYear", tagline: "TODO: Project description", tags: ["TODO"], color: "#c0392b", github: "https://github.com/switchhoff/LastYear" },
+  { id: "sixclicks", name: "SixClicks", tagline: "TODO: Project description", tags: ["TODO"], color: "#16a085", github: "https://github.com/switchhoff/SixClicks" },
+  { id: "bintherestore", name: "BinThereStoreThat", tagline: "RFID-indexed workshop storage & retrieval", tags: ["IoT", "Hardware", "Web"], color: "#2d8a50", github: "https://github.com/switchhoff/BinThereStoreThat" },
+  { id: "threadquarters", name: "Threadquarters", tagline: "TODO: Project description", tags: ["TODO"], color: "#8e44ad", github: "https://github.com/switchhoff/Threadquarters" },
+  { id: "keysborough", name: "Keysborough-District", tagline: "TODO: Project description", tags: ["TODO"], color: "#2c3e50", github: "https://github.com/switchhoff/Keysborough-District" },
 ];
 
 const WORK = [
