@@ -134,6 +134,7 @@ export default function Home() {
   const [ready, setReady] = useState(false);
   const [splashDone, setSplashDone] = useState(false);
   const [isLit, setIsLit] = useState(false);
+  const [logoPhase, setLogoPhase] = useState("initial");
 
   // Contact form
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -595,9 +596,7 @@ export default function Home() {
           </div>
         </footer>
 
-        {/* ── PANEL ── */}
-        <WorkshopPanel hotspot={active} onClose={() => setActive(null)} onNavigate={h => setActive(h)} />
-
+        {/* WorkshopPanel removed for side-cards dashboard architecture */}
       </div>{/* end site-content fade wrapper */}
     </div>
   );
