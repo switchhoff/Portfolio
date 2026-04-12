@@ -139,14 +139,15 @@ export default function Home() {
         ].join(", "),
       }}>
         <div style={{ pointerEvents: "all" }}>
-          <GkLogo onComplete={() => setSplashDone(true)} />
+          <GkLogo 
+            isHeader={splashDone} 
+            onComplete={() => setSplashDone(true)} 
+            onLightMode={() => setIsLit(true)}
+          />
         </div>
         {splashDone && (
-          <div className="flex flex-col items-center">
-            <div className="w-[120px]">
-              <GkLogo isHeader={true} />
-            </div>
-            <span className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">by alex hofmann</span>
+          <div className="mt-1 ml-2">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">by alex hofmann</span>
           </div>
         )}
       </div>

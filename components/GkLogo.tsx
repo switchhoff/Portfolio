@@ -69,10 +69,11 @@ const GK_SCHEMA = {
 
 interface GkLogoProps {
   onComplete?: () => void;
+  onLightMode?: () => void;
   isHeader?: boolean;
 }
 
-export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, isHeader = false }) => {
+export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeader = false }) => {
   const [phase, setPhase] = useState<"initial" | "precharge" | "connected" | "active" | "final">("initial");
   const [isLightMode, setIsLightMode] = useState(false);
 
@@ -100,6 +101,7 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, isHeader = false }) 
     setTimeout(() => {
       setPhase("active");
       setIsLightMode(true);
+      if (onLightMode) onLightMode();
       
       // Finally transition to app after a few more seconds
       setTimeout(() => {
@@ -158,10 +160,9 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, isHeader = false }) 
 
   return (
     <motion.div 
-      className={`fixed inset-0 flex items-center justify-center transition-colors duration-1000 ${isLightMode ? "bg-white" : "bg-black"}`}
+      className={`flex items-center justify-center transition-opacity duration-1000`}
       initial="splash"
       animate={isHeader ? "header" : "splash"}
-      variants={containerVariants}
     >
       <div className="relative w-full max-w-4xl aspect-[1200/302]">
         <svg viewBox="0 0 12000 3020" className="w-full h-full cursor-pointer overflow-visible" onClick={handlePowerClick}>
@@ -176,10 +177,15 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, isHeader = false }) 
                 initial={{ fill: "#222" }}
                 animate={{ 
                   fill: getPathColor(i),
-                  y: (isSwitch && phase !== "initial" && phase !== "precharge") ? 100 : 0, // Switch drops down
-                  filter: (getPathColor(i) !== "transparent" && getPathColor(i) !== "#222") ? "drop-shadow(0 0 8px rgba(255,0,0,0.5))" : "none"
+                  y: (isSwitch && phase !== "initial" && phase !== "precharge") ? 400 : 0, // Switch drops down significantly
+                  filter: (getPathColor(i) !== "transparent" && getPathColor(i) !== "#222") 
+                    ? `drop-shadow(0 0 15px ${getPathColor(i)}80)` 
+                    : "none"
                 }}
-                transition={{ duration: 0.5 }}
+                transition={{ 
+                  duration: isSwitch ? 0.3 : 0.5,
+                  ease: isSwitch ? "backOut" : "easeInOut"
+                }}
                 transform="translate(0,3020) scale(1,-1)"
               />
             );
