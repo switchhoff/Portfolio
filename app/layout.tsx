@@ -9,11 +9,11 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hoffmann — Engineer",
+  title: "Offswitch by Hofmann",
   description: "Forward-deployed engineer. I build systems end-to-end — firmware to web platform, hardware to cloud.",
   metadataBase: new URL("https://hoffswitch.com"),
   openGraph: {
-    title: "Hoffmann — Engineer",
+    title: "Offswitch by Hofmann",
     description: "Forward-deployed engineer. I build systems end-to-end.",
     type: "website",
   },

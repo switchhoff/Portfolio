@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import WorkshopScene from "@/components/workshop/WorkshopScene";
 import WorkshopPanel from "@/components/workshop/WorkshopPanel";
 import { type Hotspot, hotspots } from "@/lib/hotspots";
