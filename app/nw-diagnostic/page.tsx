@@ -76,6 +76,22 @@ export default function NwDiagnostic() {
             RESET
           </button>
         </div>
+        
+        <div className="mt-8 w-full max-w-2xl px-10 flex flex-col items-center">
+           <input 
+             type="range" 
+             min="0" 
+             max={totalPaths - 1} 
+             value={index} 
+             onChange={(e) => setIndex(parseInt(e.target.value))}
+             className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+           />
+           <div className="flex justify-between w-full mt-2 text-zinc-500 text-xs">
+             <span>INDEX 0</span>
+             <span>SCRUB TO ANALYZE</span>
+             <span>INDEX {totalPaths - 1}</span>
+           </div>
+        </div>
       </div>
 
       <div className="relative w-full max-w-5xl border border-zinc-800 bg-zinc-950 aspect-[1200/282] flex items-center justify-center rounded-lg overflow-hidden shadow-2xl shadow-blue-500/10">

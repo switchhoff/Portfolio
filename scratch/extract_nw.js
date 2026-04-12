@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const svgFile = 'd:/Users/61403/Documents/Developer/HoffSwitch/public/NwTPE02.svg';
+const svgFile = 'd:/Users/61403/Documents/Developer/HoffSwitch/public/gkTJQ01.svg';
 const data = fs.readFileSync(svgFile, 'utf8');
 const paths = [];
 
