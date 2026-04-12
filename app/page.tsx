@@ -139,11 +139,13 @@ export default function Home() {
         ].join(", "),
       }}>
         <div style={{ pointerEvents: "all" }}>
-          <GkLogo 
-            isHeader={splashDone} 
-            onComplete={() => setSplashDone(true)} 
-            onLightMode={() => setIsLit(true)}
-          />
+          {ready && (
+            <GkLogo 
+              isHeader={splashDone} 
+              onComplete={() => setSplashDone(true)} 
+              onLightMode={() => setIsLit(true)}
+            />
+          )}
         </div>
         {splashDone && (
           <div className="mt-1 ml-2">

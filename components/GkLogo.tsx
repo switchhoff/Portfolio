@@ -186,7 +186,6 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
                   duration: isSwitch ? 0.3 : 0.5,
                   ease: isSwitch ? "backOut" : "easeInOut"
                 }}
-                transform="translate(0,3020) scale(1,-1)"
               />
             );
           })}
