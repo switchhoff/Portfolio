@@ -1,0 +1,20 @@
+{
+  "GK_LOGO_SCHEMA": {
+    "POWER": [0, 4, 5],
+    "LETTERS": [1, 2, 3, 7, 12, 18, 20, 24, 25, 26, 27, 28, 29, 30, 35, 37, 38, 39, 40, 41, 42, 44],
+    "RESISTOR": [15],
+    "TRANSISTOR": [13],
+    "SWITCH": [6],
+    "CELL_1": [10, 16, 22, 31],
+    "CELL_2": [9, 11, 17, 23, 32],
+    "CELL_3": [19, 21, 34, 36],
+    "GROUND": [45, 46],
+    "WIRING": [8, 33],
+    "LAMP": [14, 43]
+  },
+  "METADATA": {
+    "FILE_SOURCE": "public/gkTJQ01.svg",
+    "TOTAL_PATHS": 47,
+    "ASPECT_RATIO": "1200:302"
+  }
+}

@@ -52,10 +52,29 @@ const GK_PATHS = [
   "M2077 534 c-4 -4 -7 -40 -7 -80 0 -53 4 -73 14 -77 26 -10 37 19 34 89 -2 53 -7 69 -18 72 -9 1 -19 0 -23 -4z"
 ];
 
+const GK_SCHEMA = {
+  "POWER": [0, 4, 5],
+  "LETTERS": [1, 2, 3, 7, 12, 18, 20, 24, 25, 26, 27, 28, 29, 30, 35, 37, 38, 39, 40, 41, 42, 44],
+  "RESISTOR": [15],
+  "TRANSISTOR": [13],
+  "SWITCH": [6],
+  "CELL_1": [10, 16, 22, 31],
+  "CELL_2": [9, 11, 17, 23, 32],
+  "CELL_3": [19, 21, 34, 36],
+  "GROUND": [45, 46],
+  "WIRING": [8, 33],
+  "LAMP": [14, 43]
+};
+
 export default function GkDiagnostic() {
   const [index, setIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const totalPaths = GK_PATHS.length;
+
+  const currentHighlightIndices = activeGroup 
+    ? (GK_SCHEMA as any)[activeGroup] 
+    : [index];
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -99,11 +118,30 @@ export default function GkDiagnostic() {
              onChange={(e) => setIndex(parseInt(e.target.value))}
              className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
            />
-           <div className="flex justify-between w-full mt-2 text-zinc-500 text-xs">
+           <div className="flex justify-between w-full mt-2 text-zinc-500 text-xs text-center">
              <span>INDEX 0</span>
-             <span>SCRUB TO ANALYZE</span>
+             <span>SCRUB TO ANALYZE INDIVIDUAL PATHS</span>
              <span>INDEX {totalPaths - 1}</span>
            </div>
+        </div>
+
+        <div className="mt-8 flex flex-wrap gap-2 justify-center max-w-2xl">
+          <div className="w-full text-center text-zinc-600 text-[10px] mb-2 uppercase tracking-widest">Select Group to Isolate</div>
+          <button 
+            onClick={() => setActiveGroup(null)}
+            className={`px-3 py-1 text-[10px] border ${!activeGroup ? 'border-emerald-500 text-emerald-500' : 'border-zinc-800 text-zinc-500'}`}
+          >
+            MANUAL
+          </button>
+          {Object.keys(GK_SCHEMA).map(group => (
+            <button 
+              key={group}
+              onClick={() => setActiveGroup(group)}
+              className={`px-3 py-1 text-[10px] border transition-all ${activeGroup === group ? 'border-emerald-500 text-emerald-500 scale-105' : 'border-zinc-800 text-zinc-500 hover:border-zinc-600'}`}
+            >
+              {group}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -113,13 +151,16 @@ export default function GkDiagnostic() {
            {GK_PATHS.map((p, i) => (
              <path key={i} d={p} fill="white" opacity={0.05} transform="translate(0,3020) scale(1,-1)" />
            ))}
-           {/* Active Highlight */}
-           <path 
-             d={GK_PATHS[index]} 
-             fill="#10b981" 
-             className="animate-pulse"
-             transform="translate(0,3020) scale(1,-1)"
-           />
+           {/* Active Highlight(s) */}
+           {currentHighlightIndices.map((idx: number) => (
+             <path 
+               key={`active-${idx}`}
+               d={GK_PATHS[idx]} 
+               fill="#10b981" 
+               className="animate-pulse"
+               transform="translate(0,3020) scale(1,-1)"
+             />
+           ))}
         </svg>
       </div>
 
