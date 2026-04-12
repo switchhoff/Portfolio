@@ -95,12 +95,12 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
     // Start sequence
     setPhase("cells");
     
-    setTimeout(() => setPhase("wiring"), 400);
-    setTimeout(() => setPhase("resistor"), 800);
-    setTimeout(() => setPhase("transistor"), 1200);
+    setTimeout(() => setPhase("wiring"), 1500);
+    setTimeout(() => setPhase("resistor"), 3000);
+    setTimeout(() => setPhase("transistor"), 4500);
     setTimeout(() => {
       setPhase("switch");
-    }, 1600);
+    }, 6000);
     
     setTimeout(() => {
       setPhase("active");
@@ -114,9 +114,9 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
         // Final transition to app
         setTimeout(() => {
           if (onComplete) onComplete();
-        }, 3000);
-      }, 2000);
-    }, 2100);
+        }, 4000);
+      }, 3000);
+    }, 7800);
   };
 
   const getPathColor = (index: number) => {
@@ -149,7 +149,9 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
        return ["switch", "active", "red", "final"].includes(phase) ? "#facc15" : "#222";
     }
 
-    if (group === "POWER") return "#222";
+    if (group === "POWER") {
+      return (phase === "initial") ? "#222" : "#ff0000";
+    }
 
     // Standard powered red
     return "#ff0000";
@@ -164,13 +166,13 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
       <div className="relative w-full max-w-4xl aspect-[1200/302]">
         <svg 
           viewBox="0 0 12000 3020" 
-          className="w-full h-full cursor-pointer overflow-visible" 
-          onClick={handlePowerClick}
+          className="w-full h-full overflow-visible" 
           style={{ transform: "scaleY(-1)" }}
         >
           {GK_PATHS.map((d, i) => {
             const group = Object.entries(GK_SCHEMA).find(([_, indices]) => indices.includes(i))?.[0];
             const isSwitch = group === "SWITCH";
+            const isPower = group === "POWER";
             
             return (
               <motion.path
@@ -179,15 +181,17 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
                 initial={{ fill: "rgba(0,0,0,0)" }}
                 animate={{ 
                   fill: getPathColor(i),
-                  y: (isSwitch && ["switch", "active", "red", "final"].includes(phase)) ? -400 : 0, // Switch travels other way
+                  y: (isSwitch && ["switch", "active", "red", "final"].includes(phase)) ? -200 : 0, 
                   filter: (getPathColor(i) !== "rgba(0,0,0,0)" && getPathColor(i) !== "#222") 
                     ? `drop-shadow(0 0 15px ${getPathColor(i)}80)` 
                     : "none"
                 }}
                 transition={{ 
-                  duration: isSwitch ? 0.3 : 0.5,
-                  ease: isSwitch ? "backOut" : "easeInOut"
+                  duration: isSwitch ? 0.8 : 1.5,
+                  ease: "easeInOut"
                 }}
+                onClick={isPower ? handlePowerClick : undefined}
+                className={isPower && phase === "initial" ? "cursor-pointer" : ""}
               />
             );
           })}
