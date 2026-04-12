@@ -182,8 +182,8 @@ export default function Home() {
         position: "fixed", zIndex: 50,
         pointerEvents: "none",
         ...(splashDone
-          ? { top: "12px", left: "36px", width: "160px", transform: "none" }
-          : { top: "50%", left: "50%", width: "min(92vw, 820px)", transform: "translate(-50%,-50%)" }
+          ? { top: "16px", left: "36px", width: "200px", transform: "none" }
+          : { top: "50%", left: "50%", width: "min(92vw, 940px)", transform: "translate(-50%,-50%)" }
         ),
         transition: [
           "top    0.8s cubic-bezier(0.4,0,0.2,1)",
@@ -197,13 +197,38 @@ export default function Home() {
             isHeader={splashDone} 
             onComplete={() => setSplashDone(true)} 
             onLightMode={() => setIsLit(true)}
+            onPhaseChange={setLogoPhase}
           />
         </div>
-        {splashDone && (
-          <div className="mt-1 ml-2">
-            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">by alex hofmann</span>
-          </div>
-        )}
+        
+        {/* Byline - appears during 'red' phase and follows logo to header */}
+        <AnimatePresence>
+          {(logoPhase === "red" || logoPhase === "final") && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{
+                position: "absolute",
+                left: splashDone ? "8px" : "50%",
+                transform: splashDone ? "none" : "translateX(-50%)",
+                top: splashDone ? "48px" : "calc(50% + 180px)", 
+                textAlign: "center",
+                whiteSpace: "nowrap",
+                transition: "all 0.8s cubic-bezier(0.4,0,0.2,1)"
+              }}
+            >
+              <span style={{ 
+                fontSize: splashDone ? "10px" : "14px", 
+                color: P.dim, 
+                textTransform: "uppercase", 
+                letterSpacing: "0.25em",
+                fontWeight: 500
+              }}>
+                by Alex Hofmann
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* ── SITE CONTENT — fades in after splash ── */}
@@ -216,7 +241,7 @@ export default function Home() {
         {/* ── NAV ── */}
         <header style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 30,
-          height: "52px",
+          height: "64px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
           padding: "0 36px",
           background: "rgba(255,255,255,0.92)",
@@ -224,7 +249,7 @@ export default function Home() {
           backdropFilter: "blur(10px)",
         }}>
           {/* Logo occupies this space — spacer keeps right-side content aligned */}
-          <div style={{ width: "220px" }} />
+          <div style={{ width: "240px" }} />
 
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
@@ -234,7 +259,7 @@ export default function Home() {
             </div>
             {[
               { title: "GitHub", href: "https://github.com/switchhoff", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg> },
-              { title: "LinkedIn", href: "https://linkedin.com/in/switchhoff", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg> },
+              { title: "LinkedIn", href: "https://www.linkedin.com/in/hofmannalexb/", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg> },
             ].map(s => (
               <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer" title={s.title}
                 style={{ color: P.dim, display: "flex", alignItems: "center", transition: "color 0.15s" }}
