@@ -9,8 +9,7 @@ import OffswitchLogo from "@/components/OffswitchLogo";
 function CustomCursor({ color }: { color: string | null }) {
   const [pos, setPos] = useState({ x: -100, y: -100 });
   const [clicked, setClicked] = useState(false);
-  do
-    useEffect(() => {
+  useEffect(() => {
       const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
       const down = () => { setClicked(true); setTimeout(() => setClicked(false), 160); };
       window.addEventListener("mousemove", move);
