@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import WorkshopScene from "@/components/workshop/WorkshopScene";
 import WorkshopPanel from "@/components/workshop/WorkshopPanel";
 import { type Hotspot, hotspots } from "@/lib/hotspots";
-import OffswitchLogo from "@/components/OffswitchLogo";
+import { GkLogo } from "@/components/GkLogo";
 
 // ─── Custom Cursor ────────────────────────────────────────────────────────────
 function CustomCursor({ color }: { color: string | null }) {
@@ -139,27 +139,15 @@ export default function Home() {
         ].join(", "),
       }}>
         <div style={{ pointerEvents: "all" }}>
-          <OffswitchLogo
-            onPowerOn={() => setIsLit(true)}
-            onComplete={() => setSplashDone(true)}
-          />
+          <GkLogo onComplete={() => setSplashDone(true)} />
         </div>
         {splashDone && (
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            style={{ 
-              fontSize: "10px", 
-              color: P.dim, 
-              textAlign: "center",
-              marginTop: "-15px",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase"
-            }}
-          >
-            by Alex Hofmann
-          </motion.div>
+          <div className="flex flex-col items-center">
+            <div className="w-[120px]">
+              <GkLogo isHeader={true} />
+            </div>
+            <span className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">by alex hofmann</span>
+          </div>
         )}
       </div>
 
