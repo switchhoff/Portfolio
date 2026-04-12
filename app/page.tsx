@@ -119,8 +119,9 @@ export default function Home() {
       {/* ── OFFSWITCH LOGO — splash screen → nav ── */}
       <div style={{
         position: "fixed", zIndex: 50,
+        pointerEvents: "none",
         ...(splashDone
-          ? { top: "6px", left: "16px", width: "220px", transform: "none" }
+          ? { top: "12px", left: "36px", width: "160px", transform: "none" }
           : { top: "50%", left: "50%", width: "min(92vw, 820px)", transform: "translate(-50%,-50%)" }
         ),
         transition: [
@@ -130,10 +131,29 @@ export default function Home() {
           "transform 0.8s cubic-bezier(0.4,0,0.2,1)",
         ].join(", "),
       }}>
-        <OffswitchLogo
-          onPowerOn={() => setIsLit(true)}
-          onComplete={() => setSplashDone(true)}
-        />
+        <div style={{ pointerEvents: "all" }}>
+          <OffswitchLogo
+            onPowerOn={() => setIsLit(true)}
+            onComplete={() => setSplashDone(true)}
+          />
+        </div>
+        {splashDone && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            style={{ 
+              fontSize: "10px", 
+              color: P.dim, 
+              textAlign: "center",
+              marginTop: "-15px",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase"
+            }}
+          >
+            by Alex Hofmann
+          </motion.div>
+        )}
       </div>
 
       {/* ── SITE CONTENT — fades in after splash ── */}
@@ -178,22 +198,6 @@ export default function Home() {
 
         {/* ── HERO — full-width image with overlay ── */}
         <section style={{ paddingTop: "52px", position: "relative" }}>
-
-          {/* Title overlay — top-left */}
-          <div style={{
-            position: "absolute", top: "calc(52px + 28px)", left: "36px", zIndex: 10,
-            pointerEvents: "none",
-          }}>
-            <div style={{ fontSize: "clamp(28px,3.5vw,48px)", fontWeight: 700, color: P.text, letterSpacing: "-0.03em", lineHeight: 1.1 }}>
-              HoffSwitch
-            </div>
-            <div style={{ fontSize: "12px", color: P.muted, marginTop: "4px", letterSpacing: "0.04em" }}>
-              by Alex Hofmann
-            </div>
-            <div style={{ fontSize: "9px", color: P.dim, marginTop: "2px", letterSpacing: "0.12em", textTransform: "uppercase" }}>
-              Forward Deployed Engineer
-            </div>
-          </div>
 
           {/* Instruction overlay — top-right */}
           <div style={{
