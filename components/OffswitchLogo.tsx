@@ -189,7 +189,7 @@ export default function OffswitchLogo({ onComplete, onPowerOn }: OffswitchLogoPr
   );
 }
 
-function getOriginalPath(id: number) {
+export function getOriginalPath(id: number) {
   const paths: Record<number, { d: string, fill?: string, stroke?: string, strokeWidth?: number }> = {
     3: { fill: "#000000", d: "m455.29916 248.58437l38.016327 103.078384l4.962982 0l31.068146 -68.6875l31.16742 68.6875l4.9630127 0l38.1156 -103.078384l-18.561523 0l-24.417786 66.23778l-29.182251 -66.23778l-4.9629517 0l-28.28894 66.23778l-22.730377 -66.23778z" },
     4: { fill: "#ffffff", d: "m587.238 262.93735l5.07666 1.8193665l-27.994995 75.68045l-5.076721 -1.8193665z" },

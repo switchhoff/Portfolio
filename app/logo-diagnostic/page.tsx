@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import OffswitchLogo from "@/components/OffswitchLogo";
+import OffswitchLogo, { getOriginalPath } from "@/components/OffswitchLogo";
 
 /**
  * LOGO DIAGNOSTIC PAGE
