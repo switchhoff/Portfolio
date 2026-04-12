@@ -138,14 +138,12 @@ export default function Home() {
           "transform 0.8s cubic-bezier(0.4,0,0.2,1)",
         ].join(", "),
       }}>
-        <div style={{ pointerEvents: "all" }} suppressHydrationWarning={true}>
-          {ready && (
-            <GkLogo 
-              isHeader={splashDone} 
-              onComplete={() => setSplashDone(true)} 
-              onLightMode={() => setIsLit(true)}
-            />
-          )}
+        <div style={{ pointerEvents: "all" }}>
+          <GkLogo 
+            isHeader={splashDone} 
+            onComplete={() => setSplashDone(true)} 
+            onLightMode={() => setIsLit(true)}
+          />
         </div>
         {splashDone && (
           <div className="mt-1 ml-2">

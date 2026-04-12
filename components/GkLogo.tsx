@@ -74,88 +74,85 @@ interface GkLogoProps {
 }
 
 export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeader = false }) => {
-  const [phase, setPhase] = useState<"initial" | "precharge" | "connected" | "active" | "final">("initial");
+  const [phase, setPhase] = useState<"initial" | "cells" | "wiring" | "resistor" | "transistor" | "switch" | "active" | "red" | "final">("initial");
   const [isLightMode, setIsLightMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     if (isHeader) {
       setPhase("final");
       setIsLightMode(true);
       return;
     }
-
-    // Step 1: 3s later, precharge
-    const prechargeTimer = setTimeout(() => {
-      setPhase("precharge");
-    }, 3000);
-
-    return () => clearTimeout(prechargeTimer);
   }, [isHeader]);
 
+  if (!mounted) return <div className="aspect-[1200/302] w-full" />;
+
   const handlePowerClick = () => {
-    if (phase !== "precharge" || isHeader) return;
+    if (phase !== "initial" || isHeader) return;
     
-    setPhase("connected");
+    // Start sequence
+    setPhase("cells");
     
-    // Transition to active (Lamp Red + Light Mode) after short delay
+    setTimeout(() => setPhase("wiring"), 400);
+    setTimeout(() => setPhase("resistor"), 800);
+    setTimeout(() => setPhase("transistor"), 1200);
+    setTimeout(() => {
+      setPhase("switch");
+    }, 1600);
+    
     setTimeout(() => {
       setPhase("active");
       setIsLightMode(true);
       if (onLightMode) onLightMode();
       
-      // Finally transition to app after a few more seconds
+      // 2 seconds later letters turn red
       setTimeout(() => {
-        if (onComplete) onComplete();
-      }, 3000);
-    }, 800);
+        setPhase("red");
+        
+        // Final transition to app
+        setTimeout(() => {
+          if (onComplete) onComplete();
+        }, 3000);
+      }, 2000);
+    }, 2100);
   };
 
   const getPathColor = (index: number) => {
     const group = Object.entries(GK_SCHEMA).find(([_, indices]) => indices.includes(index))?.[0];
+    const isVisible = (p: typeof phase) => {
+      if (group === "POWER") return true;
+      if (phase === "initial") return false;
+      
+      if (group?.startsWith("CELL")) return ["cells", "wiring", "resistor", "transistor", "switch", "active", "red", "final"].includes(phase);
+      if (group === "WIRING" || group === "GROUND") return ["wiring", "resistor", "transistor", "switch", "active", "red", "final"].includes(phase);
+      if (group === "RESISTOR") return ["resistor", "transistor", "switch", "active", "red", "final"].includes(phase);
+      if (group === "TRANSISTOR") return ["transistor", "switch", "active", "red", "final"].includes(phase);
+      if (group === "SWITCH") return ["switch", "active", "red", "final"].includes(phase);
+      if (group === "LAMP") return ["active", "red", "final"].includes(phase);
+      if (group === "LETTERS") return ["active", "red", "final"].includes(phase);
+      
+      return false;
+    };
 
-    // LETTERS are only visible in active/final phase
+    if (!isVisible(phase)) return "rgba(0,0,0,0)";
+
+    // Color logic
     if (group === "LETTERS") {
-      return (phase === "active" || phase === "final") ? "#ff0000" : "transparent";
+      if (phase === "active") return "#000000"; // Black first
+      if (phase === "red" || phase === "final") return "#ff0000"; // Then red
+      return "rgba(0,0,0,0)";
     }
 
-    // Colors based on phase
-    if (phase === "initial") return "#222";
-
-    if (phase === "precharge") {
-      if (["CELL_1", "CELL_2", "CELL_3", "RESISTOR", "GROUND", "WIRING"].includes(group || "")) {
-        return "#ff0000";
-      }
-      return "#222";
+    if (group === "SWITCH") {
+       return ["switch", "active", "red", "final"].includes(phase) ? "#facc15" : "#222";
     }
 
-    if (phase === "connected") {
-      if (group === "SWITCH") return "#facc15"; // Yellow
-      if (["CELL_1", "CELL_2", "CELL_3", "RESISTOR", "GROUND", "WIRING"].includes(group || "")) return "#ff0000";
-      if (group === "TRANSISTOR") return "#ff0000"; 
-      return "#222";
-    }
+    if (group === "POWER") return "#222";
 
-    if (phase === "active" || phase === "final") {
-       if (group === "SWITCH") return "#facc15";
-       return "#ff0000"; // Everything red in final state
-    }
-
-    return "#222";
-  };
-
-  const containerVariants = {
-    splash: {
-      scale: 1,
-      y: 0,
-      opacity: 1,
-    },
-    header: {
-      scale: 0.15,
-      y: -400, // Moves to top
-      x: -500, // Move to left
-      opacity: 1,
-      transition: { duration: 1.5, ease: "easeInOut" }
-    }
+    // Standard powered red
+    return "#ff0000";
   };
 
   return (
@@ -163,14 +160,13 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
       className={`flex items-center justify-center transition-opacity duration-1000`}
       initial={false}
       animate={isHeader ? "header" : "splash"}
-      suppressHydrationWarning={true}
     >
-      <div className="relative w-full max-w-4xl aspect-[1200/302]" suppressHydrationWarning={true}>
+      <div className="relative w-full max-w-4xl aspect-[1200/302]">
         <svg 
           viewBox="0 0 12000 3020" 
           className="w-full h-full cursor-pointer overflow-visible" 
           onClick={handlePowerClick}
-          suppressHydrationWarning={true}
+          style={{ transform: "scaleY(-1)" }}
         >
           {GK_PATHS.map((d, i) => {
             const group = Object.entries(GK_SCHEMA).find(([_, indices]) => indices.includes(i))?.[0];
@@ -180,11 +176,11 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
               <motion.path
                 key={i}
                 d={d}
-                initial={{ fill: "#222" }}
+                initial={{ fill: "rgba(0,0,0,0)" }}
                 animate={{ 
                   fill: getPathColor(i),
-                  y: (isSwitch && phase !== "initial" && phase !== "precharge") ? 400 : 0, // Switch drops down significantly
-                  filter: (getPathColor(i) !== "transparent" && getPathColor(i) !== "#222") 
+                  y: (isSwitch && ["switch", "active", "red", "final"].includes(phase)) ? -400 : 0, // Switch travels other way
+                  filter: (getPathColor(i) !== "rgba(0,0,0,0)" && getPathColor(i) !== "#222") 
                     ? `drop-shadow(0 0 15px ${getPathColor(i)}80)` 
                     : "none"
                 }}
@@ -192,17 +188,16 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
                   duration: isSwitch ? 0.3 : 0.5,
                   ease: isSwitch ? "backOut" : "easeInOut"
                 }}
-                transform="translate(0,3020) scale(1,-1)"
               />
             );
           })}
         </svg>
 
-        {phase === "precharge" && !isLightMode && (
+        {phase === "initial" && !isLightMode && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute bottom-[-40px] left-1/2 -translate-x-1/2 text-zinc-600 text-[10px] tracking-[0.2em]"
+            className="absolute bottom-[-100px] left-1/2 -translate-x-1/2 text-zinc-600 text-[10px] tracking-[0.2em] whitespace-nowrap"
           >
             CLICK POWER TO ENGAGE
           </motion.div>
