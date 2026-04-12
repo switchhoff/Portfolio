@@ -74,8 +74,9 @@ interface GkLogoProps {
 }
 
 export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeader = false }) => {
-  const [phase, setPhase] = useState<"initial" | "cells" | "wiring" | "resistor" | "transistor" | "switch" | "active" | "red" | "final">("initial");
+  const [phase, setPhase] = useState<"initial" | "cells" | "wiring" | "resistor" | "transistor" | "switch_light" | "switch_move" | "flicker" | "active" | "red" | "final">("initial");
   const [isLightMode, setIsLightMode] = useState(false);
+  const [flickerActive, setFlickerActive] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -87,36 +88,58 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
     }
   }, [isHeader]);
 
+  // Handle flicker effect
+  useEffect(() => {
+    if (phase === "flicker") {
+      let count = 0;
+      const interval = setInterval(() => {
+        setFlickerActive(prev => !prev);
+        count++;
+        if (count > 12) { // 12 flashes over 1.2s
+          clearInterval(interval);
+          setFlickerActive(false);
+        }
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, [phase]);
+
   if (!mounted) return <div className="aspect-[1200/302] w-full" />;
 
   const handlePowerClick = () => {
     if (phase !== "initial" || isHeader) return;
     
-    // Start sequence
+    // 0s: Cells
     setPhase("cells");
     
+    // Sequence with longer delays
     setTimeout(() => setPhase("wiring"), 1500);
     setTimeout(() => setPhase("resistor"), 3000);
     setTimeout(() => setPhase("transistor"), 4500);
-    setTimeout(() => {
-      setPhase("switch");
-    }, 6000);
     
+    // Switch sequence
+    setTimeout(() => setPhase("switch_light"), 6000);
+    setTimeout(() => setPhase("switch_move"), 8500); // 2.5s delay
+    
+    // Flicker before Light Mode
+    setTimeout(() => setPhase("flicker"), 11000);
+    
+    // Final Engagement
     setTimeout(() => {
       setPhase("active");
       setIsLightMode(true);
       if (onLightMode) onLightMode();
       
-      // 2 seconds later letters turn red
+      // Letters change to red 4s later
       setTimeout(() => {
         setPhase("red");
         
-        // Final transition to app
+        // Minimize to header 5s later
         setTimeout(() => {
           if (onComplete) onComplete();
-        }, 4000);
-      }, 3000);
-    }, 7800);
+        }, 5000);
+      }, 4000);
+    }, 12500);
   };
 
   const getPathColor = (index: number) => {
@@ -125,13 +148,16 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
       if (group === "POWER") return true;
       if (phase === "initial") return false;
       
-      if (group?.startsWith("CELL")) return ["cells", "wiring", "resistor", "transistor", "switch", "active", "red", "final"].includes(phase);
-      if (group === "WIRING" || group === "GROUND") return ["wiring", "resistor", "transistor", "switch", "active", "red", "final"].includes(phase);
-      if (group === "RESISTOR") return ["resistor", "transistor", "switch", "active", "red", "final"].includes(phase);
-      if (group === "TRANSISTOR") return ["transistor", "switch", "active", "red", "final"].includes(phase);
-      if (group === "SWITCH") return ["switch", "active", "red", "final"].includes(phase);
-      if (group === "LAMP") return ["active", "red", "final"].includes(phase);
-      if (group === "LETTERS") return ["active", "red", "final"].includes(phase);
+      const pIdx = ["initial", "cells", "wiring", "resistor", "transistor", "switch_light", "switch_move", "flicker", "active", "red", "final"].indexOf(phase);
+      const minPhase = (m: typeof phase) => pIdx >= ["initial", "cells", "wiring", "resistor", "transistor", "switch_light", "switch_move", "flicker", "active", "red", "final"].indexOf(m);
+
+      if (group?.startsWith("CELL")) return minPhase("cells");
+      if (group === "WIRING" || group === "GROUND") return minPhase("wiring");
+      if (group === "RESISTOR") return minPhase("resistor");
+      if (group === "TRANSISTOR") return minPhase("transistor");
+      if (group === "SWITCH") return minPhase("switch_light");
+      if (group === "LAMP") return minPhase("active");
+      if (group === "LETTERS") return minPhase("active");
       
       return false;
     };
@@ -140,13 +166,13 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
 
     // Color logic
     if (group === "LETTERS") {
-      if (phase === "active") return "#000000"; // Black first
-      if (phase === "red" || phase === "final") return "#ff0000"; // Then red
+      if (phase === "active" || phase === "flicker") return "#000000"; 
+      if (phase === "red" || phase === "final") return "#ff0000";
       return "rgba(0,0,0,0)";
     }
 
     if (group === "SWITCH") {
-       return ["switch", "active", "red", "final"].includes(phase) ? "#facc15" : "#222";
+       return ["switch_light", "switch_move", "flicker", "active", "red", "final"].includes(phase) ? "#facc15" : "#222";
     }
 
     if (group === "POWER") {
@@ -181,7 +207,7 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
                 initial={{ fill: "rgba(0,0,0,0)" }}
                 animate={{ 
                   fill: getPathColor(i),
-                  y: (isSwitch && ["switch", "active", "red", "final"].includes(phase)) ? -200 : 0, 
+                  y: (isSwitch && ["switch_move", "flicker", "active", "red", "final"].includes(phase)) ? -200 : 0, 
                   filter: (getPathColor(i) !== "rgba(0,0,0,0)" && getPathColor(i) !== "#222") 
                     ? `drop-shadow(0 0 15px ${getPathColor(i)}80)` 
                     : "none"
@@ -196,6 +222,16 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
             );
           })}
         </svg>
+
+        {/* Flicker Overlay Overlay */}
+        <div 
+          className="absolute inset-0 pointer-events-none rounded-lg"
+          style={{ 
+            backgroundColor: "white", 
+            opacity: flickerActive ? 0.9 : 0,
+            transition: "opacity 0.05s"
+          }}
+        />
 
         {phase === "initial" && !isLightMode && (
           <motion.div 
