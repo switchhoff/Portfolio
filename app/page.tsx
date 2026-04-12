@@ -138,7 +138,7 @@ export default function Home() {
           "transform 0.8s cubic-bezier(0.4,0,0.2,1)",
         ].join(", "),
       }}>
-        <div style={{ pointerEvents: "all" }}>
+        <div style={{ pointerEvents: "all" }} suppressHydrationWarning={true}>
           {ready && (
             <GkLogo 
               isHeader={splashDone} 
@@ -159,7 +159,7 @@ export default function Home() {
         opacity: splashDone ? 1 : 0,
         pointerEvents: splashDone ? "all" : "none",
         transition: "opacity 0.6s ease 0.25s",
-      }}>
+      }} suppressHydrationWarning={true}>
 
         {/* ── NAV ── */}
         <header style={{

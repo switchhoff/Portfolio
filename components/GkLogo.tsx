@@ -161,11 +161,17 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
   return (
     <motion.div 
       className={`flex items-center justify-center transition-opacity duration-1000`}
-      initial="splash"
+      initial={false}
       animate={isHeader ? "header" : "splash"}
+      suppressHydrationWarning={true}
     >
-      <div className="relative w-full max-w-4xl aspect-[1200/302]">
-        <svg viewBox="0 0 12000 3020" className="w-full h-full cursor-pointer overflow-visible" onClick={handlePowerClick}>
+      <div className="relative w-full max-w-4xl aspect-[1200/302]" suppressHydrationWarning={true}>
+        <svg 
+          viewBox="0 0 12000 3020" 
+          className="w-full h-full cursor-pointer overflow-visible" 
+          onClick={handlePowerClick}
+          suppressHydrationWarning={true}
+        >
           {GK_PATHS.map((d, i) => {
             const group = Object.entries(GK_SCHEMA).find(([_, indices]) => indices.includes(i))?.[0];
             const isSwitch = group === "SWITCH";
@@ -186,6 +192,7 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
                   duration: isSwitch ? 0.3 : 0.5,
                   ease: isSwitch ? "backOut" : "easeInOut"
                 }}
+                transform="translate(0,3020) scale(1,-1)"
               />
             );
           })}
