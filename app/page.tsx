@@ -192,56 +192,56 @@ export default function Home() {
           </div>
         </header>
 
-        {/* ── HERO — full-width image with overlay ── */}
-        <section style={{ paddingTop: "52px", position: "relative" }}>
-
-          {/* Instruction overlay — top-right */}
-          <div style={{
-            position: "absolute", top: "calc(52px + 28px)", right: "36px", zIndex: 10,
-            pointerEvents: "none", textAlign: "right",
+        {/* ── HERO — 3-Column Dashboard Layout ── */}
+        <section style={{ paddingTop: "80px", paddingBottom: "60px", maxWidth: "1600px", margin: "0 auto", paddingLeft: "36px", paddingRight: "36px" }}>
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: "300px 1fr 300px", 
+            gap: "40px", 
+            alignItems: "start" 
           }}>
-            <div style={{ fontSize: "9px", color: P.dim, letterSpacing: "0.16em", textTransform: "uppercase" }}>
-              Click anywhere
-            </div>
-            <div style={{ fontSize: "9px", color: P.dim, letterSpacing: "0.16em", textTransform: "uppercase" }}>
-              to explore
-            </div>
-            <div style={{ marginTop: "8px", display: "flex", justifyContent: "flex-end", gap: "5px", flexWrap: "wrap" }}>
-              {hotspots.slice(0, 5).map(h => (
-                <div key={h.id} style={{ width: 6, height: 6, borderRadius: "50%", background: h.color, opacity: 0.6 }} />
+            
+            {/* COLUMN 1: LEFT CARDS */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {hotspots.filter((_, i) => i % 2 === 0).map(h => (
+                <HotspotCard key={h.id} h={h} active={active?.id === h.id} onSelect={() => setActive(active?.id === h.id ? null : h)} />
               ))}
-              <div style={{ fontSize: "8px", color: P.dim, lineHeight: "6px" }}>+{hotspots.length - 5}</div>
             </div>
-          </div>
 
-          {/* Full-width image — no container, no border */}
-          <div style={{ width: "100%", position: "relative" }}>
-            <WorkshopScene
-              onSelect={setActive}
-              activeId={active?.id ?? null}
-              onHoverChange={setHoverSpot}
-            />
-          </div>
+            {/* COLUMN 2: CENTER VIEWPORT */}
+            <div style={{ position: "relative" }}>
+              <div style={{ 
+                width: "100%", 
+                maxWidth: "800px", 
+                margin: "0 auto",
+                border: `1px solid ${P.border}`,
+                borderRadius: "12px",
+                overflow: "hidden",
+                background: "#fff",
+                boxShadow: "0 25px 50px -12px rgba(0,0,0,0.1)"
+              }}>
+                <WorkshopScene
+                  onSelect={setActive}
+                  activeId={active?.id ?? null}
+                  onHoverChange={setHoverSpot}
+                />
+              </div>
 
-          {/* Zone chips below image */}
-          <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "10px 36px 0" }}>
-            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-              {hotspots.map(h => (
-                <button key={h.id}
-                  onClick={() => setActive(active?.id === h.id ? null : h)}
-                  style={{
-                    background: active?.id === h.id ? h.color : P.surface,
-                    color: active?.id === h.id ? "#fff" : P.muted,
-                    border: `1px solid ${active?.id === h.id ? h.color : P.border}`,
-                    padding: "3px 10px", cursor: "none",
-                    fontSize: "9px", letterSpacing: "0.1em", textTransform: "uppercase",
-                    fontFamily: "var(--font-mono)", transition: "all 0.15s",
-                  }}
-                  onMouseEnter={e => { if (active?.id !== h.id) { e.currentTarget.style.borderColor = h.color; e.currentTarget.style.color = h.color; } }}
-                  onMouseLeave={e => { if (active?.id !== h.id) { e.currentTarget.style.borderColor = P.border; e.currentTarget.style.color = P.muted; } }}
-                >
-                  {h.label}
-                </button>
+              <div style={{
+                position: "absolute", top: "-40px", left: "0", right: "0",
+                display: "flex", justifyContent: "center",
+                pointerEvents: "none",
+              }}>
+                <div style={{ fontSize: "9px", color: P.dim, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 500 }}>
+                  Active Workspace Context
+                </div>
+              </div>
+            </div>
+
+            {/* COLUMN 3: RIGHT CARDS */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {hotspots.filter((_, i) => i % 2 !== 0).map(h => (
+                <HotspotCard key={h.id} h={h} active={active?.id === h.id} onSelect={() => setActive(active?.id === h.id ? null : h)} />
               ))}
             </div>
           </div>

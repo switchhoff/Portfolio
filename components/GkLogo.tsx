@@ -237,7 +237,7 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeade
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute bottom-[-100px] left-1/2 -translate-x-1/2 text-zinc-600 text-[10px] tracking-[0.2em] whitespace-nowrap"
+            className="absolute bottom-[-150px] left-1/2 -translate-x-1/2 text-zinc-600 text-[18px] font-medium tracking-[0.3em] whitespace-nowrap"
           >
             CLICK POWER TO ENGAGE
           </motion.div>
