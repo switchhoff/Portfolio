@@ -70,14 +70,19 @@ const GK_SCHEMA = {
 interface GkLogoProps {
   onComplete?: () => void;
   onLightMode?: () => void;
+  onPhaseChange?: (phase: string) => void;
   isHeader?: boolean;
 }
 
-export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, isHeader = false }) => {
+export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhaseChange, isHeader = false }) => {
   const [phase, setPhase] = useState<"initial" | "cells" | "wiring" | "resistor" | "transistor" | "switch_light" | "switch_move" | "flicker" | "active" | "red" | "final">("initial");
   const [isLightMode, setIsLightMode] = useState(false);
   const [flickerActive, setFlickerActive] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (onPhaseChange) onPhaseChange(phase);
+  }, [phase, onPhaseChange]);
 
   useEffect(() => {
     setMounted(true);

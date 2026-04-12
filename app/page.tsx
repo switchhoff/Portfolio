@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import WorkshopScene from "@/components/workshop/WorkshopScene";
-import WorkshopPanel from "@/components/workshop/WorkshopPanel";
 import { type Hotspot, hotspots } from "@/lib/hotspots";
 import { GkLogo } from "@/components/GkLogo";
 
@@ -11,28 +10,83 @@ function CustomCursor({ color }: { color: string | null }) {
   const [pos, setPos] = useState({ x: -100, y: -100 });
   const [clicked, setClicked] = useState(false);
   useEffect(() => {
-      const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
-      const down = () => { setClicked(true); setTimeout(() => setClicked(false), 160); };
-      window.addEventListener("mousemove", move);
-      window.addEventListener("mousedown", down);
-      return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mousedown", down); };
-    }, []);
+    const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    const down = () => { setClicked(true); setTimeout(() => setClicked(false), 160); };
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mousedown", down);
+    return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mousedown", down); };
+  }, []);
 
   const c = color ?? "#2d5a3d";
-  const size = clicked ? 14 : 18;
   return (
-    <div style={{ position: "fixed", left: pos.x, top: pos.y, transform: "translate(-50%,-50%)", pointerEvents: "none", zIndex: 9999 }}>
-      <svg width={size} height={size} viewBox="0 0 18 18" style={{ transition: "width 0.1s,height 0.1s", overflow: "visible" }}>
-        <line x1="9" y1="0" x2="9" y2="5.5" stroke={c} strokeWidth="1.5" />
-        <line x1="9" y1="12.5" x2="9" y2="18" stroke={c} strokeWidth="1.5" />
-        <line x1="0" y1="9" x2="5.5" y2="9" stroke={c} strokeWidth="1.5" />
-        <line x1="12.5" y1="9" x2="18" y2="9" stroke={c} strokeWidth="1.5" />
-        <circle cx="9" cy="9" r="2" fill="none" stroke={c} strokeWidth="1.2" />
-        {color && <circle cx="9" cy="9" r="1" fill={c} />}
-      </svg>
+    <div style={{
+      position: "fixed", top: 0, left: 0, width: 24, height: 24,
+      border: `1.2px solid ${c}`,
+      borderRadius: "50%", pointerEvents: "none", zIndex: 10000,
+      transform: `translate(${pos.x - 12}px, ${pos.y - 12}px) scale(${clicked ? 0.7 : 1})`,
+      transition: "transform 0.1s ease-out, border-color 0.2s, background 0.2s",
+      background: clicked ? `${c}20` : "transparent",
+      display: "flex", alignItems: "center", justifyContent: "center"
+    }}>
+      <div style={{ width: 2, height: 2, background: c, borderRadius: "50%" }} />
     </div>
   );
 }
+
+const HotspotCard = ({ h, active, onSelect }: { h: Hotspot, active: boolean, onSelect: () => void }) => {
+  return (
+    <div 
+      onClick={onSelect}
+      style={{
+        padding: "16px",
+        background: active ? "#ffffff" : "rgba(255,255,255,0.03)",
+        border: `1px solid ${active ? h.color : "rgba(0,0,0,0.08)"}`,
+        borderLeft: `3px solid ${h.color}`,
+        borderRadius: "8px",
+        cursor: "pointer",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        opacity: active ? 1 : 0.7,
+        transform: active ? "scale(1.02)" : "scale(1)",
+        boxShadow: active ? "0 10px 25px rgba(0,0,0,0.05)" : "none",
+        position: "relative"
+      }}
+    >
+      <div style={{ fontSize: "9px", fontWeight: 700, color: h.color, textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: "6px" }}>
+        {h.label}
+      </div>
+      <div style={{ fontSize: "14px", fontWeight: 600, color: active ? "#111" : "#555", marginBottom: active ? "10px" : "0" }}>
+        {h.panelContent.title}
+      </div>
+      
+      {active && (
+        <motion.div 
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          transition={{ duration: 0.3 }}
+          style={{ overflow: "hidden" }}
+        >
+          <p style={{ fontSize: "11px", color: "#666", lineHeight: 1.7, marginBottom: "14px", whiteSpace: "pre-wrap" }}>
+            {h.panelContent.body}
+          </p>
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            {h.panelContent.tags.map(t => (
+              <span key={t} style={{ 
+                fontSize: "8px", 
+                padding: "2px 8px", 
+                background: "#f1f5f9", 
+                borderRadius: "4px", 
+                color: "#64748b",
+                border: "1px solid #e2e8f0"
+              }}>
+                {t}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const PROJECTS = [
