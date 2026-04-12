@@ -22,13 +22,13 @@ export interface PanelContent {
 
 export const hotspots: Hotspot[] = [
   // ── Chair / About ────────────────────────────────────────────────────────────
-  // Centre of room, lower half — the tan office chair + dog area
+  // Centre floor — the tan office chair (isometric floor parallelogram)
   {
     id: 'chair',
     label: 'About',
     sublabel: 'Alex Hofmann',
     color: '#c87941',
-    points: '950,1080 1420,1080 1420,1680 950,1680',
+    points: '880,1060 1190,900 1280,1180 970,1340',
     panelContent: {
       title: 'Alex Hofmann',
       status: 'active',
