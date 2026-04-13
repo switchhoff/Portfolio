@@ -403,5 +403,23 @@
       "url": "https://youtube.com/@hoffswitch",
       "text": "Visit YouTube Channel"
     }
+  },
+  {
+    "id": "crafting",
+    "label": "Crafting",
+    "svgElement": "sewing_machine",
+    "color": "#f1c40f",
+    "category": "popups",
+    "type": "popup",
+    "popup": {
+      "title": "Crafting & Making",
+      "items": [
+        { "name": "Sewing & textile work" },
+        { "name": "Leather crafting" },
+        { "name": "3D printing functional art" },
+        { "name": "Woodworking & furniture" },
+        { "name": "Custom gear & bags" }
+      ]
+    }
   }
 ]
