@@ -472,5 +472,21 @@
         { "label": "Feels Like", "value": "18°C", "source": "openweathermap" }
       ]
     }
+  },
+  {
+    "id": "world_map",
+    "label": "World Map",
+    "svgElement": "world_map",
+    "color": "#27ae60",
+    "category": "about",
+    "type": "popup",
+    "popup": {
+      "title": "Where I'm From",
+      "items": [
+        { "name": "Born in South Africa", "icon": "📍" },
+        { "name": "Now based in Melbourne, Australia", "icon": "🇦🇺" },
+        { "name": "Between continents — global perspective" }
+      ]
+    }
   }
 ]
