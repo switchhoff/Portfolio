@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import WorkshopScene from "@/components/workshop/WorkshopScene";
 import { type Hotspot, hotspots } from "@/lib/hotspots";
 import { GkLogo } from "@/components/GkLogo";
@@ -122,9 +122,8 @@ const P = {
 // ─── Input style helper ───────────────────────────────────────────────────────
 const inputStyle: React.CSSProperties = {
   width: "100%", padding: "10px 14px",
-  border: `1px solid ${P.border}`, background: P.surface,
+  background: P.surface,
   fontSize: "12px", color: P.text, fontFamily: "var(--font-mono)",
-  outline: "none", transition: "border-color 0.15s",
 };
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -153,7 +152,7 @@ export default function Home() {
     setSending(true);
     setFormError("");
     try {
-      const res = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+      const res = await fetch(`https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_ID}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify(form),
@@ -255,17 +254,15 @@ export default function Home() {
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#3a9e5c", boxShadow: "0 0 6px #3a9e5c", animation: "pulse 2.5s ease-in-out infinite" }} />
-              <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}`}</style>
-              <span style={{ fontSize: "9px", letterSpacing: "0.14em", color: P.dim, textTransform: "uppercase" }}>Available</span>
+<span style={{ fontSize: "9px", letterSpacing: "0.14em", color: P.dim, textTransform: "uppercase" }}>Available</span>
             </div>
             {[
               { title: "GitHub", href: "https://github.com/switchhoff", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg> },
               { title: "LinkedIn", href: "https://www.linkedin.com/in/hofmannalexb/", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg> },
             ].map(s => (
-              <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer" title={s.title}
-                style={{ color: P.dim, display: "flex", alignItems: "center", transition: "color 0.15s" }}
-                onMouseEnter={e => (e.currentTarget.style.color = P.pine)}
-                onMouseLeave={e => (e.currentTarget.style.color = P.dim)}>
+              <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer"
+                title={s.title} aria-label={s.title}
+                className="social-link">
                 {s.icon}
               </a>
             ))}
@@ -426,9 +423,8 @@ export default function Home() {
           }}>
             {PROJECTS.map(proj => (
               <div key={proj.id}
-                style={{ background: P.surface, padding: "22px", position: "relative", transition: "background 0.15s" }}
-                onMouseEnter={e => (e.currentTarget.style.background = P.bg)}
-                onMouseLeave={e => (e.currentTarget.style.background = P.surface)}
+                className="project-card-cell"
+                style={{ padding: "22px", position: "relative" }}
               >
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: proj.color }} />
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "10px" }}>
@@ -436,10 +432,9 @@ export default function Home() {
                     {proj.name}
                   </div>
                   <a href={proj.github} target="_blank" rel="noopener noreferrer"
-                    title="View on GitHub"
-                    style={{ color: P.dim, flexShrink: 0, marginLeft: 8, transition: "color 0.15s" }}
-                    onMouseEnter={e => (e.currentTarget.style.color = proj.color)}
-                    onMouseLeave={e => (e.currentTarget.style.color = P.dim)}
+                    title="View on GitHub" aria-label={`${proj.name} on GitHub`}
+                    className="proj-github"
+                    style={{ "--proj-color": proj.color, flexShrink: 0, marginLeft: 8 } as React.CSSProperties}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -483,15 +478,8 @@ export default function Home() {
                 ].map(s => (
                   <a key={s.href} href={s.href}
                     target={s.href.startsWith("http") ? "_blank" : undefined}
-                    rel="noopener noreferrer" title={s.title}
-                    style={{
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      width: 44, height: 44,
-                      border: `1px solid ${P.border}`, background: P.surface,
-                      color: P.muted, transition: "all 0.15s", textDecoration: "none",
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = P.pine; e.currentTarget.style.color = P.pine; e.currentTarget.style.background = "#e8f0e4"; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = P.border; e.currentTarget.style.color = P.muted; e.currentTarget.style.background = P.surface; }}
+                    rel="noopener noreferrer" title={s.title} aria-label={s.title}
+                    className="contact-icon"
                   >
                     {s.icon}
                   </a>
@@ -518,9 +506,7 @@ export default function Home() {
                         type="text" required placeholder="Alex Smith"
                         value={form.name}
                         onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                        style={inputStyle}
-                        onFocus={e => (e.target.style.borderColor = P.pine)}
-                        onBlur={e => (e.target.style.borderColor = P.border)}
+                        className="form-field" style={inputStyle}
                       />
                     </div>
                     <div>
@@ -529,9 +515,7 @@ export default function Home() {
                         type="email" required placeholder="you@example.com"
                         value={form.email}
                         onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                        style={inputStyle}
-                        onFocus={e => (e.target.style.borderColor = P.pine)}
-                        onBlur={e => (e.target.style.borderColor = P.border)}
+                        className="form-field" style={inputStyle}
                       />
                     </div>
                   </div>
@@ -541,9 +525,7 @@ export default function Home() {
                       type="text" required placeholder="Re: FDE role"
                       value={form.subject}
                       onChange={e => setForm(f => ({ ...f, subject: e.target.value }))}
-                      style={inputStyle}
-                      onFocus={e => (e.target.style.borderColor = P.pine)}
-                      onBlur={e => (e.target.style.borderColor = P.border)}
+                      className="form-field" style={inputStyle}
                     />
                   </div>
                   <div>
@@ -552,9 +534,7 @@ export default function Home() {
                       required rows={5} placeholder="What are you building?"
                       value={form.message}
                       onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                      style={{ ...inputStyle, resize: "vertical" }}
-                      onFocus={e => (e.target.style.borderColor = P.pine)}
-                      onBlur={e => (e.target.style.borderColor = P.border)}
+                      className="form-field" style={{ ...inputStyle, resize: "vertical" }}
                     />
                   </div>
                   {formError && (
@@ -562,15 +542,11 @@ export default function Home() {
                   )}
                   <button
                     type="submit" disabled={sending}
+                    className="submit-btn"
                     style={{
-                      padding: "11px 24px", background: sending ? P.border : P.pine,
-                      color: "#fff", border: "none", cursor: sending ? "not-allowed" : "none",
-                      fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase",
-                      fontFamily: "var(--font-mono)", transition: "background 0.15s",
-                      alignSelf: "flex-start",
+                      background: sending ? P.border : P.pine,
+                      cursor: sending ? "not-allowed" : "none",
                     }}
-                    onMouseEnter={e => { if (!sending) (e.currentTarget as HTMLButtonElement).style.background = "#1e3d29"; }}
-                    onMouseLeave={e => { if (!sending) (e.currentTarget as HTMLButtonElement).style.background = P.pine; }}
                   >
                     {sending ? "Sending…" : "Send Message"}
                   </button>

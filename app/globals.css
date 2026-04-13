@@ -37,6 +37,17 @@ body { background: var(--bg); min-height: 100vh; }
 ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
 ::selection { background: rgba(45,90,61,0.15); color: var(--pine); }
 
+/* Scanlines overlay */
+.scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.018) 2px,
+    rgba(0, 0, 0, 0.018) 4px
+  );
+}
+
 /* Subtle dot grid */
 .dot-grid {
   background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
@@ -126,6 +137,72 @@ body { background: var(--bg); min-height: 100vh; }
   0%,100% { opacity:1; }
   50%      { opacity:0.3; }
 }
+
+/* Social / nav links */
+.social-link {
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+.social-link:hover { color: var(--pine); }
+
+/* Project grid cell */
+.project-card-cell {
+  background: var(--surface);
+  transition: background 0.15s;
+}
+.project-card-cell:hover { background: var(--bg); }
+
+/* Per-project GitHub link (--proj-color set inline) */
+.proj-github {
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+.proj-github:hover { color: var(--proj-color, var(--pine)); }
+
+/* Contact icon buttons */
+.contact-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.contact-icon:hover {
+  border-color: var(--pine);
+  color: var(--pine);
+  background: #e8f0e4;
+}
+
+/* Form fields */
+.form-field {
+  border: 1px solid var(--border);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-field:focus { border-color: var(--pine); }
+
+/* Submit button */
+.submit-btn {
+  padding: 11px 24px;
+  color: #fff;
+  border: none;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  transition: background 0.15s;
+  align-self: flex-start;
+}
+.submit-btn:hover:not(:disabled) { background: #1e3d29 !important; }
 
 /* Blink cursor */
 @keyframes blink {
