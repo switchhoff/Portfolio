@@ -4,6 +4,7 @@
     "label": "PawsButton",
     "svgElement": "dog",
     "color": "#e67e22",
+    "category": "projects",
     "project": {
       "name": "PawsButton",
       "repo": "switchhoff/PawsButton",
@@ -147,6 +148,7 @@
     "label": "About",
     "svgElement": "person",
     "color": "#2d5a3d",
+    "category": "about",
     "project": {
       "name": "About Alex Hofmann",
       "repo": null,
@@ -160,6 +162,7 @@
     "label": "Printables",
     "svgElement": "3d_printer",
     "color": "#e74c3c",
+    "category": "projects",
     "type": "project",
     "project": {
       "name": "Printables",
@@ -175,6 +178,7 @@
     "label": "Monsoon",
     "svgElement": "board_game_box",
     "color": "#e74c3c",
+    "category": "projects",
     "type": "project",
     "project": {
       "name": "Monsoon",
@@ -189,6 +193,7 @@
     "label": "Multiboard",
     "svgElement": "multiboard_wall",
     "color": "#e74c3c",
+    "category": "projects",
     "type": "project",
     "project": {
       "name": "Multiboard",
@@ -203,6 +208,7 @@
     "label": "Games",
     "svgElement": "computer",
     "color": "#f1c40f",
+    "category": "popups",
     "type": "popup",
     "popup": {
       "title": "Games I Play",
@@ -220,6 +226,7 @@
     "label": "Books",
     "svgElement": "bookshelf",
     "color": "#f1c40f",
+    "category": "popups",
     "type": "popup",
     "popup": {
       "title": "Favourite Books",
@@ -235,6 +242,7 @@
     "label": "Diploma",
     "svgElement": "diploma_wall",
     "color": "#e74c3c",
+    "category": "experience",
     "type": "experience",
     "experience": {
       "title": "Education",
@@ -265,6 +273,7 @@
     "label": "RC Car",
     "svgElement": "rc_car",
     "color": "#e74c3c",
+    "category": "experience",
     "type": "experience",
     "experience": {
       "title": "DefendTex — UGV Navigation",
@@ -279,6 +288,7 @@
     "label": "VR Headset",
     "svgElement": "vr_headset",
     "color": "#e74c3c",
+    "category": "experience",
     "type": "experience",
     "experience": {
       "title": "Tonbo Systems — Thermal Imaging",
@@ -293,6 +303,7 @@
     "label": "Smartwatch",
     "svgElement": "smartwatch",
     "color": "#e74c3c",
+    "category": "experience",
     "type": "experience",
     "experience": {
       "title": "Fortifyedge — Chief Engineer",
@@ -307,6 +318,7 @@
     "label": "Model Rocket",
     "svgElement": "model_rocket",
     "color": "#e74c3c",
+    "category": "experience",
     "type": "experience",
     "experience": {
       "title": "Monash High Powered Rocketry",
@@ -321,6 +333,7 @@
     "label": "Model Plane",
     "svgElement": "model_plane",
     "color": "#e74c3c",
+    "category": "experience",
     "type": "experience",
     "experience": {
       "title": "Monash Uncrewed Aerial Systems",
@@ -335,6 +348,7 @@
     "label": "Water Filter",
     "svgElement": "water_filter",
     "color": "#e74c3c",
+    "category": "experience",
     "type": "experience",
     "experience": {
       "title": "Humanitarian Hackathon — Water Filtration",
