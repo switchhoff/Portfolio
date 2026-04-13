@@ -93,6 +93,9 @@ export interface StatusHotspot {
     title: string;
     description: string;
     liveData: boolean;
+    location?: string;
+    dynamicBackground?: boolean;
+    backgroundConditions?: Record<string, string>;
     fields: Array<{
       label: string;
       value: string;

@@ -442,5 +442,35 @@
         { "label": "Job Progress", "value": "idle", "source": "mqtt" }
       ]
     }
+  },
+  {
+    "id": "window_weather",
+    "label": "Window",
+    "svgElement": "window",
+    "color": "#3498db",
+    "category": "projects",
+    "type": "status",
+    "note": "LIVE: Real-time Melbourne weather. Window background changes with conditions (sunny, cloudy, rainy, stormy).",
+    "status": {
+      "title": "Melbourne Weather",
+      "description": "Live weather conditions right now",
+      "liveData": true,
+      "location": "Melbourne, Australia",
+      "dynamicBackground": true,
+      "backgroundConditions": {
+        "sunny": "#87CEEB",
+        "cloudy": "#B0C4DE",
+        "rainy": "#708090",
+        "stormy": "#2F4F4F",
+        "night": "#1a1a2e"
+      },
+      "fields": [
+        { "label": "Temperature", "value": "20°C", "source": "openweathermap" },
+        { "label": "Condition", "value": "Partly Cloudy", "source": "openweathermap" },
+        { "label": "Humidity", "value": "65%", "source": "openweathermap" },
+        { "label": "Wind", "value": "12 km/h", "source": "openweathermap" },
+        { "label": "Feels Like", "value": "18°C", "source": "openweathermap" }
+      ]
+    }
   }
 ]
