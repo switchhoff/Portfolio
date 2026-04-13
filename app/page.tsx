@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import WorkshopScene from "@/components/workshop/WorkshopScene";
 import { type Hotspot, hotspots } from "@/lib/hotspots";
 import { GkLogo } from "@/components/GkLogo";
+import { getProjects } from "@/lib/projects";
 
 // ─── Custom Cursor ────────────────────────────────────────────────────────────
 function CustomCursor({ color }: { color: string | null }) {
@@ -89,19 +90,7 @@ const HotspotCard = ({ h, active, onSelect }: { h: Hotspot, active: boolean, onS
 };
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
-const PROJECTS = [
-  { id: "portfolio", name: "Portfolio", tagline: "This portfolio — isometric workshop, point-and-click", tags: ["Next.js", "TypeScript", "Three.js"], color: "#3a5fbf", github: "https://github.com/switchhoff/Portfolio" },
-  { id: "pawsbutton", name: "PawsButton", tagline: "TODO: Project description", tags: ["TODO"], color: "#e67e22", github: "https://github.com/switchhoff/PawsButton" },
-  { id: "benfl", name: "BeNFL", tagline: "TODO: Project description", tags: ["TODO"], color: "#27ae60", github: "https://github.com/switchhoff/BeNFL" },
-  { id: "minimise", name: "MiniMise", tagline: "Android launcher for intentional phone use", tags: ["Android", "Kotlin", "UX"], color: "#7a5ce0", github: "https://github.com/switchhoff/MiniMise" },
-  { id: "habitat", name: "Habitat", tagline: "Habit tracker — streaks, intent, accountability", tags: ["Mobile", "TypeScript", "UX"], color: "#2d6fa3", github: "https://github.com/switchhoff/Habitat" },
-  { id: "cavedisto", name: "CaveDisto", tagline: "Cave Disto laser measuring hardware system", tags: ["Firmware", "Hardware", "Optics"], color: "#b85c3a", github: "https://github.com/switchhoff/CaveDisto" },
-  { id: "lastyear", name: "LastYear", tagline: "TODO: Project description", tags: ["TODO"], color: "#c0392b", github: "https://github.com/switchhoff/LastYear" },
-  { id: "sixclicks", name: "SixClicks", tagline: "TODO: Project description", tags: ["TODO"], color: "#16a085", github: "https://github.com/switchhoff/SixClicks" },
-  { id: "bintherestore", name: "BinThereStoreThat", tagline: "RFID-indexed workshop storage & retrieval", tags: ["IoT", "Hardware", "Web"], color: "#2d8a50", github: "https://github.com/switchhoff/BinThereStoreThat" },
-  { id: "threadquarters", name: "Threadquarters", tagline: "TODO: Project description", tags: ["TODO"], color: "#8e44ad", github: "https://github.com/switchhoff/Threadquarters" },
-  { id: "keysborough", name: "Keysborough-District", tagline: "TODO: Project description", tags: ["TODO"], color: "#2c3e50", github: "https://github.com/switchhoff/Keysborough-District" },
-];
+const PROJECTS = getProjects();
 
 const WORK = [
   { title: "Chief Engineer", company: "Fortifyedge", period: "2024 — Present", note: "Defence tech. Full-system ownership." },
@@ -269,54 +258,40 @@ export default function Home() {
           </div>
         </header>
 
-        {/* ── HERO — 3-Column Dashboard Layout ── */}
-        <section style={{ paddingTop: "80px", paddingBottom: "60px", maxWidth: "1600px", margin: "0 auto", paddingLeft: "36px", paddingRight: "36px" }}>
-          <div style={{ 
-            display: "grid", 
-            gridTemplateColumns: "300px 1fr 300px", 
-            gap: "40px", 
-            alignItems: "start" 
+        {/* ── WORKSHOP SCENE — full-width image ── */}
+        <section style={{ paddingTop: "60px", paddingBottom: "60px", width: "100%", margin: "0 auto" }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: "40px",
+            alignItems: "start"
           }}>
             
-            {/* COLUMN 1: LEFT CARDS */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {/* COLUMN 1: LEFT CARDS — hidden until SVG clicks implemented */}
+            <div style={{ display: "none", flexDirection: "column", gap: "12px" }}>
               {hotspots.filter((_, i) => i % 2 === 0).map(h => (
                 <HotspotCard key={h.id} h={h} active={active?.id === h.id} onSelect={() => setActive(active?.id === h.id ? null : h)} />
               ))}
             </div>
 
-            {/* COLUMN 2: CENTER VIEWPORT */}
+            {/* COLUMN 2: CENTER VIEWPORT — full width, no border */}
             <div style={{ position: "relative" }}>
-              <div style={{ 
-                width: "100%", 
-                maxWidth: "800px", 
+              <div style={{
+                width: "100%",
                 margin: "0 auto",
-                border: `1px solid ${P.border}`,
-                borderRadius: "12px",
-                overflow: "hidden",
-                background: "#fff",
-                boxShadow: "0 25px 50px -12px rgba(0,0,0,0.1)"
+                overflow: "hidden"
               }}>
                 <WorkshopScene
-                  onSelect={setActive}
-                  activeId={active?.id ?? null}
-                  onHoverChange={setHoverSpot}
+                  onSelect={() => {}}
+                  activeId={null}
+                  onHoverChange={() => {}}
                 />
               </div>
 
-              <div style={{
-                position: "absolute", top: "-40px", left: "0", right: "0",
-                display: "flex", justifyContent: "center",
-                pointerEvents: "none",
-              }}>
-                <div style={{ fontSize: "9px", color: P.dim, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 500 }}>
-                  Active Workspace Context
-                </div>
-              </div>
             </div>
 
-            {/* COLUMN 3: RIGHT CARDS */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {/* COLUMN 3: RIGHT CARDS — hidden until SVG clicks implemented */}
+            <div style={{ display: "none", flexDirection: "column", gap: "12px" }}>
               {hotspots.filter((_, i) => i % 2 !== 0).map(h => (
                 <HotspotCard key={h.id} h={h} active={active?.id === h.id} onSelect={() => setActive(active?.id === h.id ? null : h)} />
               ))}
@@ -431,7 +406,7 @@ export default function Home() {
                   <div style={{ fontSize: "14px", fontWeight: 600, color: P.text, letterSpacing: "-0.01em", lineHeight: 1.2 }}>
                     {proj.name}
                   </div>
-                  <a href={proj.github} target="_blank" rel="noopener noreferrer"
+                  <a href={`https://github.com/${proj.repo}`} target="_blank" rel="noopener noreferrer"
                     title="View on GitHub" aria-label={`${proj.name} on GitHub`}
                     className="proj-github"
                     style={{ "--proj-color": proj.color, flexShrink: 0, marginLeft: 8 } as React.CSSProperties}

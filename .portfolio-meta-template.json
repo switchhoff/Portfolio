@@ -1,0 +1,5 @@
+{
+  "tagline": "Project description — what it does in one sentence",
+  "tags": ["Tag1", "Tag2", "Tag3"],
+  "firebase": "project-id-here or null"
+}

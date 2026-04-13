@@ -4,11 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/fetch-projects.js && next build",
     "start": "next start",
-    "deploy": "next build && firebase deploy --only hosting"
+    "fetch-projects": "node scripts/fetch-projects.js",
+    "deploy": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
+    "firebase": "^10.14.1",
+    "firebase-admin": "^12.7.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.8.0",
     "next": "16.2.2",

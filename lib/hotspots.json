@@ -1,0 +1,233 @@
+[
+  {
+    "id": "pawsbutton",
+    "label": "PawsButton",
+    "svgElement": "dog",
+    "color": "#e67e22",
+    "project": {
+      "name": "PawsButton",
+      "repo": "switchhoff/PawsButton",
+      "tagline": "Pet feeding, tracking, and logging app for dogs",
+      "tags": ["iOS", "React Native", "Firebase"],
+      "description": "Companion app for pet owners. Track feeding schedules, health logs, vet appointments. Real-time sync across devices."
+    }
+  },
+  {
+    "id": "votemotm",
+    "label": "VoteMotM",
+    "svgElement": "soccer_ball",
+    "color": "#27ae60",
+    "project": {
+      "name": "VoteMotM",
+      "repo": "switchhoff/VoteMotM",
+      "tagline": "Vote for man of the match in your local soccer team",
+      "tags": ["Web", "React", "Real-time"],
+      "description": "Live voting during matches. See who your community thinks played best. Stats, leaderboards, seasonal tracking."
+    }
+  },
+  {
+    "id": "lastyear",
+    "label": "LastYear",
+    "svgElement": "calendar",
+    "color": "#c0392b",
+    "project": {
+      "name": "LastYear",
+      "repo": "switchhoff/LastYear",
+      "tagline": "Memory journal—one year ago on this day",
+      "tags": ["iOS", "Swift", "Local Storage"],
+      "description": "Relive memories. App shows what happened exactly one year ago today. Build a timeline of moments over years."
+    }
+  },
+  {
+    "id": "portfolio",
+    "label": "Portfolio",
+    "svgElement": "monitors",
+    "color": "#3a5fbf",
+    "project": {
+      "name": "Portfolio",
+      "repo": "switchhoff/Portfolio",
+      "tagline": "This website—interactive portfolio with dynamic project metadata",
+      "tags": ["Next.js", "TypeScript", "3D"],
+      "description": "Point-and-click portfolio. Isometric workshop scene. Dynamically fetches project data from GitHub and per-repo metadata."
+    }
+  },
+  {
+    "id": "minimise",
+    "label": "MiniMise",
+    "svgElement": "phone_tablet",
+    "color": "#7a5ce0",
+    "project": {
+      "name": "MiniMise",
+      "repo": "switchhoff/MiniMise",
+      "tagline": "Minimalist Android launcher for intentional phone use",
+      "tags": ["Android", "Kotlin", "UX"],
+      "description": "Strip-down launcher. Essential apps only. Reduce distractions, foster intentionality. Customizable, lightweight."
+    }
+  },
+  {
+    "id": "benfl",
+    "label": "BeNFL",
+    "svgElement": "nfl_ball",
+    "color": "#27ae60",
+    "project": {
+      "name": "BeNFL",
+      "repo": "switchhoff/BeNFL",
+      "tagline": "NFL fan experience—antispoiler game app",
+      "tags": ["Web", "React", "Sports"],
+      "description": "Watch NFL games spoiler-free. Control what you see, when you see it. Live scores without reveals."
+    }
+  },
+  {
+    "id": "habitat",
+    "label": "Habitat",
+    "svgElement": "pot_plant",
+    "color": "#2d6fa3",
+    "project": {
+      "name": "Habitat",
+      "repo": "switchhoff/Habitat",
+      "tagline": "Habit tracker—streaks, intent, accountability",
+      "tags": ["Mobile", "TypeScript", "Psychology"],
+      "description": "Build habits that stick. Track streaks. Visual progress. Community accountability. Science-backed reminders."
+    }
+  },
+  {
+    "id": "cavedisto",
+    "label": "CaveDisto",
+    "svgElement": "electrical_components",
+    "color": "#b85c3a",
+    "project": {
+      "name": "CaveDisto",
+      "repo": "switchhoff/CaveDisto",
+      "tagline": "Hardware infrared laser measuring device for caving surveys",
+      "tags": ["Firmware", "Hardware", "Optics"],
+      "description": "Handheld cave surveying tool. Laser rangefinder + IMU. Logs bearing, pitch, distance. Custom PCB, MicroPython."
+    }
+  },
+  {
+    "id": "sixclicks",
+    "label": "6 Clicks",
+    "svgElement": "computer_mouse",
+    "color": "#16a085",
+    "project": {
+      "name": "6 Clicks",
+      "repo": "switchhoff/6Clicks",
+      "tagline": "Visualize your professional network and theirs—degrees of separation",
+      "tags": ["Web", "Graph", "Network"],
+      "description": "Map your professional connections. See how you're linked to others. Weak ties, bridges, clusters. LinkedIn integration."
+    }
+  },
+  {
+    "id": "threadquarters",
+    "label": "Threadquarters",
+    "svgElement": "hoodie",
+    "color": "#8e44ad",
+    "project": {
+      "name": "Threadquarters",
+      "repo": "switchhoff/Threadquarters",
+      "tagline": "Outfit tracker and inspiration log—clothes, combos, moments",
+      "tags": ["iOS", "Swift", "Fashion"],
+      "description": "Photo journal of fits. Log outfits with context. Find inspo from your wardrobe. Stats on colors, brands, styles."
+    }
+  },
+  {
+    "id": "bintherestore",
+    "label": "BinThereStoreThat",
+    "svgElement": "stack_boxes",
+    "color": "#2d8a50",
+    "project": {
+      "name": "BinThereStoreThat",
+      "repo": "switchhoff/BinThereStoreThat",
+      "tagline": "QR-indexed personal inventory—never lose track of your stuff",
+      "tags": ["IoT", "Hardware", "Web"],
+      "description": "RFID/QR storage system. Know what's in each bin. Search by item. Track location, quantity, condition."
+    }
+  },
+  {
+    "id": "about",
+    "label": "About",
+    "svgElement": "person",
+    "color": "#2d5a3d",
+    "project": {
+      "name": "About Alex Hofmann",
+      "repo": null,
+      "tagline": "Forward-deployed engineer building systems end-to-end",
+      "tags": ["Engineering", "Full-Stack", "Hardware"],
+      "description": "24-year-old building from first principles. Firmware to cloud. Defence R&D background. Seeking FDE roles where deep tech meets customer impact."
+    }
+  },
+  {
+    "id": "printables",
+    "label": "Printables",
+    "svgElement": "3d_printer",
+    "color": "#e74c3c",
+    "type": "project",
+    "project": {
+      "name": "Printables",
+      "repo": null,
+      "tagline": "3D CAD modelling and 3D printing portfolio",
+      "tags": ["PROJECT", "CAD", "3D Printing"],
+      "description": "I design and iterate functional parts, enclosures, and tools in CAD. Upload finished models to Printables for community sharing and iteration.",
+      "link": "https://www.printables.com/@switchhoff"
+    }
+  },
+  {
+    "id": "monsoon",
+    "label": "Monsoon",
+    "svgElement": "board_game_box",
+    "color": "#e74c3c",
+    "type": "project",
+    "project": {
+      "name": "Monsoon",
+      "repo": null,
+      "tagline": "Original board game design—mechanics, balance, playtesting",
+      "tags": ["PROJECT", "Game Design", "Tabletop"],
+      "description": "Designed and playtested a complete board game. Iterative mechanics refinement, component design, rulebook documentation. [More details on design process and rule iterations TBD]"
+    }
+  },
+  {
+    "id": "multiboard",
+    "label": "Multiboard",
+    "svgElement": "multiboard_wall",
+    "color": "#e74c3c",
+    "type": "project",
+    "project": {
+      "name": "Multiboard",
+      "repo": null,
+      "tagline": "Desk storage transformation—modular wall-mounted system",
+      "tags": ["PROJECT", "Organization", "DIY"],
+      "description": "Custom modular storage system for desk. Iterative design and installation. Before/after photos showing transformation. [Photos and detailed process TBD]"
+    }
+  },
+  {
+    "id": "games",
+    "label": "Games",
+    "svgElement": "computer",
+    "color": "#f1c40f",
+    "type": "popup",
+    "popup": {
+      "title": "Games I Play",
+      "items": [
+        { "name": "Terraria", "hours": null },
+        { "name": "Call of Duty", "hours": null },
+        { "name": "Minecraft", "hours": null },
+        { "name": "Assassins Creed", "hours": null },
+        { "name": "Civilization V", "hours": null }
+      ]
+    }
+  },
+  {
+    "id": "books",
+    "label": "Books",
+    "svgElement": "bookshelf",
+    "color": "#f1c40f",
+    "type": "popup",
+    "popup": {
+      "title": "Favourite Books",
+      "items": [
+        { "name": "Brotherband Chronicle" },
+        { "name": "The 100-Year-Old Man Who Climbed Out the Window and Disappeared" },
+        { "name": "Conn Iggulden's Genghis Khan Series" }
+      ]
+    }
+  }
+]

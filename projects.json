@@ -1,0 +1,101 @@
+[
+  {
+    "id": "portfolio",
+    "repo": "switchhoff/Portfolio",
+    "name": "Portfolio",
+    "tagline": "This portfolio — isometric workshop, point-and-click",
+    "tags": ["Next.js", "TypeScript", "Three.js"],
+    "color": "#3a5fbf",
+    "firebase": null
+  },
+  {
+    "id": "pawsbutton",
+    "repo": "switchhoff/PawsButton",
+    "name": "PawsButton",
+    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tags": ["TODO"],
+    "color": "#e67e22",
+    "firebase": null
+  },
+  {
+    "id": "benfl",
+    "repo": "switchhoff/BeNFL",
+    "name": "BeNFL",
+    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tags": ["TODO"],
+    "color": "#27ae60",
+    "firebase": null
+  },
+  {
+    "id": "minimise",
+    "repo": "switchhoff/MiniMise",
+    "name": "MiniMise",
+    "tagline": "Android launcher for intentional phone use",
+    "tags": ["Android", "Kotlin", "UX"],
+    "color": "#7a5ce0",
+    "firebase": null
+  },
+  {
+    "id": "habitat",
+    "repo": "switchhoff/Habitat",
+    "name": "Habitat",
+    "tagline": "Habit tracker — streaks, intent, accountability",
+    "tags": ["Mobile", "TypeScript", "UX"],
+    "color": "#2d6fa3",
+    "firebase": null
+  },
+  {
+    "id": "cavedisto",
+    "repo": "switchhoff/CaveDisto",
+    "name": "CaveDisto",
+    "tagline": "Cave Disto laser measuring hardware system",
+    "tags": ["Firmware", "Hardware", "Optics"],
+    "color": "#b85c3a",
+    "firebase": null
+  },
+  {
+    "id": "lastyear",
+    "repo": "switchhoff/LastYear",
+    "name": "LastYear",
+    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tags": ["TODO"],
+    "color": "#c0392b",
+    "firebase": null
+  },
+  {
+    "id": "sixclicks",
+    "repo": "switchhoff/SixClicks",
+    "name": "SixClicks",
+    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tags": ["TODO"],
+    "color": "#16a085",
+    "firebase": null
+  },
+  {
+    "id": "bintherestore",
+    "repo": "switchhoff/BinThereStoreThat",
+    "name": "BinThereStoreThat",
+    "tagline": "RFID-indexed workshop storage & retrieval",
+    "tags": ["IoT", "Hardware", "Web"],
+    "color": "#2d8a50",
+    "firebase": null
+  },
+  {
+    "id": "threadquarters",
+    "repo": "switchhoff/Threadquarters",
+    "name": "Threadquarters",
+    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tags": ["TODO"],
+    "color": "#8e44ad",
+    "firebase": null
+  },
+  {
+    "id": "keysborough",
+    "repo": "switchhoff/Keysborough-District",
+    "name": "Keysborough-District",
+    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tags": ["TODO"],
+    "color": "#2c3e50",
+    "firebase": null
+  }
+]
