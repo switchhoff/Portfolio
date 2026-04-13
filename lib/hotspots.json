@@ -389,5 +389,19 @@
         { "name": "message", "label": "Message", "type": "textarea", "required": true }
       ]
     }
+  },
+  {
+    "id": "webcam",
+    "label": "Webcam",
+    "svgElement": "webcam",
+    "color": "#3498db",
+    "category": "projects",
+    "type": "link",
+    "link": {
+      "title": "Videography",
+      "description": "Engineering videos, build logs, and tutorials",
+      "url": "https://youtube.com/@hoffswitch",
+      "text": "Visit YouTube Channel"
+    }
   }
 ]
