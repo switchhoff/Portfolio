@@ -47,7 +47,41 @@ export interface ExperienceHotspot {
   };
 }
 
-export type Hotspot = ProjectHotspot | PopupHotspot | ExperienceHotspot;
+export interface LinkHotspot {
+  id: string;
+  label: string;
+  svgElement: string;
+  color: string;
+  category: string;
+  type: 'link';
+  link: {
+    title: string;
+    description: string;
+    url: string;
+    text: string;
+  };
+}
+
+export interface FormHotspot {
+  id: string;
+  label: string;
+  svgElement: string;
+  color: string;
+  category: string;
+  type: 'form';
+  form: {
+    title: string;
+    description: string;
+    fields: Array<{
+      name: string;
+      label: string;
+      type: 'text' | 'email' | 'textarea';
+      required: boolean;
+    }>;
+  };
+}
+
+export type Hotspot = ProjectHotspot | PopupHotspot | ExperienceHotspot | LinkHotspot | FormHotspot;
 
 export function getHotspots(): Hotspot[] {
   return hotspots as Hotspot[];
@@ -67,6 +101,14 @@ export function isPopup(h: Hotspot): h is PopupHotspot {
 
 export function isExperience(h: Hotspot): h is ExperienceHotspot {
   return h.type === 'experience';
+}
+
+export function isLink(h: Hotspot): h is LinkHotspot {
+  return h.type === 'link';
+}
+
+export function isForm(h: Hotspot): h is FormHotspot {
+  return h.type === 'form';
 }
 
 export interface CheatGuideCategory {
@@ -100,6 +142,12 @@ export const CHEAT_GUIDE_CATEGORIES: CheatGuideCategory[] = [
     label: 'About',
     color: '#2d5a3d',
     description: 'Bio & background'
+  },
+  {
+    id: 'contact',
+    label: 'Contact',
+    color: '#27ae60',
+    description: 'Get in touch'
   }
 ];
 

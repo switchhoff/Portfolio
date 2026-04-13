@@ -357,5 +357,37 @@
       "description": "Designed low-cost water filtration units using sand, plastic bottles, and locally-available materials for communities in Vanuatu. Rapid prototyping, deployment-ready solution.",
       "tags": ["Humanitarian", "Water", "Hackathon"]
     }
+  },
+  {
+    "id": "camera",
+    "label": "Camera",
+    "svgElement": "camera",
+    "color": "#3498db",
+    "category": "projects",
+    "type": "link",
+    "link": {
+      "title": "Photography",
+      "description": "Photography portfolio and daily captures",
+      "url": "https://instagram.com/hoffswitch",
+      "text": "Visit Instagram"
+    }
+  },
+  {
+    "id": "envelope",
+    "label": "Contact",
+    "svgElement": "envelope",
+    "color": "#27ae60",
+    "category": "contact",
+    "type": "form",
+    "form": {
+      "title": "Get in Touch",
+      "description": "Drop a line — let's chat about projects, opportunities, or just say hi.",
+      "fields": [
+        { "name": "name", "label": "Name", "type": "text", "required": true },
+        { "name": "email", "label": "Email", "type": "email", "required": true },
+        { "name": "subject", "label": "Subject", "type": "text", "required": true },
+        { "name": "message", "label": "Message", "type": "textarea", "required": true }
+      ]
+    }
   }
 ]
