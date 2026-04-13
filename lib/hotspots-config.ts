@@ -81,7 +81,27 @@ export interface FormHotspot {
   };
 }
 
-export type Hotspot = ProjectHotspot | PopupHotspot | ExperienceHotspot | LinkHotspot | FormHotspot;
+export interface StatusHotspot {
+  id: string;
+  label: string;
+  svgElement: string;
+  color: string;
+  category: string;
+  type: 'status';
+  note?: string;
+  status: {
+    title: string;
+    description: string;
+    liveData: boolean;
+    fields: Array<{
+      label: string;
+      value: string;
+      source?: string;
+    }>;
+  };
+}
+
+export type Hotspot = ProjectHotspot | PopupHotspot | ExperienceHotspot | LinkHotspot | FormHotspot | StatusHotspot;
 
 export function getHotspots(): Hotspot[] {
   return hotspots as Hotspot[];
@@ -109,6 +129,10 @@ export function isLink(h: Hotspot): h is LinkHotspot {
 
 export function isForm(h: Hotspot): h is FormHotspot {
   return h.type === 'form';
+}
+
+export function isStatus(h: Hotspot): h is StatusHotspot {
+  return h.type === 'status';
 }
 
 export interface CheatGuideCategory {

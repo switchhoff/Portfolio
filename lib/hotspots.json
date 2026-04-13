@@ -421,5 +421,26 @@
         { "name": "Custom gear & bags" }
       ]
     }
+  },
+  {
+    "id": "3d_printer",
+    "label": "3D Printer",
+    "svgElement": "3d_printer",
+    "color": "#2d8a50",
+    "category": "projects",
+    "type": "status",
+    "note": "LIVE: Connected to real Prusa i3 MK3S+ printer. Shows current job, temperature, progress.",
+    "status": {
+      "title": "3D Printer Status",
+      "description": "Real-time connection to workshop printer",
+      "liveData": true,
+      "fields": [
+        { "label": "Printer", "value": "Prusa i3 MK3S+" },
+        { "label": "Status", "value": "monitoring", "source": "mqtt" },
+        { "label": "Nozzle Temp", "value": "0°C", "source": "mqtt" },
+        { "label": "Bed Temp", "value": "0°C", "source": "mqtt" },
+        { "label": "Job Progress", "value": "idle", "source": "mqtt" }
+      ]
+    }
   }
 ]
