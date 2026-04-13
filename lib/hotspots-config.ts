@@ -28,7 +28,23 @@ export interface PopupHotspot {
   };
 }
 
-export type Hotspot = ProjectHotspot | PopupHotspot;
+export interface ExperienceHotspot {
+  id: string;
+  label: string;
+  svgElement: string;
+  color: string;
+  type: 'experience';
+  experience: {
+    title: string;
+    period?: string;
+    role?: string;
+    description?: string;
+    items?: Array<{ degree?: string; institution?: string; period?: string; note?: string }>;
+    tags?: string[];
+  };
+}
+
+export type Hotspot = ProjectHotspot | PopupHotspot | ExperienceHotspot;
 
 export function getHotspots(): Hotspot[] {
   return hotspots as Hotspot[];
@@ -44,4 +60,8 @@ export function isProject(h: Hotspot): h is ProjectHotspot {
 
 export function isPopup(h: Hotspot): h is PopupHotspot {
   return h.type === 'popup';
+}
+
+export function isExperience(h: Hotspot): h is ExperienceHotspot {
+  return h.type === 'experience';
 }

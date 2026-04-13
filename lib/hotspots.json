@@ -229,5 +229,119 @@
         { "name": "Conn Iggulden's Genghis Khan Series" }
       ]
     }
+  },
+  {
+    "id": "diploma",
+    "label": "Diploma",
+    "svgElement": "diploma_wall",
+    "color": "#e74c3c",
+    "type": "experience",
+    "experience": {
+      "title": "Education",
+      "items": [
+        {
+          "degree": "Master of Electrical Engineering",
+          "institution": "Monash University",
+          "period": null,
+          "note": ""
+        },
+        {
+          "degree": "Bachelor of Mechatronics & Robotics Engineering (AI)",
+          "institution": "Monash University",
+          "period": null,
+          "note": "AI Specialisation"
+        },
+        {
+          "degree": "Minor — Software Engineering",
+          "institution": "Monash University",
+          "period": null,
+          "note": ""
+        }
+      ]
+    }
+  },
+  {
+    "id": "rc_car",
+    "label": "RC Car",
+    "svgElement": "rc_car",
+    "color": "#e74c3c",
+    "type": "experience",
+    "experience": {
+      "title": "DefendTex — UGV Navigation",
+      "period": "2022–2023",
+      "role": "R&D Engineer",
+      "description": "Navigation and autonomous systems for Unmanned Ground Vehicles. Sensor fusion, path planning, obstacle avoidance.",
+      "tags": ["Robotics", "Autonomous Systems", "ROS"]
+    }
+  },
+  {
+    "id": "vr_headset",
+    "label": "VR Headset",
+    "svgElement": "vr_headset",
+    "color": "#e74c3c",
+    "type": "experience",
+    "experience": {
+      "title": "Tonbo Systems — Thermal Imaging",
+      "period": "2023",
+      "role": "Engineer",
+      "description": "Thermal imaging sensor integration and system development. Custom imaging pipelines, sensor calibration, real-time processing.",
+      "tags": ["Thermal Imaging", "Sensors", "Signal Processing"]
+    }
+  },
+  {
+    "id": "smartwatch",
+    "label": "Smartwatch",
+    "svgElement": "smartwatch",
+    "color": "#e74c3c",
+    "type": "experience",
+    "experience": {
+      "title": "Fortifyedge — Chief Engineer",
+      "period": "2024–Present",
+      "role": "Chief Engineer",
+      "description": "Defence tech. Full-system ownership from architecture through deployment. Firmware, hardware, cloud infrastructure, team leadership.",
+      "tags": ["Defence Tech", "Full-Stack", "Leadership"]
+    }
+  },
+  {
+    "id": "rocket",
+    "label": "Model Rocket",
+    "svgElement": "model_rocket",
+    "color": "#e74c3c",
+    "type": "experience",
+    "experience": {
+      "title": "Monash High Powered Rocketry",
+      "period": "University",
+      "role": "Team Member",
+      "description": "Design and build high-powered rocket systems. Avionics, structural engineering, launch operations. Competition-level payload delivery.",
+      "tags": ["Rocketry", "Avionics", "Aerospace"]
+    }
+  },
+  {
+    "id": "model_plane",
+    "label": "Model Plane",
+    "svgElement": "model_plane",
+    "color": "#e74c3c",
+    "type": "experience",
+    "experience": {
+      "title": "Monash Uncrewed Aerial Systems",
+      "period": "University",
+      "role": "Team Member",
+      "description": "Design and operate autonomous drones. Flight control systems, mission planning, computer vision integration.",
+      "tags": ["UAS", "Drones", "Autonomy"]
+    }
+  },
+  {
+    "id": "water_filter",
+    "label": "Water Filter",
+    "svgElement": "water_filter",
+    "color": "#e74c3c",
+    "type": "experience",
+    "experience": {
+      "title": "Humanitarian Hackathon — Water Filtration",
+      "period": "Hackathon Winner",
+      "role": "Designer",
+      "description": "Designed low-cost water filtration units using sand, plastic bottles, and locally-available materials for communities in Vanuatu. Rapid prototyping, deployment-ready solution.",
+      "tags": ["Humanitarian", "Water", "Hackathon"]
+    }
   }
 ]
