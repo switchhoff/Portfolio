@@ -11,10 +11,11 @@ import BoringView from "@/components/resume/BoringView";
 import { Gamepad2, FileText } from "lucide-react";
 
 // ─── Custom Cursor ────────────────────────────────────────────────────────────
-function CustomCursor({ color, activeTab }: { color: string | null; activeTab: string }) {
+function CustomCursor({ activeTab }: { activeTab: string }) {
   const [pos, setPos] = useState({ x: -100, y: -100 });
   const [clicked, setClicked] = useState(false);
   const [bgColor, setBgColor] = useState("#f6f8f3");
+  const [isClickable, setIsClickable] = useState(false);
 
   const invertColor = (hex: string): string => {
     const cleanHex = hex.replace(/^#/, "");
@@ -28,6 +29,30 @@ function CustomCursor({ color, activeTab }: { color: string | null; activeTab: s
     return `#${invR}${invG}${invB}`;
   };
 
+  const isElementClickable = (el: Element | null): boolean => {
+    if (!el) return false;
+    const tagName = el.tagName.toLowerCase();
+
+    // Direct clickable elements
+    if (["button", "a", "input"].includes(tagName)) return true;
+    if (el.hasAttribute("onclick")) return true;
+    if (el.hasAttribute("role") && ["button", "link"].includes(el.getAttribute("role") || "")) return true;
+    if (el.hasAttribute("data-clickable")) return true;
+
+    // Check computed style for pointer cursor
+    const style = window.getComputedStyle(el);
+    if (style.cursor === "pointer") return true;
+
+    // Check parent recursively (SVG paths, etc)
+    if (el.parentElement) {
+      const parent = el.parentElement;
+      if (parent.hasAttribute("onclick") || parent.hasAttribute("role")) return true;
+      return isElementClickable(parent);
+    }
+
+    return false;
+  };
+
   useEffect(() => {
     const move = (e: MouseEvent) => {
       setPos({ x: e.clientX, y: e.clientY });
@@ -36,6 +61,7 @@ function CustomCursor({ color, activeTab }: { color: string | null; activeTab: s
         const computed = window.getComputedStyle(el);
         const bgVal = computed.backgroundColor || "#f6f8f3";
         setBgColor(bgVal);
+        setIsClickable(isElementClickable(el));
       }
     };
     const down = () => { setClicked(true); setTimeout(() => setClicked(false), 160); };
@@ -46,7 +72,6 @@ function CustomCursor({ color, activeTab }: { color: string | null; activeTab: s
 
   if (activeTab === "boring") return null;
 
-  const isClickable = color !== null;
   const cursorColor = invertColor(bgColor);
   const glowColor = isClickable ? "#ffd700" : "transparent";
 
@@ -104,7 +129,7 @@ export default function Home() {
 
   return (
     <div style={{ background: P.surface, minHeight: "100vh", fontFamily: "var(--font-mono)" }}>
-      {ready && <CustomCursor color={hoverSpot?.color ?? null} activeTab={activeTab} />}
+      {ready && <CustomCursor activeTab={activeTab} />}
 
       {/* ── SPLASH BACKDROP ── */}
       <div style={{

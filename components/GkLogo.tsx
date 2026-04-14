@@ -203,9 +203,9 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
                 initial={{ fill: "rgba(0,0,0,0)" }}
                 animate={{
                   fill: getPathColor(i),
-                  y: (isSwitch && ["switch_animating", "glowing", "light_mode", "final"].includes(phase)) ? -190 : 0, 
-                  filter: (getPathColor(i) !== "rgba(0,0,0,0)" && getPathColor(i) !== "#000000") 
-                    ? `drop-shadow(0 0 15px ${getPathColor(i)}80)` 
+                  y: (isSwitch && ["switch_animating", "glowing", "light_mode", "final"].includes(phase)) ? -190 : 0,
+                  filter: (getPathColor(i) !== "rgba(0,0,0,0)" && getPathColor(i) !== "#000000")
+                    ? `drop-shadow(0 0 15px ${getPathColor(i)}80)`
                     : "none"
                 }}
                 transition={{
@@ -213,6 +213,7 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
                   ease: "easeInOut"
                 }}
                 onClick={isPower ? handlePowerClick : undefined}
+                style={{ cursor: isPower ? "pointer" : "default" }}
               />
             );
           })}

@@ -4,7 +4,11 @@
     "repo": "switchhoff/Portfolio",
     "name": "Portfolio",
     "tagline": "This portfolio — isometric workshop, point-and-click",
-    "tags": ["Next.js", "TypeScript", "Three.js"],
+    "tags": [
+      "Next.js",
+      "TypeScript",
+      "Three.js"
+    ],
     "color": "#3a5fbf",
     "firebase": null
   },
@@ -13,7 +17,9 @@
     "repo": "switchhoff/PawsButton",
     "name": "PawsButton",
     "tagline": "TODO: Add description to portfolio-meta.json",
-    "tags": ["TODO"],
+    "tags": [
+      "TODO"
+    ],
     "color": "#e67e22",
     "firebase": null
   },
@@ -22,7 +28,9 @@
     "repo": "switchhoff/BeNFL",
     "name": "BeNFL",
     "tagline": "TODO: Add description to portfolio-meta.json",
-    "tags": ["TODO"],
+    "tags": [
+      "TODO"
+    ],
     "color": "#27ae60",
     "firebase": null
   },
@@ -31,7 +39,11 @@
     "repo": "switchhoff/MiniMise",
     "name": "MiniMise",
     "tagline": "Android launcher for intentional phone use",
-    "tags": ["Android", "Kotlin", "UX"],
+    "tags": [
+      "Android",
+      "Kotlin",
+      "UX"
+    ],
     "color": "#7a5ce0",
     "firebase": null
   },
@@ -40,7 +52,11 @@
     "repo": "switchhoff/Habitat",
     "name": "Habitat",
     "tagline": "Habit tracker — streaks, intent, accountability",
-    "tags": ["Mobile", "TypeScript", "UX"],
+    "tags": [
+      "Mobile",
+      "TypeScript",
+      "UX"
+    ],
     "color": "#2d6fa3",
     "firebase": null
   },
@@ -49,7 +65,11 @@
     "repo": "switchhoff/CaveDisto",
     "name": "CaveDisto",
     "tagline": "Cave Disto laser measuring hardware system",
-    "tags": ["Firmware", "Hardware", "Optics"],
+    "tags": [
+      "Firmware",
+      "Hardware",
+      "Optics"
+    ],
     "color": "#b85c3a",
     "firebase": null
   },
@@ -58,7 +78,9 @@
     "repo": "switchhoff/LastYear",
     "name": "LastYear",
     "tagline": "TODO: Add description to portfolio-meta.json",
-    "tags": ["TODO"],
+    "tags": [
+      "TODO"
+    ],
     "color": "#c0392b",
     "firebase": null
   },
@@ -67,7 +89,9 @@
     "repo": "switchhoff/SixClicks",
     "name": "SixClicks",
     "tagline": "TODO: Add description to portfolio-meta.json",
-    "tags": ["TODO"],
+    "tags": [
+      "TODO"
+    ],
     "color": "#16a085",
     "firebase": null
   },
@@ -76,7 +100,11 @@
     "repo": "switchhoff/BinThereStoreThat",
     "name": "BinThereStoreThat",
     "tagline": "RFID-indexed workshop storage & retrieval",
-    "tags": ["IoT", "Hardware", "Web"],
+    "tags": [
+      "IoT",
+      "Hardware",
+      "Web"
+    ],
     "color": "#2d8a50",
     "firebase": null
   },
@@ -85,7 +113,9 @@
     "repo": "switchhoff/Threadquarters",
     "name": "Threadquarters",
     "tagline": "TODO: Add description to portfolio-meta.json",
-    "tags": ["TODO"],
+    "tags": [
+      "TODO"
+    ],
     "color": "#8e44ad",
     "firebase": null
   },
@@ -94,7 +124,9 @@
     "repo": "switchhoff/Keysborough-District",
     "name": "Keysborough-District",
     "tagline": "TODO: Add description to portfolio-meta.json",
-    "tags": ["TODO"],
+    "tags": [
+      "TODO"
+    ],
     "color": "#2c3e50",
     "firebase": null
   }
