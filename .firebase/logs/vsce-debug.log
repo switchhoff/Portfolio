@@ -1,0 +1,29 @@
+[debug] [2026-04-14T03:56:23.702Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2026-04-14T03:56:25.072Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-04-14T03:56:25.072Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-14T03:56:25.073Z] > authorizing via signed-in user (alex.hofmann@fortifyedge.com)
+[debug] [2026-04-14T03:56:25.074Z] Checked if tokens are valid: true, expires at: 1776141190801
+[debug] [2026-04-14T03:56:25.074Z] Checked if tokens are valid: true, expires at: 1776141190801
+[debug] [2026-04-14T03:56:25.074Z] [Firebase Plugin] User found:  alex.hofmann@fortifyedge.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-04-14T03:56:25.075Z] Checked if tokens are valid: true, expires at: 1776141190801
+[debug] [2026-04-14T03:56:25.076Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-04-14T03:56:25.080Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting Data Connect toolkit (version 3.3.1) on port 50001
+[debug] [2026-04-14T03:56:25.320Z] 'fdc build' failed with error: Unable to build your Data Connect schema and connectors (exit code 1): E0414 13:56:25.318355   79800 cmd.go:43] Error loading data connect config: could not find dataconnect.yaml in `/Users/alexhofmann/Documents/Code/Portfolio/dataconnect`
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"'fdc build' failed with error: Unable to build your Data Connect schema and connectors (exit code 1): E0414 13:56:25.318355   79800 cmd.go:43] Error loading data connect config: could not find dataconnect.yaml in `/Users/alexhofmann/Documents/Code/Portfolio/dataconnect`\n"}}
+[debug] [2026-04-14T03:56:25.321Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-04-14T03:56:25.321Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-04-14T03:56:25.321Z] Starting Data Connect Emulator with command {"binary":"/Users/alexhofmann/.cache/firebase/emulators/dataconnect-emulator-3.3.1","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=/Users/alexhofmann/Documents/Code/Portfolio/dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting Data Connect Emulator with command {\"binary\":\"/Users/alexhofmann/.cache/firebase/emulators/dataconnect-emulator-3.3.1\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=/Users/alexhofmann/Documents/Code/Portfolio/dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: Data Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"Data Connect Emulator logging to dataconnect-debug.log"}}
+[debug] [2026-04-14T03:56:25.343Z] E0414 13:56:25.343073   79801 dev.go:83] Failed to load initial config from "/Users/alexhofmann/Documents/Code/Portfolio/dataconnect": could not find dataconnect.yaml in `/Users/alexhofmann/Documents/Code/Portfolio/dataconnect`
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0414 13:56:25.343073   79801 dev.go:83] Failed to load initial config from \"/Users/alexhofmann/Documents/Code/Portfolio/dataconnect\": could not find dataconnect.yaml in `/Users/alexhofmann/Documents/Code/Portfolio/dataconnect`\n"}}
+[debug] [2026-04-14T03:56:25.346Z] E0414 13:56:25.346093   79801 watch.go:116] watchAllDir unable to walk dir `/Users/alexhofmann/Documents/Code/Portfolio/dataconnect`: lstat /Users/alexhofmann/Documents/Code/Portfolio/dataconnect: no such file or directory
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0414 13:56:25.346093   79801 watch.go:116] watchAllDir unable to walk dir `/Users/alexhofmann/Documents/Code/Portfolio/dataconnect`: lstat /Users/alexhofmann/Documents/Code/Portfolio/dataconnect: no such file or directory\n"}}
+[debug] [2026-04-14T03:56:25.348Z] I0414 13:56:25.348341   79801 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0414 13:56:25.348341   79801 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[error] [Firebase Plugin] error:  {}
+[debug] [2026-04-14T03:56:27.360Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-04-14T03:56:27.360Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2026-04-14T03:56:35.349Z] E0414 13:56:35.349331   79801 watch.go:40] Failed to load config from "/Users/alexhofmann/Documents/Code/Portfolio/dataconnect": could not find dataconnect.yaml in `/Users/alexhofmann/Documents/Code/Portfolio/dataconnect`
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0414 13:56:35.349331   79801 watch.go:40] Failed to load config from \"/Users/alexhofmann/Documents/Code/Portfolio/dataconnect\": could not find dataconnect.yaml in `/Users/alexhofmann/Documents/Code/Portfolio/dataconnect`\n"}}

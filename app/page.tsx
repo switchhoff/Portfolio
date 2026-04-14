@@ -1,7 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import WorkshopScene from "@/components/workshop/WorkshopScene";
+import HotspotModal from "@/components/modals/HotspotModal";
+import CheatGuide from "@/components/CheatGuide";
 import { type Hotspot, getHotspots, getCategoryColor } from "@/lib/hotspots-config";
 import { GkLogo } from "@/components/GkLogo";
 import { getProjects } from "@/lib/projects";
@@ -18,18 +20,19 @@ function CustomCursor({ color }: { color: string | null }) {
     return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mousedown", down); };
   }, []);
 
-  const c = color ?? "#2d5a3d";
+  const isClickable = color !== null;
+  const glowColor = isClickable ? "#ffd700" : "#2d5a3d";
   return (
     <div style={{
-      position: "fixed", top: 0, left: 0, width: 24, height: 24,
-      border: `1.2px solid ${c}`,
+      position: "fixed", top: 0, left: 0, width: 16, height: 16,
+      border: `1px solid ${glowColor}`,
       borderRadius: "50%", pointerEvents: "none", zIndex: 10000,
-      transform: `translate(${pos.x - 12}px, ${pos.y - 12}px) scale(${clicked ? 0.7 : 1})`,
-      transition: "transform 0.1s ease-out, border-color 0.2s, background 0.2s",
-      background: clicked ? `${c}20` : "transparent",
+      transform: `translate(${pos.x - 8}px, ${pos.y - 8}px) scale(${clicked ? 0.8 : 1})`,
+      transition: "transform 0.1s ease-out, border-color 0.2s, box-shadow 0.2s",
+      boxShadow: isClickable ? `0 0 12px ${glowColor}, inset 0 0 8px ${glowColor}40` : "none",
       display: "flex", alignItems: "center", justifyContent: "center"
     }}>
-      <div style={{ width: 2, height: 2, background: c, borderRadius: "50%" }} />
+      <div style={{ width: 2, height: 2, background: glowColor, borderRadius: "50%" }} />
     </div>
   );
 }
@@ -38,10 +41,13 @@ function CustomCursor({ color }: { color: string | null }) {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const PROJECTS = getProjects();
 
+const BIRTHDAY = new Date(2001, 7, 29); // Aug 29, 2001
+const AGE = Math.floor((Date.now() - BIRTHDAY.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+
 const WORK = [
-  { title: "Chief Engineer", company: "Fortifyedge", period: "2024 — Present", note: "Defence tech. Full-system ownership." },
-  { title: "Engineer", company: "Tonbo Systems", period: "2023", note: "Thermal imaging & sensor integration." },
-  { title: "R&D Engineer", company: "DefendTex", period: "2022 — 2023", note: "Navigation of Unmanned Ground Vehicles." },
+  { title: "Chief Engineer", company: "Fortifyedge", period: "2024 — Present", note: "Human Monitoring on Ruggedized Edge devices." },
+  { title: "Software Systems Engineer", company: "Tonbo Systems", period: "2023", note: "Integrating tactical sensors into Augmented Reality Systems." },
+  { title: "Engineer", company: "DefendTex", period: "2022 — 2023", note: "Navigation of Unmanned Ground Vehicles." },
 ];
 
 const P = {
@@ -64,11 +70,14 @@ const inputStyle: React.CSSProperties = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [active, setActive] = useState<Hotspot | null>(null);
+  const [clickOrigin, setClickOrigin] = useState<{ x: number; y: number } | null>(null);
+  const [highlightCategory, setHighlightCategory] = useState<string | null>(null);
   const [hoverSpot, setHoverSpot] = useState<Hotspot | null>(null);
   const [ready, setReady] = useState(false);
   const [splashDone, setSplashDone] = useState(false);
   const [isLit, setIsLit] = useState(false);
   const [logoPhase, setLogoPhase] = useState("initial");
+  const sceneContainerRef = useRef<HTMLDivElement>(null);
 
   // Contact form
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -136,9 +145,9 @@ export default function Home() {
           />
         </div>
         
-        {/* Byline - appears during 'red' phase and follows logo to header */}
+        {/* Byline - appears during light_mode and follows logo to header */}
         <AnimatePresence>
-          {(logoPhase === "red" || logoPhase === "final") && (
+          {(logoPhase === "light_mode" || logoPhase === "final") && (
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -191,6 +200,18 @@ export default function Home() {
               <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#3a9e5c", boxShadow: "0 0 6px #3a9e5c", animation: "pulse 2.5s ease-in-out infinite" }} />
 <span style={{ fontSize: "9px", letterSpacing: "0.14em", color: P.dim, textTransform: "uppercase" }}>Available</span>
             </div>
+            <a
+              href="#tldr"
+              onClick={(e) => { e.preventDefault(); document.getElementById("tldr")?.scrollIntoView({ behavior: "smooth" }); }}
+              style={{
+                fontSize: "9px", fontWeight: 600, letterSpacing: "0.14em",
+                color: P.pine, textDecoration: "none", textTransform: "uppercase",
+                padding: "4px 10px", border: `1px solid ${P.border}`,
+                cursor: "pointer",
+              }}
+            >
+              TL;DR
+            </a>
             {[
               { title: "GitHub", href: "https://github.com/switchhoff", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg> },
               { title: "LinkedIn", href: "https://www.linkedin.com/in/hofmannalexb/", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg> },
@@ -205,29 +226,61 @@ export default function Home() {
         </header>
 
         {/* ── WORKSHOP SCENE — full-width image ── */}
-        <section style={{ paddingTop: "60px", paddingBottom: "60px", width: "100%", margin: "0 auto" }}>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: "40px",
-            alignItems: "start"
-          }}>
-            
-            {/* WORKSHOP SCENE */}
-            <div style={{ position: "relative" }}>
-              <div style={{
-                width: "100%",
-                margin: "0 auto",
-                overflow: "hidden"
-              }}>
-                <WorkshopScene
-                  onHotspotClick={(h) => setActive(active?.id === h.id ? null : h)}
-                  activeId={active?.id ?? null}
-                  highlightCategory={null}
-                  onHoverChange={setHoverSpot}
-                />
-              </div>
-            </div>
+        <section style={{ paddingTop: "60px", paddingBottom: "0", width: "100%", margin: "0 auto" }}>
+          <div
+            ref={sceneContainerRef}
+            style={{ position: "relative", width: "100%", overflow: "hidden" }}
+          >
+            <WorkshopScene
+              onHotspotClick={(h, origin) => {
+                if (active?.id === h.id) {
+                  setActive(null);
+                  setClickOrigin(null);
+                } else {
+                  setActive(h);
+                  setClickOrigin(origin);
+                }
+              }}
+              activeId={active?.id ?? null}
+              highlightCategory={highlightCategory}
+              onHoverChange={setHoverSpot}
+            />
+
+            <HotspotModal
+              hotspot={active}
+              clickOrigin={clickOrigin}
+              containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
+              onClose={() => { setActive(null); setClickOrigin(null); }}
+            />
+
+            <CheatGuide
+              onHotspotSelect={(h) => {
+                setActive(h);
+                setClickOrigin(null);
+              }}
+              activeCategory={highlightCategory}
+              onCategoryChange={setHighlightCategory}
+            />
+          </div>
+        </section>
+
+        {/* ── TL;DR ── */}
+        <section id="tldr" style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 36px 48px", textAlign: "center" }}>
+          <div style={{ fontSize: "9px", letterSpacing: "0.2em", color: P.dim, textTransform: "uppercase", marginBottom: "16px" }}>TL;DR</div>
+          <p style={{ fontSize: "clamp(14px, 1.5vw, 17px)", color: P.text, lineHeight: 1.9, marginBottom: "24px" }}>
+            Forward-deployed engineer building systems end-to-end — from microcontroller firmware and PCB layout through to full-stack platforms and cloud automation. Based in Melbourne, Australia.
+          </p>
+          <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+            {[
+              { label: "GitHub", href: "https://github.com/switchhoff" },
+              { label: "LinkedIn", href: "https://www.linkedin.com/in/hofmannalexb/" },
+              { label: "Email", href: "mailto:alex@hoffswitch.com" },
+            ].map(l => (
+              <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer"
+                style={{ fontSize: 10, fontWeight: 600, color: P.pine, textDecoration: "none", letterSpacing: "0.1em", padding: "6px 14px", border: `1px solid ${P.border}` }}>
+                {l.label} →
+              </a>
+            ))}
           </div>
         </section>
 
@@ -239,16 +292,31 @@ export default function Home() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "start" }}>
-            {/* Bio */}
+            {/* Bio + Info Cards */}
             <div>
-              <p style={{ fontSize: "clamp(15px,1.6vw,19px)", color: P.text, lineHeight: 1.85, fontWeight: 400, marginBottom: "28px" }}>
-                I'm a 24-year-old engineer who builds systems from first principles — firmware on microcontrollers to full-stack web platforms, laser-cut enclosures to cloud automation pipelines.
-              </p>
-              <p style={{ fontSize: "13px", color: P.muted, lineHeight: 1.9, marginBottom: "28px" }}>
-                Background in defence R&D across Australia and India. Currently seeking a Forward Deployed Engineer role where I can operate at the intersection of deep technical work and direct customer impact.
-              </p>
+              {/* Info Cards */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "32px" }}>
+                {[
+                  { label: "Name", value: "Alex" },
+                  { label: "Age", value: AGE.toString() },
+                  { label: "Location", value: "Melbourne" },
+                  { label: "Vibes", value: "Good" },
+                ].map((card, i) => (
+                  <div key={i} style={{
+                    padding: "14px 12px",
+                    border: `1px solid ${P.border}`,
+                    borderLeft: `2px solid ${P.pine}`,
+                    textAlign: "center",
+                  }}>
+                    <div style={{ fontSize: "8px", letterSpacing: "0.2em", color: P.dim, textTransform: "uppercase", marginBottom: "4px" }}>{card.label}</div>
+                    <div style={{ fontSize: "14px", fontWeight: 600, color: P.text, fontFamily: "var(--font-mono)" }}>{card.value}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Bio text */}
               <p style={{ fontSize: "13px", color: P.muted, lineHeight: 1.9 }}>
-                When I'm not shipping code or soldering, I'm adding to the Multiboard wall, printing brackets at 3am, or running automations I don't technically need but definitely wanted.
+                I like to build things: for work, for fun, for anywhere or anything. I've held various roles in the Australian Defence industry across cutting-edge R&D to customer facing forward deployments on tech stacks that I have owned fully. I love a challenge, and when I'm not shipping code or building systems professionally, I'll be tinkering away in my home office, putting on 3D prints and designing mini apps.
               </p>
             </div>
 

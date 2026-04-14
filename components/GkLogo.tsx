@@ -75,7 +75,7 @@ interface GkLogoProps {
 }
 
 export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhaseChange, isHeader = false }) => {
-  const [phase, setPhase] = useState<"initial" | "cells" | "wiring" | "resistor" | "transistor" | "switch_light" | "switch_move" | "flicker" | "active" | "red" | "final">("initial");
+  const [phase, setPhase] = useState<"initial" | "activated" | "switch_animating" | "glowing" | "light_mode" | "letters_red" | "final">("initial");
   const [isLightMode, setIsLightMode] = useState(false);
   const [flickerActive, setFlickerActive] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -95,7 +95,7 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
 
   // Handle flicker effect
   useEffect(() => {
-    if (phase === "flicker") {
+    if (phase === "glowing") {
       let count = 0;
       const interval = setInterval(() => {
         setFlickerActive(prev => !prev);
@@ -113,38 +113,28 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
 
   const handlePowerClick = () => {
     if (phase !== "initial" || isHeader) return;
-    
-    // 0s: Cells
-    setPhase("cells");
-    
-    // Sequence with longer delays
-    setTimeout(() => setPhase("wiring"), 1500);
-    setTimeout(() => setPhase("resistor"), 3000);
-    setTimeout(() => setPhase("transistor"), 4500);
-    
-    // Switch sequence
-    setTimeout(() => setPhase("switch_light"), 6000);
-    setTimeout(() => setPhase("switch_move"), 8500); // 2.5s delay
-    
-    // Flicker before Light Mode
-    setTimeout(() => setPhase("flicker"), 11000);
-    
-    // Final Engagement
+
+    // 0ms: All components appear (except switch black)
+    setPhase("activated");
+
+    // 2500ms: Switch animates down (white → red)
+    setTimeout(() => setPhase("switch_animating"), 2500);
+
+    // 4500ms: Glow flickers, letters not yet
+    setTimeout(() => setPhase("glowing"), 4500);
+
+    // 6000ms: Light mode, letters appear black then fade to red
     setTimeout(() => {
-      setPhase("active");
+      setPhase("light_mode");
       setIsLightMode(true);
       if (onLightMode) onLightMode();
-      
-      // Letters change to red 4s later
-      setTimeout(() => {
-        setPhase("red");
-        
-        // Minimize to header 5s later
-        setTimeout(() => {
-          if (onComplete) onComplete();
-        }, 5000);
-      }, 4000);
-    }, 12500);
+    }, 6000);
+
+    // 10000ms: Minimize to header
+    setTimeout(() => {
+      setPhase("final");
+      if (onComplete) onComplete();
+    }, 10000);
   };
 
   const getPathColor = (index: number) => {
@@ -153,16 +143,16 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
       if (group === "POWER") return true;
       if (phase === "initial") return false;
       
-      const pIdx = ["initial", "cells", "wiring", "resistor", "transistor", "switch_light", "switch_move", "flicker", "active", "red", "final"].indexOf(phase);
-      const minPhase = (m: typeof phase) => pIdx >= ["initial", "cells", "wiring", "resistor", "transistor", "switch_light", "switch_move", "flicker", "active", "red", "final"].indexOf(m);
+      const pIdx = ["initial", "activated", "switch_animating", "glowing", "light_mode", "final"].indexOf(phase);
+      const minPhase = (m: typeof phase) => pIdx >= ["initial", "activated", "switch_animating", "glowing", "light_mode", "final"].indexOf(m);
 
-      if (group?.startsWith("CELL")) return minPhase("cells");
-      if (group === "WIRING" || group === "GROUND") return minPhase("wiring");
-      if (group === "RESISTOR") return minPhase("resistor");
-      if (group === "TRANSISTOR") return minPhase("transistor");
-      if (group === "SWITCH") return minPhase("switch_light");
-      if (group === "LAMP") return minPhase("active");
-      if (group === "LETTERS") return minPhase("active");
+      if (group?.startsWith("CELL")) return minPhase("activated");
+      if (group === "WIRING" || group === "GROUND") return minPhase("activated");
+      if (group === "RESISTOR") return minPhase("activated");
+      if (group === "TRANSISTOR") return minPhase("activated");
+      if (group === "SWITCH") return minPhase("activated");
+      if (group === "LAMP") return minPhase("activated");
+      if (group === "LETTERS") return minPhase("glowing");
       
       return false;
     };
@@ -171,20 +161,21 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
 
     // Color logic
     if (group === "LETTERS") {
-      if (phase === "active" || phase === "flicker") return "#000000"; 
-      if (phase === "red" || phase === "final") return "#ff0000";
+      if (phase === "glowing") return "#000000"; // Black
+      if (phase === "light_mode" || phase === "final") return "#ff0000"; // Fade to red (handled by transition)
       return "rgba(0,0,0,0)";
     }
 
     if (group === "SWITCH") {
-       return ["switch_light", "switch_move", "flicker", "active", "red", "final"].includes(phase) ? "#facc15" : "#222";
+      if (["activated", "switch_animating"].includes(phase)) return "#ffffff";
+      return ["glowing", "light_mode", "final"].includes(phase) ? "#ff0000" : "#ffffff";
     }
 
     if (group === "POWER") {
-      return (phase === "initial") ? "#222" : "#ff0000";
+      return (phase === "initial") ? "#ffffff" : "#ff0000";
     }
 
-    // Standard powered red
+    // All other components red from activated onward
     return "#ff0000";
   };
 
@@ -210,33 +201,40 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
                 key={i}
                 d={d}
                 initial={{ fill: "rgba(0,0,0,0)" }}
-                animate={{ 
+                animate={{
                   fill: getPathColor(i),
-                  y: (isSwitch && ["switch_move", "flicker", "active", "red", "final"].includes(phase)) ? -200 : 0, 
+                  y: (isSwitch && ["switch_animating", "glowing", "light_mode", "final"].includes(phase)) ? -190 : 0, 
                   filter: (getPathColor(i) !== "rgba(0,0,0,0)" && getPathColor(i) !== "#222") 
                     ? `drop-shadow(0 0 15px ${getPathColor(i)}80)` 
                     : "none"
                 }}
-                transition={{ 
-                  duration: isSwitch ? 0.8 : 1.5,
+                transition={{
+                  duration: isSwitch ? 2 : 1.5,
                   ease: "easeInOut"
                 }}
                 onClick={isPower ? handlePowerClick : undefined}
-                className={isPower && phase === "initial" ? "cursor-pointer" : ""}
               />
             );
           })}
         </svg>
 
-        {/* Flicker Overlay Overlay */}
-        <div 
-          className="absolute inset-0 pointer-events-none rounded-lg"
-          style={{ 
-            backgroundColor: "white", 
-            opacity: flickerActive ? 0.9 : 0,
-            transition: "opacity 0.05s"
-          }}
-        />
+        {/* Natural Lamp Flicker Glow — only during glowing phase */}
+        {phase === "glowing" && (
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: "90%",
+              top: "65%",
+              width: "500px",
+              height: "500px",
+              transform: "translate(-50%, -50%)",
+              background: `radial-gradient(circle, ${flickerActive ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0)"} 0%, rgba(255,255,200,0.2) 30%, transparent 75%)`,
+              transition: "background 0.08s",
+              filter: flickerActive ? "blur(50px)" : "blur(70px)",
+              borderRadius: "50%"
+            }}
+          />
+        )}
 
         {phase === "initial" && !isLightMode && (
           <motion.div 

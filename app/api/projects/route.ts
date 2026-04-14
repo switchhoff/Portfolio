@@ -1,5 +1,7 @@
 import { getProjects } from '@/lib/projects';
 
+export const dynamic = 'force-static';
+
 export async function GET() {
   try {
     const projects = getProjects();

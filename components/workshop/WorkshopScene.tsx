@@ -3,7 +3,7 @@ import { useState, useRef, useCallback } from "react";
 import { getMappedHotspots, getCategoryColor, type Hotspot } from "@/lib/hotspots-config";
 
 interface Props {
-  onHotspotClick: (hotspot: Hotspot) => void;
+  onHotspotClick: (hotspot: Hotspot, clickOrigin: { x: number; y: number }) => void;
   activeId: string | null;
   highlightCategory: string | null;
   onHoverChange?: (hotspot: Hotspot | null) => void;
@@ -107,7 +107,15 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                     }}
                     onPointerEnter={() => setHover(h.id)}
                     onPointerLeave={() => setHover(null)}
-                    onClick={() => onHotspotClick(h)}
+                    onClick={(e) => {
+                      const rect = containerRef.current?.getBoundingClientRect();
+                      if (rect) {
+                        const scale = rect.width / IMG_W;
+                        onHotspotClick(h, { x: cx * scale, y: cy * scale });
+                      } else {
+                        onHotspotClick(h, { x: e.clientX, y: e.clientY });
+                      }
+                    }}
                   />
 
                   {/* Corner brackets */}

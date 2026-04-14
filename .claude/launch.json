@@ -5,7 +5,7 @@
       "name": "hoffswitch",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "autoPort": true
+      "port": 3000
     }
   ]
 }
