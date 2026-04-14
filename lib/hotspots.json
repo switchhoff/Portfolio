@@ -5,6 +5,8 @@
     "svgElement": "dog",
     "color": "#e67e22",
     "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "PawsButton",
       "repo": "switchhoff/PawsButton",
@@ -18,6 +20,9 @@
     "label": "VoteMotM",
     "svgElement": "soccer_ball",
     "color": "#27ae60",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "VoteMotM",
       "repo": "switchhoff/VoteMotM",
@@ -31,6 +36,9 @@
     "label": "LastYear",
     "svgElement": "calendar",
     "color": "#c0392b",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "LastYear",
       "repo": "switchhoff/LastYear",
@@ -44,6 +52,9 @@
     "label": "Portfolio",
     "svgElement": "monitors",
     "color": "#3a5fbf",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "Portfolio",
       "repo": "switchhoff/Portfolio",
@@ -57,6 +68,9 @@
     "label": "MiniMise",
     "svgElement": "phone_tablet",
     "color": "#7a5ce0",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "MiniMise",
       "repo": "switchhoff/MiniMise",
@@ -70,6 +84,9 @@
     "label": "BeNFL",
     "svgElement": "nfl_ball",
     "color": "#27ae60",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "BeNFL",
       "repo": "switchhoff/BeNFL",
@@ -83,6 +100,9 @@
     "label": "Habitat",
     "svgElement": "pot_plant",
     "color": "#2d6fa3",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "Habitat",
       "repo": "switchhoff/Habitat",
@@ -96,6 +116,9 @@
     "label": "CaveDisto",
     "svgElement": "electrical_components",
     "color": "#b85c3a",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "CaveDisto",
       "repo": "switchhoff/CaveDisto",
@@ -109,6 +132,9 @@
     "label": "6 Clicks",
     "svgElement": "computer_mouse",
     "color": "#16a085",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "6 Clicks",
       "repo": "switchhoff/6Clicks",
@@ -122,6 +148,9 @@
     "label": "Threadquarters",
     "svgElement": "hoodie",
     "color": "#8e44ad",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "Threadquarters",
       "repo": "switchhoff/Threadquarters",
@@ -135,6 +164,9 @@
     "label": "BinThereStoreThat",
     "svgElement": "stack_boxes",
     "color": "#2d8a50",
+    "category": "projects",
+    "type": "project",
+    "points": "",
     "project": {
       "name": "BinThereStoreThat",
       "repo": "switchhoff/BinThereStoreThat",
@@ -149,12 +181,18 @@
     "svgElement": "person",
     "color": "#2d5a3d",
     "category": "about",
-    "project": {
-      "name": "About Alex Hofmann",
-      "repo": null,
+    "type": "about",
+    "points": "",
+    "about": {
+      "name": "Alex Hofmann",
       "tagline": "Forward-deployed engineer building systems end-to-end",
-      "tags": ["Engineering", "Full-Stack", "Hardware"],
-      "description": "24-year-old building from first principles. Firmware to cloud. Defence R&D background. Seeking FDE roles where deep tech meets customer impact."
+      "tags": ["FDE", "Mechatronics", "Melbourne"],
+      "bio": "24-year-old forward-deployed engineer based in Melbourne, Australia. Master of Electrical Engineering and Bachelor of Mechatronics & Robotics Engineering (AI specialisation), with a Minor in Software Engineering.\n\nI build systems end-to-end — microcontroller firmware and PCB layout through to full-stack platforms and cloud automation pipelines. Background in defence R&D. This workshop is where most of it gets made.",
+      "links": [
+        { "label": "GitHub", "url": "https://github.com/switchhoff" },
+        { "label": "LinkedIn", "url": "https://linkedin.com/in/hofmannalexb" },
+        { "label": "Email", "url": "mailto:alex@hoffswitch.com" }
+      ]
     }
   },
   {
@@ -164,6 +202,7 @@
     "color": "#e74c3c",
     "category": "projects",
     "type": "project",
+    "points": "",
     "project": {
       "name": "Printables",
       "repo": null,
@@ -180,12 +219,13 @@
     "color": "#e74c3c",
     "category": "projects",
     "type": "project",
+    "points": "",
     "project": {
       "name": "Monsoon",
       "repo": null,
       "tagline": "Original board game design—mechanics, balance, playtesting",
       "tags": ["PROJECT", "Game Design", "Tabletop"],
-      "description": "Designed and playtested a complete board game. Iterative mechanics refinement, component design, rulebook documentation. [More details on design process and rule iterations TBD]"
+      "description": "Designed and playtested a complete board game. Iterative mechanics refinement, component design, rulebook documentation."
     }
   },
   {
@@ -195,12 +235,13 @@
     "color": "#e74c3c",
     "category": "projects",
     "type": "project",
+    "points": "",
     "project": {
       "name": "Multiboard",
       "repo": null,
       "tagline": "Desk storage transformation—modular wall-mounted system",
       "tags": ["PROJECT", "Organization", "DIY"],
-      "description": "Custom modular storage system for desk. Iterative design and installation. Before/after photos showing transformation. [Photos and detailed process TBD]"
+      "description": "Custom modular storage system for desk. Iterative design and installation. Before/after photos showing transformation."
     }
   },
   {
@@ -210,14 +251,15 @@
     "color": "#f1c40f",
     "category": "popups",
     "type": "popup",
+    "points": "",
     "popup": {
       "title": "Games I Play",
       "items": [
-        { "name": "Terraria", "hours": null },
-        { "name": "Call of Duty", "hours": null },
-        { "name": "Minecraft", "hours": null },
-        { "name": "Assassins Creed", "hours": null },
-        { "name": "Civilization V", "hours": null }
+        { "name": "Terraria" },
+        { "name": "Call of Duty" },
+        { "name": "Minecraft" },
+        { "name": "Assassins Creed" },
+        { "name": "Civilization V" }
       ]
     }
   },
@@ -228,6 +270,7 @@
     "color": "#f1c40f",
     "category": "popups",
     "type": "popup",
+    "points": "",
     "popup": {
       "title": "Favourite Books",
       "items": [
@@ -244,27 +287,13 @@
     "color": "#e74c3c",
     "category": "experience",
     "type": "experience",
+    "points": "",
     "experience": {
       "title": "Education",
       "items": [
-        {
-          "degree": "Master of Electrical Engineering",
-          "institution": "Monash University",
-          "period": null,
-          "note": ""
-        },
-        {
-          "degree": "Bachelor of Mechatronics & Robotics Engineering (AI)",
-          "institution": "Monash University",
-          "period": null,
-          "note": "AI Specialisation"
-        },
-        {
-          "degree": "Minor — Software Engineering",
-          "institution": "Monash University",
-          "period": null,
-          "note": ""
-        }
+        { "degree": "Master of Electrical Engineering", "institution": "Monash University" },
+        { "degree": "Bachelor of Mechatronics & Robotics Engineering (AI)", "institution": "Monash University", "note": "AI Specialisation" },
+        { "degree": "Minor — Software Engineering", "institution": "Monash University" }
       ]
     }
   },
@@ -275,6 +304,7 @@
     "color": "#e74c3c",
     "category": "experience",
     "type": "experience",
+    "points": "",
     "experience": {
       "title": "DefendTex — UGV Navigation",
       "period": "2022–2023",
@@ -290,6 +320,7 @@
     "color": "#e74c3c",
     "category": "experience",
     "type": "experience",
+    "points": "",
     "experience": {
       "title": "Tonbo Systems — Thermal Imaging",
       "period": "2023",
@@ -305,6 +336,7 @@
     "color": "#e74c3c",
     "category": "experience",
     "type": "experience",
+    "points": "",
     "experience": {
       "title": "Fortifyedge — Chief Engineer",
       "period": "2024–Present",
@@ -320,6 +352,7 @@
     "color": "#e74c3c",
     "category": "experience",
     "type": "experience",
+    "points": "",
     "experience": {
       "title": "Monash High Powered Rocketry",
       "period": "University",
@@ -335,6 +368,7 @@
     "color": "#e74c3c",
     "category": "experience",
     "type": "experience",
+    "points": "",
     "experience": {
       "title": "Monash Uncrewed Aerial Systems",
       "period": "University",
@@ -350,6 +384,7 @@
     "color": "#e74c3c",
     "category": "experience",
     "type": "experience",
+    "points": "",
     "experience": {
       "title": "Humanitarian Hackathon — Water Filtration",
       "period": "Hackathon Winner",
@@ -365,6 +400,7 @@
     "color": "#3498db",
     "category": "projects",
     "type": "link",
+    "points": "",
     "link": {
       "title": "Photography",
       "description": "Photography portfolio and daily captures",
@@ -379,6 +415,7 @@
     "color": "#27ae60",
     "category": "contact",
     "type": "form",
+    "points": "",
     "form": {
       "title": "Get in Touch",
       "description": "Drop a line — let's chat about projects, opportunities, or just say hi.",
@@ -397,6 +434,7 @@
     "color": "#3498db",
     "category": "projects",
     "type": "link",
+    "points": "",
     "link": {
       "title": "Videography",
       "description": "Engineering videos, build logs, and tutorials",
@@ -411,6 +449,7 @@
     "color": "#f1c40f",
     "category": "popups",
     "type": "popup",
+    "points": "",
     "popup": {
       "title": "Crafting & Making",
       "items": [
@@ -425,10 +464,11 @@
   {
     "id": "3d_printer",
     "label": "3D Printer",
-    "svgElement": "3d_printer",
+    "svgElement": "printer_machine",
     "color": "#2d8a50",
     "category": "projects",
     "type": "status",
+    "points": "",
     "note": "LIVE: Connected to real Prusa i3 MK3S+ printer. Shows current job, temperature, progress.",
     "status": {
       "title": "3D Printer Status",
@@ -450,7 +490,8 @@
     "color": "#3498db",
     "category": "projects",
     "type": "status",
-    "note": "LIVE: Real-time Melbourne weather. Window background changes with conditions (sunny, cloudy, rainy, stormy).",
+    "points": "",
+    "note": "LIVE: Real-time Melbourne weather. Window background changes with conditions.",
     "status": {
       "title": "Melbourne Weather",
       "description": "Live weather conditions right now",
@@ -480,11 +521,12 @@
     "color": "#27ae60",
     "category": "about",
     "type": "popup",
+    "points": "",
     "popup": {
       "title": "Where I'm From",
       "items": [
-        { "name": "Born in South Africa", "icon": "📍" },
-        { "name": "Now based in Melbourne, Australia", "icon": "🇦🇺" },
+        { "name": "Born in South Africa" },
+        { "name": "Now based in Melbourne, Australia" },
         { "name": "Between continents — global perspective" }
       ]
     }

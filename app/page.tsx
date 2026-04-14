@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import WorkshopScene from "@/components/workshop/WorkshopScene";
-import { type Hotspot, hotspots } from "@/lib/hotspots";
+import { type Hotspot, getHotspots, getCategoryColor } from "@/lib/hotspots-config";
 import { GkLogo } from "@/components/GkLogo";
 import { getProjects } from "@/lib/projects";
 
@@ -34,60 +34,6 @@ function CustomCursor({ color }: { color: string | null }) {
   );
 }
 
-const HotspotCard = ({ h, active, onSelect }: { h: Hotspot, active: boolean, onSelect: () => void }) => {
-  return (
-    <div 
-      onClick={onSelect}
-      style={{
-        padding: "16px",
-        background: active ? "#ffffff" : "rgba(255,255,255,0.03)",
-        border: `1px solid ${active ? h.color : "rgba(0,0,0,0.08)"}`,
-        borderLeft: `3px solid ${h.color}`,
-        borderRadius: "8px",
-        cursor: "pointer",
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-        opacity: active ? 1 : 0.7,
-        transform: active ? "scale(1.02)" : "scale(1)",
-        boxShadow: active ? "0 10px 25px rgba(0,0,0,0.05)" : "none",
-        position: "relative"
-      }}
-    >
-      <div style={{ fontSize: "9px", fontWeight: 700, color: h.color, textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: "6px" }}>
-        {h.label}
-      </div>
-      <div style={{ fontSize: "14px", fontWeight: 600, color: active ? "#111" : "#555", marginBottom: active ? "10px" : "0" }}>
-        {h.panelContent.title}
-      </div>
-      
-      {active && (
-        <motion.div 
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          transition={{ duration: 0.3 }}
-          style={{ overflow: "hidden" }}
-        >
-          <p style={{ fontSize: "11px", color: "#666", lineHeight: 1.7, marginBottom: "14px", whiteSpace: "pre-wrap" }}>
-            {h.panelContent.body}
-          </p>
-          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-            {h.panelContent.tags.map(t => (
-              <span key={t} style={{ 
-                fontSize: "8px", 
-                padding: "2px 8px", 
-                background: "#f1f5f9", 
-                borderRadius: "4px", 
-                color: "#64748b",
-                border: "1px solid #e2e8f0"
-              }}>
-                {t}
-              </span>
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </div>
-  );
-};
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const PROJECTS = getProjects();
@@ -267,14 +213,7 @@ export default function Home() {
             alignItems: "start"
           }}>
             
-            {/* COLUMN 1: LEFT CARDS — hidden until SVG clicks implemented */}
-            <div style={{ display: "none", flexDirection: "column", gap: "12px" }}>
-              {hotspots.filter((_, i) => i % 2 === 0).map(h => (
-                <HotspotCard key={h.id} h={h} active={active?.id === h.id} onSelect={() => setActive(active?.id === h.id ? null : h)} />
-              ))}
-            </div>
-
-            {/* COLUMN 2: CENTER VIEWPORT — full width, no border */}
+            {/* WORKSHOP SCENE */}
             <div style={{ position: "relative" }}>
               <div style={{
                 width: "100%",
@@ -282,19 +221,12 @@ export default function Home() {
                 overflow: "hidden"
               }}>
                 <WorkshopScene
-                  onSelect={() => {}}
-                  activeId={null}
-                  onHoverChange={() => {}}
+                  onHotspotClick={(h) => setActive(active?.id === h.id ? null : h)}
+                  activeId={active?.id ?? null}
+                  highlightCategory={null}
+                  onHoverChange={setHoverSpot}
                 />
               </div>
-
-            </div>
-
-            {/* COLUMN 3: RIGHT CARDS — hidden until SVG clicks implemented */}
-            <div style={{ display: "none", flexDirection: "column", gap: "12px" }}>
-              {hotspots.filter((_, i) => i % 2 !== 0).map(h => (
-                <HotspotCard key={h.id} h={h} active={active?.id === h.id} onSelect={() => setActive(active?.id === h.id ? null : h)} />
-              ))}
             </div>
           </div>
         </section>
