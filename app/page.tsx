@@ -348,7 +348,6 @@ export default function Home() {
                 background: "transparent",
                 border: "none",
                 color: P.muted,
-                cursor: "pointer",
                 transition: "color 0.2s",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.color = P.text)}
@@ -361,29 +360,32 @@ export default function Home() {
           {footerRevealed && (
             <div style={{
               display: "flex",
-              gap: "8px",
+              gap: "0",
+              width: "100%",
+              maxWidth: "600px",
               background: "#f0f4ec",
-              padding: "6px",
+              padding: "0",
               borderRadius: "6px",
               border: `1px solid ${P.border}`,
             }}>
               {[
                 { id: "fun", label: "FUN", icon: <Gamepad2 size={16} /> },
                 { id: "boring", label: "BORING", icon: <FileText size={16} /> }
-              ].map((t) => (
+              ].map((t, idx) => (
                 <button
                   key={t.id}
                   onClick={() => setActiveTab(t.id as any)}
                   style={{
+                    flex: 1,
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: "center",
                     gap: "8px",
-                    padding: "10px 20px",
+                    padding: "12px 20px",
                     fontSize: "13px",
                     fontWeight: 700,
                     letterSpacing: "0.12em",
-                    borderRadius: "4px",
-                    cursor: "pointer",
+                    borderRadius: idx === 0 ? "6px 0 0 6px" : "0 6px 6px 0",
                     border: "none",
                     transition: "all 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
                     background: activeTab === t.id ? "#ff0000" : "transparent",
