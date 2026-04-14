@@ -61,18 +61,14 @@ function CustomCursor({ activeTab }: { activeTab: string }) {
 
   if (activeTab === "boring") return null;
 
-  const glowColor = isClickable ? "#ffd700" : "transparent";
-
   return (
     <div style={{
       position: "fixed", top: 0, left: 0, width: 24, height: 24,
-      border: `2px solid #000000`,
+      border: isClickable ? `6px solid #ffd700` : `2px solid #000000`,
       borderRadius: "50%", pointerEvents: "none", zIndex: 10000,
       transform: `translate(${pos.x - 12}px, ${pos.y - 12}px) scale(${clicked ? 0.85 : 1})`,
-      transition: "transform 0.1s ease-out, box-shadow 0.2s",
-      boxShadow: isClickable
-        ? `0 0 30px ${glowColor}, 0 0 60px ${glowColor}80, inset 0 0 10px ${glowColor}40`
-        : `none`,
+      transition: "transform 0.1s ease-out, border 0.2s, box-shadow 0.2s",
+      boxShadow: `0 0 0 2px #000000`,
       display: "flex", alignItems: "center", justifyContent: "center"
     }}>
       <div style={{ width: 6, height: 6, background: "#ffffff", borderRadius: "50%" }} />
