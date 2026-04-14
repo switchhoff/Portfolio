@@ -1,54 +1,57 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import WorkshopScene from "@/components/workshop/WorkshopScene";
 import HotspotModal from "@/components/modals/HotspotModal";
 import CheatGuide from "@/components/CheatGuide";
-import { type Hotspot, getHotspots, getCategoryColor } from "@/lib/hotspots-config";
+import { type Hotspot } from "@/lib/hotspots-config";
 import { GkLogo } from "@/components/GkLogo";
 import { getProjects } from "@/lib/projects";
+import BoringView from "@/components/resume/BoringView";
+import { Gamepad2, FileText } from "lucide-react";
 
 // ─── Custom Cursor ────────────────────────────────────────────────────────────
-function CustomCursor({ color }: { color: string | null }) {
+function CustomCursor({ color, activeTab }: { color: string | null; activeTab: string }) {
   const [pos, setPos] = useState({ x: -100, y: -100 });
   const [clicked, setClicked] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
   useEffect(() => {
-    const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    const move = (e: MouseEvent) => {
+      setPos({ x: e.clientX, y: e.clientY });
+      if (!isVisible) setIsVisible(true);
+    };
     const down = () => { setClicked(true); setTimeout(() => setClicked(false), 160); };
     window.addEventListener("mousemove", move);
     window.addEventListener("mousedown", down);
     return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mousedown", down); };
-  }, []);
+  }, [isVisible]);
+
+  if (activeTab === "boring") return null;
 
   const isClickable = color !== null;
   const glowColor = isClickable ? "#ffd700" : "#2d5a3d";
+  
   return (
     <div style={{
-      position: "fixed", top: 0, left: 0, width: 16, height: 16,
-      border: `1px solid ${glowColor}`,
+      position: "fixed", top: 0, left: 0, width: 24, height: 24,
+      border: `1.5px solid ${glowColor}`,
       borderRadius: "50%", pointerEvents: "none", zIndex: 10000,
-      transform: `translate(${pos.x - 8}px, ${pos.y - 8}px) scale(${clicked ? 0.8 : 1})`,
-      transition: "transform 0.1s ease-out, border-color 0.2s, box-shadow 0.2s",
-      boxShadow: isClickable ? `0 0 12px ${glowColor}, inset 0 0 8px ${glowColor}40` : "none",
+      opacity: isVisible ? 1 : 0,
+      transform: `translate(${pos.x - 12}px, ${pos.y - 12}px) scale(${clicked ? 0.8 : 1})`,
+      transition: "transform 0.1s ease-out, border-color 0.2s, box-shadow 0.2s, opacity 0.3s",
+      boxShadow: isClickable ? `0 0 16px ${glowColor}, inset 0 0 8px ${glowColor}40` : "none",
       display: "flex", alignItems: "center", justifyContent: "center"
     }}>
-      <div style={{ width: 2, height: 2, background: glowColor, borderRadius: "50%" }} />
+      <div style={{ width: 3, height: 3, background: glowColor, borderRadius: "50%" }} />
     </div>
   );
 }
 
-
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const PROJECTS = getProjects();
-
-const BIRTHDAY = new Date(2001, 7, 29); // Aug 29, 2001
+const BIRTHDAY = new Date(2001, 7, 29);
 const AGE = Math.floor((Date.now() - BIRTHDAY.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-
-const WORK = [
-  { title: "Chief Engineer", company: "Fortifyedge", period: "2024 — Present", note: "Human Monitoring on Ruggedized Edge devices." },
-  { title: "Software Systems Engineer", company: "Tonbo Systems", period: "2023", note: "Integrating tactical sensors into Augmented Reality Systems." },
-  { title: "Engineer", company: "DefendTex", period: "2022 — 2023", note: "Navigation of Unmanned Ground Vehicles." },
-];
 
 const P = {
   bg: "#f6f8f3",
@@ -60,15 +63,8 @@ const P = {
   dim: "#9aaa94",
 };
 
-// ─── Input style helper ───────────────────────────────────────────────────────
-const inputStyle: React.CSSProperties = {
-  width: "100%", padding: "10px 14px",
-  background: P.surface,
-  fontSize: "12px", color: P.text, fontFamily: "var(--font-mono)",
-};
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<"fun" | "boring">("fun");
   const [active, setActive] = useState<Hotspot | null>(null);
   const [clickOrigin, setClickOrigin] = useState<{ x: number; y: number } | null>(null);
   const [highlightCategory, setHighlightCategory] = useState<string | null>(null);
@@ -79,476 +75,214 @@ export default function Home() {
   const [logoPhase, setLogoPhase] = useState("initial");
   const sceneContainerRef = useRef<HTMLDivElement>(null);
 
-  // Contact form
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [formError, setFormError] = useState("");
-
   useEffect(() => {
-    document.body.style.cursor = "none";
+    if (activeTab === "fun") {
+      document.body.style.cursor = "none";
+    } else {
+      document.body.style.cursor = "default";
+    }
     setReady(true);
     return () => { document.body.style.cursor = ""; };
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    setFormError("");
-    try {
-      const res = await fetch(`https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_ID}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify(form),
-      });
-      if (res.ok) { setSent(true); }
-      else { setFormError("Something went wrong. Email alex@hoffswitch.com directly."); }
-    } catch {
-      setFormError("Connection error. Email alex@hoffswitch.com directly.");
-    } finally { setSending(false); }
-  };
+  }, [activeTab]);
 
   return (
     <div style={{ background: P.surface, minHeight: "100vh", fontFamily: "var(--font-mono)" }}>
-      {ready && <CustomCursor color={hoverSpot?.color ?? null} />}
+      {ready && <CustomCursor color={hoverSpot?.color ?? null} activeTab={activeTab} />}
 
-      {/* ── SPLASH BACKDROP ── covers site until logo animation completes */}
+      {/* ── SPLASH BACKDROP ── */}
       <div style={{
-        position: "fixed", inset: 0, zIndex: 45,
+        position: "fixed", inset: 0, zIndex: 110,
         background: isLit ? "#ffffff" : "#0a0f0a",
         opacity: splashDone ? 0 : 1,
         pointerEvents: splashDone ? "none" : "all",
-        transition: "all 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
+        transition: "opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1)",
       }} />
 
-      {/* ── OFFSWITCH LOGO — splash screen → nav ── */}
-      <div style={{
-        position: "fixed", zIndex: 50,
-        pointerEvents: "none",
-        ...(splashDone
-          ? { top: "16px", left: "36px", width: "200px", transform: "none" }
-          : { top: "50%", left: "50%", width: "min(92vw, 940px)", transform: "translate(-50%,-50%)" }
-        ),
-        transition: [
-          "top    0.8s cubic-bezier(0.4,0,0.2,1)",
-          "left   0.8s cubic-bezier(0.4,0,0.2,1)",
-          "width  0.8s cubic-bezier(0.4,0,0.2,1)",
-          "transform 0.8s cubic-bezier(0.4,0,0.2,1)",
-        ].join(", "),
-      }}>
-        <div style={{ pointerEvents: "all" }}>
-          <GkLogo 
-            isHeader={splashDone} 
-            onComplete={() => setSplashDone(true)} 
-            onLightMode={() => setIsLit(true)}
-            onPhaseChange={setLogoPhase}
-          />
-        </div>
-        
-        {/* Byline - appears during light_mode and follows logo to header */}
-        <AnimatePresence>
-          {(logoPhase === "light_mode" || logoPhase === "final") && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              style={{
-                position: "absolute",
-                left: splashDone ? "8px" : "50%",
-                transform: splashDone ? "none" : "translateX(-50%)",
-                top: splashDone ? "48px" : "calc(50% + 180px)", 
-                textAlign: "center",
-                whiteSpace: "nowrap",
-                transition: "all 0.8s cubic-bezier(0.4,0,0.2,1)"
-              }}
-            >
-              <span style={{ 
-                fontSize: splashDone ? "10px" : "14px", 
-                color: P.dim, 
-                textTransform: "uppercase", 
-                letterSpacing: "0.25em",
-                fontWeight: 500
-              }}>
-                by Alex Hofmann
-              </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      {/* ── SHARED LOGO TRANSITION CONTAINER ── */}
+      <LayoutGroup>
+        <motion.div
+          layout
+          style={{
+            position: "fixed",
+            zIndex: 120,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: splashDone ? "flex-start" : "center",
+            justifyContent: "center",
+            top: splashDone ? "10px" : "50%",
+            left: splashDone ? "24px" : "50%",
+            transform: splashDone ? "translate(0, 0)" : "translate(-50%, -50%)",
+            width: splashDone ? "clamp(120px, 15vw, 160px)" : "min(92vw, 940px)",
+            pointerEvents: splashDone ? "none" : "all",
+            margin: splashDone ? "0" : "auto"
+          }}
+          transition={{ 
+            layout: { type: "spring", stiffness: 60, damping: 15 },
+          }}
+        >
+          <motion.div layout style={{ width: "100%", display: "flex", justifyContent: splashDone ? "flex-start" : "center" }}>
+            <div style={{ width: splashDone ? "100%" : "auto" }}>
+              <GkLogo 
+                isHeader={splashDone} 
+                onComplete={() => setSplashDone(true)} 
+                onLightMode={() => setIsLit(true)}
+                onPhaseChange={setLogoPhase}
+              />
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ 
+              opacity: (logoPhase === "light_mode" || logoPhase === "final" || splashDone) ? 1 : 0,
+              scale: splashDone ? 0.65 : 1,
+              marginTop: splashDone ? "-6px" : "24px",
+              originX: splashDone ? 0 : 0.5
+            }}
+            style={{
+              textAlign: splashDone ? "left" : "center",
+              width: splashDone ? "auto" : "100%",
+              whiteSpace: "nowrap",
+              color: splashDone ? P.muted : "#666",
+              fontSize: "clamp(8px, 1vw, 12px)",
+              fontWeight: 700,
+              letterSpacing: "0.25em",
+              textTransform: "uppercase"
+            }}
+          >
+            by Alex Hofmann
+          </motion.div>
+        </motion.div>
+      </LayoutGroup>
 
-      {/* ── SITE CONTENT — fades in after splash ── */}
+      {/* ── SITE CONTENT ── */}
       <div style={{
         opacity: splashDone ? 1 : 0,
         pointerEvents: splashDone ? "all" : "none",
-        transition: "opacity 0.6s ease 0.25s",
+        transition: "opacity 1s ease 0.8s",
       }} suppressHydrationWarning={true}>
 
-        {/* ── NAV ── */}
+        {/* ── HEADER ── */}
         <header style={{
-          position: "fixed", top: 0, left: 0, right: 0, zIndex: 30,
-          height: "64px",
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+          height: "60px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "0 36px",
-          background: "rgba(255,255,255,0.92)",
+          padding: "0 clamp(16px, 4vw, 32px)",
+          background: "rgba(255,255,255,0.7)",
           borderBottom: `1px solid ${P.border}`,
-          backdropFilter: "blur(10px)",
+          backdropFilter: "blur(20px)",
         }}>
-          {/* Logo occupies this space — spacer keeps right-side content aligned */}
-          <div style={{ width: "240px" }} />
+          {/* Logo spacer */}
+          <div style={{ width: "clamp(140px, 20vw, 300px)" }} />
 
-          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#3a9e5c", boxShadow: "0 0 6px #3a9e5c", animation: "pulse 2.5s ease-in-out infinite" }} />
-<span style={{ fontSize: "9px", letterSpacing: "0.14em", color: P.dim, textTransform: "uppercase" }}>Available</span>
-            </div>
-            <a
-              href="#tldr"
-              onClick={(e) => { e.preventDefault(); document.getElementById("tldr")?.scrollIntoView({ behavior: "smooth" }); }}
-              style={{
-                fontSize: "9px", fontWeight: 600, letterSpacing: "0.14em",
-                color: P.pine, textDecoration: "none", textTransform: "uppercase",
-                padding: "4px 10px", border: `1px solid ${P.border}`,
-                cursor: "pointer",
-              }}
-            >
-              TL;DR
-            </a>
+          {/* Tab Switcher in Header */}
+          <div style={{ 
+            display: "flex", 
+            gap: "2px",
+            background: "#f0f4ec", 
+            padding: "2px", 
+            borderRadius: "4px",
+            border: `1px solid ${P.border}`,
+            scale: "clamp(0.8, 1vw, 1)"
+          }}>
             {[
-              { title: "GitHub", href: "https://github.com/switchhoff", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg> },
-              { title: "LinkedIn", href: "https://www.linkedin.com/in/hofmannalexb/", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg> },
-            ].map(s => (
-              <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer"
-                title={s.title} aria-label={s.title}
-                className="social-link">
-                {s.icon}
-              </a>
+              { id: "fun", label: "FUN", icon: <Gamepad2 size={12} /> },
+              { id: "boring", label: "BORING", icon: <FileText size={12} /> }
+            ].map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setActiveTab(t.id as any)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "6px clamp(10px, 2vw, 20px)",
+                  fontSize: "clamp(8px, 0.9vw, 9px)",
+                  fontWeight: 700,
+                  letterSpacing: "0.12em",
+                  borderRadius: "2px",
+                  cursor: "pointer",
+                  border: "none",
+                  transition: "all 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+                  background: activeTab === t.id ? "#ff0000" : "transparent",
+                  color: activeTab === t.id ? "#fff" : P.muted,
+                }}
+              >
+                {t.icon} {t.label}
+              </button>
             ))}
+          </div>
+
+          <div style={{ 
+            display: "flex", 
+            alignItems: "center", 
+            justifyContent: "flex-end",
+            width: "clamp(140px, 20vw, 300px)"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
+              <a href="https://github.com/switchhoff" target="_blank" className="social-link" title="GitHub" style={{ color: P.text, opacity: 0.8 }}>
+                <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="20" height="20">
+                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                </svg>
+              </a>
+              <a href="https://linkedin.com/in/hofmannalexb/" target="_blank" className="social-link" title="LinkedIn" style={{ color: P.text, opacity: 0.8 }}>
+                <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="20" height="20">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451c.981 0 1.771-.773 1.771-1.729V1.729C24 .774 23.207 0 22.225 0z"/>
+                </svg>
+              </a>
+            </div>
           </div>
         </header>
 
-        {/* ── WORKSHOP SCENE — full-width image ── */}
-        <section style={{ paddingTop: "60px", paddingBottom: "0", width: "100%", margin: "0 auto" }}>
-          <div
-            ref={sceneContainerRef}
-            style={{ position: "relative", width: "100%", overflow: "hidden" }}
-          >
-            <WorkshopScene
-              onHotspotClick={(h, origin) => {
-                if (active?.id === h.id) {
-                  setActive(null);
-                  setClickOrigin(null);
-                } else {
-                  setActive(h);
-                  setClickOrigin(origin);
-                }
-              }}
-              activeId={active?.id ?? null}
-              highlightCategory={highlightCategory}
-              onHoverChange={setHoverSpot}
-            />
-
-            <HotspotModal
-              hotspot={active}
-              clickOrigin={clickOrigin}
-              containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
-              onClose={() => { setActive(null); setClickOrigin(null); }}
-            />
-
-            <CheatGuide
-              onHotspotSelect={(h) => {
-                setActive(h);
-                setClickOrigin(null);
-              }}
-              activeCategory={highlightCategory}
-              onCategoryChange={setHighlightCategory}
-            />
-          </div>
-        </section>
-
-        {/* ── TL;DR ── */}
-        <section id="tldr" style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 36px 48px", textAlign: "center" }}>
-          <div style={{ fontSize: "9px", letterSpacing: "0.2em", color: P.dim, textTransform: "uppercase", marginBottom: "16px" }}>TL;DR</div>
-          <p style={{ fontSize: "clamp(14px, 1.5vw, 17px)", color: P.text, lineHeight: 1.9, marginBottom: "24px" }}>
-            Forward-deployed engineer building systems end-to-end — from microcontroller firmware and PCB layout through to full-stack platforms and cloud automation. Based in Melbourne, Australia.
-          </p>
-          <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-            {[
-              { label: "GitHub", href: "https://github.com/switchhoff" },
-              { label: "LinkedIn", href: "https://www.linkedin.com/in/hofmannalexb/" },
-              { label: "Email", href: "mailto:alex@hoffswitch.com" },
-            ].map(l => (
-              <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer"
-                style={{ fontSize: 10, fontWeight: 600, color: P.pine, textDecoration: "none", letterSpacing: "0.1em", padding: "6px 14px", border: `1px solid ${P.border}` }}>
-                {l.label} →
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {/* ── ABOUT ── */}
-        <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "96px 36px 80px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "48px" }}>
-            <div style={{ width: 24, height: 1, background: P.pine, opacity: 0.5 }} />
-            <span style={{ fontSize: "9px", letterSpacing: "0.2em", color: P.muted, textTransform: "uppercase" }}>About</span>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "start" }}>
-            {/* Bio + Info Cards */}
-            <div>
-              {/* Info Cards */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "32px" }}>
-                {[
-                  { label: "Name", value: "Alex" },
-                  { label: "Age", value: AGE.toString() },
-                  { label: "Location", value: "Melbourne" },
-                  { label: "Vibes", value: "Good" },
-                ].map((card, i) => (
-                  <div key={i} style={{
-                    padding: "14px 12px",
-                    border: `1px solid ${P.border}`,
-                    borderLeft: `2px solid ${P.pine}`,
-                    textAlign: "center",
-                  }}>
-                    <div style={{ fontSize: "8px", letterSpacing: "0.2em", color: P.dim, textTransform: "uppercase", marginBottom: "4px" }}>{card.label}</div>
-                    <div style={{ fontSize: "14px", fontWeight: 600, color: P.text, fontFamily: "var(--font-mono)" }}>{card.value}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bio text */}
-              <p style={{ fontSize: "13px", color: P.muted, lineHeight: 1.9 }}>
-                I like to build things: for work, for fun, for anywhere or anything. I've held various roles in the Australian Defence industry across cutting-edge R&D to customer facing forward deployments on tech stacks that I have owned fully. I love a challenge, and when I'm not shipping code or building systems professionally, I'll be tinkering away in my home office, putting on 3D prints and designing mini apps.
-              </p>
-            </div>
-
-            {/* Education + Experience */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "44px" }}>
-              {/* Education */}
-              <div>
-                <div style={{ fontSize: "8px", letterSpacing: "0.2em", color: P.dim, textTransform: "uppercase", marginBottom: "16px" }}>Education</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  {[
-                    { degree: "Master of Electrical Engineering", detail: "Monash University" },
-                    { degree: "Bachelor of Mechatronics & Robotics Engineering (AI)", detail: "Monash University · AI Specialisation" },
-                    { degree: "Minor — Software Engineering", detail: "" },
-                  ].map((e, i) => (
-                    <div key={i} style={{
-                      padding: "12px 16px",
-                      border: `1px solid ${P.border}`,
-                      borderLeft: `2px solid ${P.pine}`,
-                      background: P.surface,
-                    }}>
-                      <div style={{ fontSize: "12px", fontWeight: 500, color: P.text, marginBottom: e.detail ? "3px" : 0 }}>
-                        {e.degree}
-                      </div>
-                      {e.detail && <div style={{ fontSize: "10px", color: P.dim }}>{e.detail}</div>}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Experience */}
-              <div>
-                <div style={{ fontSize: "8px", letterSpacing: "0.2em", color: P.dim, textTransform: "uppercase", marginBottom: "16px" }}>Experience</div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  {WORK.map((w, i) => (
-                    <div key={i} style={{
-                      display: "flex", gap: "16px",
-                      padding: "16px 0",
-                      borderBottom: i < WORK.length - 1 ? `1px solid ${P.border}` : "none",
-                    }}>
-                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "5px" }}>
-                        <div style={{ width: 6, height: 6, borderRadius: "50%", border: `1.5px solid ${P.pine}`, background: P.bg, flexShrink: 0 }} />
-                        {i < WORK.length - 1 && <div style={{ width: 1, flex: 1, background: P.border, marginTop: 4 }} />}
-                      </div>
-                      <div>
-                        <div style={{ display: "flex", alignItems: "baseline", gap: "7px", marginBottom: "2px", flexWrap: "wrap" }}>
-                          <span style={{ fontSize: "12px", fontWeight: 500, color: P.text }}>{w.title}</span>
-                          <span style={{ fontSize: "10px", color: P.pine }}>@ {w.company}</span>
-                        </div>
-                        <div style={{ fontSize: "9px", color: P.dim, letterSpacing: "0.06em", marginBottom: "3px" }}>{w.period}</div>
-                        <div style={{ fontSize: "11px", color: P.muted }}>{w.note}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 36px" }}>
-          <div style={{ height: 1, background: P.border }} />
-        </div>
-
-        {/* ── PROJECTS ── */}
-        <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "80px 36px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "36px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <div style={{ width: 24, height: 1, background: P.pine, opacity: 0.5 }} />
-              <span style={{ fontSize: "9px", letterSpacing: "0.2em", color: P.muted, textTransform: "uppercase" }}>Projects</span>
-            </div>
-          </div>
-
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))",
-            gap: "1px", background: P.border,
-            border: `1px solid ${P.border}`,
-          }}>
-            {PROJECTS.map(proj => (
-              <div key={proj.id}
-                className="project-card-cell"
-                style={{ padding: "22px", position: "relative" }}
+        <main style={{ paddingTop: "60px" }}>
+          <AnimatePresence mode="wait">
+            {activeTab === "fun" ? (
+              <motion.section 
+                key="fun"
+                initial={{ opacity: 0, filter: "blur(10px)" }}
+                animate={{ opacity: 1, filter: "blur(0px)" }}
+                exit={{ opacity: 0, filter: "blur(10px)" }}
+                transition={{ duration: 0.4 }}
+                style={{ position: "relative", width: "100%", overflow: "hidden" }}
               >
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: proj.color }} />
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "10px" }}>
-                  <div style={{ fontSize: "14px", fontWeight: 600, color: P.text, letterSpacing: "-0.01em", lineHeight: 1.2 }}>
-                    {proj.name}
-                  </div>
-                  <a href={`https://github.com/${proj.repo}`} target="_blank" rel="noopener noreferrer"
-                    title="View on GitHub" aria-label={`${proj.name} on GitHub`}
-                    className="proj-github"
-                    style={{ "--proj-color": proj.color, flexShrink: 0, marginLeft: 8 } as React.CSSProperties}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                    </svg>
-                  </a>
-                </div>
-                <div style={{ fontSize: "12px", color: P.muted, lineHeight: 1.65, marginBottom: "14px" }}>{proj.tagline}</div>
-                <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
-                  {proj.tags.map(t => (
-                    <span key={t} style={{
-                      fontSize: "8px", letterSpacing: "0.1em", textTransform: "uppercase",
-                      padding: "2px 6px", border: `1px solid ${P.border}`, color: P.dim,
-                    }}>{t}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 36px" }}>
-          <div style={{ height: 1, background: P.border }} />
-        </div>
-
-        {/* ── CONTACT ── */}
-        <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "80px 36px 100px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "80px", alignItems: "start" }}>
-
-            {/* Left — heading + icons */}
-            <div>
-              <div style={{ fontSize: "9px", letterSpacing: "0.2em", color: P.muted, textTransform: "uppercase", marginBottom: "14px" }}>Contact</div>
-              <h2 style={{ fontSize: "clamp(22px,2.8vw,36px)", fontWeight: 600, color: P.text, letterSpacing: "-0.025em", lineHeight: 1.2, marginBottom: "28px" }}>
-                Let's build something.
-              </h2>
-              <div style={{ display: "flex", gap: "10px" }}>
-                {[
-                  { title: "GitHub", href: "https://github.com/switchhoff", icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg> },
-                  { title: "LinkedIn", href: "https://www.linkedin.com/in/hofmannalexb/", icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg> },
-                  { title: "Email", href: "mailto:alex@hoffswitch.com", icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M2 7l10 7 10-7" /></svg> },
-                ].map(s => (
-                  <a key={s.href} href={s.href}
-                    target={s.href.startsWith("http") ? "_blank" : undefined}
-                    rel="noopener noreferrer" title={s.title} aria-label={s.title}
-                    className="contact-icon"
-                  >
-                    {s.icon}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Right — form */}
-            <div>
-              {sent ? (
-                <div style={{
-                  padding: "32px", border: `1px solid ${P.pine}30`,
-                  borderLeft: `3px solid ${P.pine}`, background: "#eaf3ec",
-                }}>
-                  <div style={{ fontSize: "13px", fontWeight: 500, color: P.pine, marginBottom: "6px" }}>Message sent.</div>
-                  <div style={{ fontSize: "12px", color: P.muted }}>Thanks — I'll get back to you soon.</div>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                    <div>
-                      <label style={{ fontSize: "8px", letterSpacing: "0.18em", textTransform: "uppercase", color: P.dim, display: "block", marginBottom: "5px" }}>Name</label>
-                      <input
-                        type="text" required placeholder="Alex Smith"
-                        value={form.name}
-                        onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                        className="form-field" style={inputStyle}
-                      />
-                    </div>
-                    <div>
-                      <label style={{ fontSize: "8px", letterSpacing: "0.18em", textTransform: "uppercase", color: P.dim, display: "block", marginBottom: "5px" }}>Email</label>
-                      <input
-                        type="email" required placeholder="you@example.com"
-                        value={form.email}
-                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                        className="form-field" style={inputStyle}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label style={{ fontSize: "8px", letterSpacing: "0.18em", textTransform: "uppercase", color: P.dim, display: "block", marginBottom: "5px" }}>Subject</label>
-                    <input
-                      type="text" required placeholder="Re: FDE role"
-                      value={form.subject}
-                      onChange={e => setForm(f => ({ ...f, subject: e.target.value }))}
-                      className="form-field" style={inputStyle}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ fontSize: "8px", letterSpacing: "0.18em", textTransform: "uppercase", color: P.dim, display: "block", marginBottom: "5px" }}>Message</label>
-                    <textarea
-                      required rows={5} placeholder="What are you building?"
-                      value={form.message}
-                      onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                      className="form-field" style={{ ...inputStyle, resize: "vertical" }}
-                    />
-                  </div>
-                  {formError && (
-                    <div style={{ fontSize: "11px", color: "#b85c3a" }}>{formError}</div>
-                  )}
-                  <button
-                    type="submit" disabled={sending}
-                    className="submit-btn"
-                    style={{
-                      background: sending ? P.border : P.pine,
-                      cursor: sending ? "not-allowed" : "none",
+                <div ref={sceneContainerRef} style={{ position: "relative" }}>
+                  <WorkshopScene
+                    onHotspotClick={(h, origin) => {
+                      if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
+                      else { setActive(h); setClickOrigin(origin); }
                     }}
-                  >
-                    {sending ? "Sending…" : "Send Message"}
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* ── FOOTER ── */}
-        <footer style={{
-          borderTop: `1px solid ${P.border}`,
-          padding: "16px 36px",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          maxWidth: "1200px", margin: "0 auto",
-        }}>
-          <span style={{ fontSize: "9px", letterSpacing: "0.12em", color: P.dim, textTransform: "uppercase" }}>
-            © 2025 Alex Hofmann
-          </span>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#3a9e5c", boxShadow: "0 0 5px #3a9e5c", animation: "pulse 2.5s ease-in-out infinite" }} />
-            <span style={{ fontSize: "9px", letterSpacing: "0.12em", color: P.dim, textTransform: "uppercase" }}>hoffswitch.com</span>
-          </div>
-        </footer>
-
-        {/* WorkshopPanel removed for side-cards dashboard architecture */}
-      </div>{/* end site-content fade wrapper */}
+                    activeId={active?.id ?? null}
+                    highlightCategory={highlightCategory}
+                    onHoverChange={setHoverSpot}
+                  />
+                  <HotspotModal
+                    hotspot={active}
+                    clickOrigin={clickOrigin}
+                    containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
+                    onClose={() => { setActive(null); setClickOrigin(null); }}
+                  />
+                  <CheatGuide
+                    onHotspotSelect={(h) => { setActive(h); setClickOrigin(null); }}
+                    activeCategory={highlightCategory}
+                    onCategoryChange={setHighlightCategory}
+                  />
+                </div>
+              </motion.section>
+            ) : (
+              <motion.section
+                key="boring"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+              >
+                <BoringView projects={PROJECTS} age={AGE} />
+              </motion.section>
+            )}
+          </AnimatePresence>
+        </main>
+      </div>
     </div>
   );
 }
