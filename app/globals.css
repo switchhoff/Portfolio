@@ -30,7 +30,8 @@ html {
   overflow-x: hidden;
 }
 
-body { background: var(--bg); min-height: 100vh; }
+body { background: var(--bg); min-height: 100vh; cursor: none !important; }
+* { cursor: none !important; }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }

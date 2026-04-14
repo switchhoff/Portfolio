@@ -17,16 +17,14 @@ function CustomCursor({ activeTab }: { activeTab: string }) {
   const [bgColor, setBgColor] = useState("#f6f8f3");
   const [isClickable, setIsClickable] = useState(false);
 
-  const invertColor = (hex: string): string => {
+  const getContrastColor = (hex: string): string => {
     const cleanHex = hex.replace(/^#/, "");
-    if (cleanHex.length !== 6) return "#000000";
+    if (cleanHex.length !== 6) return "#ffffff";
     const r = parseInt(cleanHex.substring(0, 2), 16);
     const g = parseInt(cleanHex.substring(2, 4), 16);
     const b = parseInt(cleanHex.substring(4, 6), 16);
-    const invR = (255 - r).toString(16).padStart(2, "0");
-    const invG = (255 - g).toString(16).padStart(2, "0");
-    const invB = (255 - b).toString(16).padStart(2, "0");
-    return `#${invR}${invG}${invB}`;
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.5 ? "#000000" : "#ffffff";
   };
 
   const isElementClickable = (el: Element | null): boolean => {
@@ -72,7 +70,7 @@ function CustomCursor({ activeTab }: { activeTab: string }) {
 
   if (activeTab === "boring") return null;
 
-  const cursorColor = invertColor(bgColor);
+  const cursorColor = getContrastColor(bgColor);
   const glowColor = isClickable ? "#ffd700" : "transparent";
 
   return (
@@ -82,7 +80,9 @@ function CustomCursor({ activeTab }: { activeTab: string }) {
       borderRadius: "50%", pointerEvents: "none", zIndex: 10000,
       transform: `translate(${pos.x - 10}px, ${pos.y - 10}px) scale(${clicked ? 0.8 : 1})`,
       transition: "transform 0.1s ease-out, border-color 0.15s, box-shadow 0.15s",
-      boxShadow: isClickable ? `0 0 20px ${glowColor}, inset 0 0 6px ${glowColor}60` : "none",
+      boxShadow: isClickable
+        ? `0 0 20px ${glowColor}, inset 0 0 6px ${glowColor}60, 0 0 1px ${cursorColor}`
+        : `0 0 1px ${cursorColor}`,
       display: "flex", alignItems: "center", justifyContent: "center"
     }}>
       <div style={{ width: 3, height: 3, background: cursorColor, borderRadius: "50%" }} />
@@ -119,12 +119,18 @@ export default function Home() {
 
   useEffect(() => {
     if (activeTab === "fun") {
+      document.documentElement.style.cursor = "none";
       document.body.style.cursor = "none";
+      document.body.style.pointerEvents = "auto";
     } else {
+      document.documentElement.style.cursor = "default";
       document.body.style.cursor = "default";
     }
     setReady(true);
-    return () => { document.body.style.cursor = ""; };
+    return () => {
+      document.documentElement.style.cursor = "";
+      document.body.style.cursor = "";
+    };
   }, [activeTab]);
 
   return (
@@ -149,48 +155,60 @@ export default function Home() {
             zIndex: 120,
             display: "flex",
             flexDirection: "column",
-            alignItems: splashDone ? "flex-start" : "center",
+            alignItems: "center",
             justifyContent: "center",
-            top: splashDone ? "10px" : "50%",
-            left: splashDone ? "24px" : "50%",
-            transform: splashDone ? "translate(0, 0)" : "translate(-50%, -50%)",
-            width: splashDone ? "clamp(120px, 15vw, 160px)" : "min(92vw, 940px)",
+            inset: 0,
             pointerEvents: splashDone ? "none" : "all",
-            margin: splashDone ? "0" : "auto"
           }}
-          transition={{ 
+          transition={{
             layout: { type: "spring", stiffness: 60, damping: 15 },
           }}
         >
-          <motion.div layout style={{ width: "100%", display: "flex", justifyContent: splashDone ? "flex-start" : "center" }}>
-            <div style={{ width: splashDone ? "100%" : "auto" }}>
-              <GkLogo 
-                isHeader={splashDone} 
-                onComplete={() => setSplashDone(true)} 
-                onLightMode={() => setIsLit(true)}
-                onPhaseChange={setLogoPhase}
-              />
-            </div>
+          <motion.div
+            layout
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            animate={{
+              scale: splashDone ? 0.65 : 1,
+              y: splashDone ? -300 : 0,
+              x: splashDone ? -380 : 0,
+            }}
+            transition={{
+              layout: { type: "spring", stiffness: 60, damping: 15 },
+            }}
+          >
+            <GkLogo
+              isHeader={splashDone}
+              onComplete={() => setSplashDone(true)}
+              onLightMode={() => setIsLit(true)}
+              onPhaseChange={setLogoPhase}
+            />
           </motion.div>
           
-          <motion.div 
+          <motion.div
             layout
             initial={{ opacity: 0 }}
-            animate={{ 
+            animate={{
               opacity: (logoPhase === "light_mode" || logoPhase === "final" || splashDone) ? 1 : 0,
               scale: splashDone ? 0.65 : 1,
-              marginTop: splashDone ? "-6px" : "24px",
-              originX: splashDone ? 0 : 0.5
+              y: splashDone ? -300 : 24,
+              x: splashDone ? -380 : 0,
             }}
             style={{
-              textAlign: splashDone ? "left" : "center",
-              width: splashDone ? "auto" : "100%",
+              textAlign: "center",
               whiteSpace: "nowrap",
               color: splashDone ? P.muted : "#666",
               fontSize: "clamp(8px, 1vw, 12px)",
               fontWeight: 700,
               letterSpacing: "0.25em",
               textTransform: "uppercase"
+            }}
+            transition={{
+              layout: { type: "spring", stiffness: 60, damping: 15 },
             }}
           >
             by Alex Hofmann
