@@ -11,12 +11,33 @@ import BoringView from "@/components/resume/BoringView";
 import { Gamepad2, FileText } from "lucide-react";
 
 // ─── Custom Cursor ────────────────────────────────────────────────────────────
-function CustomCursor({ color, activeTab, logoPhase }: { color: string | null; activeTab: string; logoPhase: string }) {
+function CustomCursor({ color, activeTab }: { color: string | null; activeTab: string }) {
   const [pos, setPos] = useState({ x: -100, y: -100 });
   const [clicked, setClicked] = useState(false);
+  const [bgColor, setBgColor] = useState("#f6f8f3");
+
+  const invertColor = (hex: string): string => {
+    const cleanHex = hex.replace(/^#/, "");
+    if (cleanHex.length !== 6) return "#000000";
+    const r = parseInt(cleanHex.substring(0, 2), 16);
+    const g = parseInt(cleanHex.substring(2, 4), 16);
+    const b = parseInt(cleanHex.substring(4, 6), 16);
+    const invR = (255 - r).toString(16).padStart(2, "0");
+    const invG = (255 - g).toString(16).padStart(2, "0");
+    const invB = (255 - b).toString(16).padStart(2, "0");
+    return `#${invR}${invG}${invB}`;
+  };
 
   useEffect(() => {
-    const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    const move = (e: MouseEvent) => {
+      setPos({ x: e.clientX, y: e.clientY });
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      if (el) {
+        const computed = window.getComputedStyle(el);
+        const bgVal = computed.backgroundColor || "#f6f8f3";
+        setBgColor(bgVal);
+      }
+    };
     const down = () => { setClicked(true); setTimeout(() => setClicked(false), 160); };
     window.addEventListener("mousemove", move);
     window.addEventListener("mousedown", down);
@@ -25,20 +46,22 @@ function CustomCursor({ color, activeTab, logoPhase }: { color: string | null; a
 
   if (activeTab === "boring") return null;
 
-  // Only show glow after switch animation (phase: light_mode or final)
-  const showGlow = logoPhase === "light_mode" || logoPhase === "final";
-  const isClickable = color !== null && showGlow;
+  const isClickable = color !== null;
+  const cursorColor = invertColor(bgColor);
   const glowColor = isClickable ? "#ffd700" : "transparent";
 
   return (
     <div style={{
-      position: "fixed", top: 0, left: 0, width: 24, height: 24,
-      border: `1.5px solid ${glowColor}`,
+      position: "fixed", top: 0, left: 0, width: 20, height: 20,
+      border: `1.5px solid ${cursorColor}`,
       borderRadius: "50%", pointerEvents: "none", zIndex: 10000,
-      transform: `translate(${pos.x - 12}px, ${pos.y - 12}px) scale(${clicked ? 0.8 : 1})`,
-      transition: "transform 0.1s ease-out, border-color 0.2s, box-shadow 0.2s",
-      boxShadow: isClickable ? `0 0 16px ${glowColor}, inset 0 0 8px ${glowColor}40` : "none",
-    }} />
+      transform: `translate(${pos.x - 10}px, ${pos.y - 10}px) scale(${clicked ? 0.8 : 1})`,
+      transition: "transform 0.1s ease-out, border-color 0.15s, box-shadow 0.15s",
+      boxShadow: isClickable ? `0 0 20px ${glowColor}, inset 0 0 6px ${glowColor}60` : "none",
+      display: "flex", alignItems: "center", justifyContent: "center"
+    }}>
+      <div style={{ width: 3, height: 3, background: cursorColor, borderRadius: "50%" }} />
+    </div>
   );
 }
 
@@ -81,7 +104,7 @@ export default function Home() {
 
   return (
     <div style={{ background: P.surface, minHeight: "100vh", fontFamily: "var(--font-mono)" }}>
-      {ready && <CustomCursor color={hoverSpot?.color ?? null} activeTab={activeTab} logoPhase={logoPhase} />}
+      {ready && <CustomCursor color={hoverSpot?.color ?? null} activeTab={activeTab} />}
 
       {/* ── SPLASH BACKDROP ── */}
       <div style={{
