@@ -17,15 +17,6 @@ function CustomCursor({ activeTab }: { activeTab: string }) {
   const [bgColor, setBgColor] = useState("#f6f8f3");
   const [isClickable, setIsClickable] = useState(false);
 
-  const getContrastColor = (hex: string): string => {
-    const cleanHex = hex.replace(/^#/, "");
-    if (cleanHex.length !== 6) return "#ffffff";
-    const r = parseInt(cleanHex.substring(0, 2), 16);
-    const g = parseInt(cleanHex.substring(2, 4), 16);
-    const b = parseInt(cleanHex.substring(4, 6), 16);
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return luminance > 0.5 ? "#000000" : "#ffffff";
-  };
 
   const isElementClickable = (el: Element | null): boolean => {
     if (!el) return false;
@@ -70,22 +61,21 @@ function CustomCursor({ activeTab }: { activeTab: string }) {
 
   if (activeTab === "boring") return null;
 
-  const cursorColor = getContrastColor(bgColor);
   const glowColor = isClickable ? "#ffd700" : "transparent";
 
   return (
     <div style={{
-      position: "fixed", top: 0, left: 0, width: 20, height: 20,
-      border: `1.5px solid ${cursorColor}`,
+      position: "fixed", top: 0, left: 0, width: 24, height: 24,
+      border: `2px solid #000000`,
       borderRadius: "50%", pointerEvents: "none", zIndex: 10000,
-      transform: `translate(${pos.x - 10}px, ${pos.y - 10}px) scale(${clicked ? 0.8 : 1})`,
-      transition: "transform 0.1s ease-out, border-color 0.15s, box-shadow 0.15s",
+      transform: `translate(${pos.x - 12}px, ${pos.y - 12}px) scale(${clicked ? 0.85 : 1})`,
+      transition: "transform 0.1s ease-out, box-shadow 0.2s",
       boxShadow: isClickable
-        ? `0 0 20px ${glowColor}, inset 0 0 6px ${glowColor}60, 0 0 1px ${cursorColor}`
-        : `0 0 1px ${cursorColor}`,
+        ? `0 0 30px ${glowColor}, 0 0 60px ${glowColor}80, inset 0 0 10px ${glowColor}40`
+        : `none`,
       display: "flex", alignItems: "center", justifyContent: "center"
     }}>
-      <div style={{ width: 3, height: 3, background: cursorColor, borderRadius: "50%" }} />
+      <div style={{ width: 6, height: 6, background: "#ffffff", borderRadius: "50%" }} />
     </div>
   );
 }
@@ -167,15 +157,17 @@ export default function Home() {
           <motion.div
             layout
             style={{
-              width: "100%",
+              position: splashDone ? "fixed" : "relative",
+              top: splashDone ? "10px" : "auto",
+              left: splashDone ? "24px" : "auto",
+              width: splashDone ? "clamp(120px, 15vw, 160px)" : "100%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              zIndex: splashDone ? 100 : "auto",
             }}
             animate={{
-              scale: splashDone ? 0.65 : 1,
-              y: splashDone ? -300 : 0,
-              x: splashDone ? -380 : 0,
+              scale: splashDone ? 1 : 1,
             }}
             transition={{
               layout: { type: "spring", stiffness: 60, damping: 15 },
@@ -194,18 +186,17 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{
               opacity: (logoPhase === "light_mode" || logoPhase === "final" || splashDone) ? 1 : 0,
-              scale: splashDone ? 0.65 : 1,
-              y: splashDone ? -300 : 24,
-              x: splashDone ? -380 : 0,
             }}
             style={{
+              display: splashDone ? "none" : "block",
               textAlign: "center",
               whiteSpace: "nowrap",
-              color: splashDone ? P.muted : "#666",
+              color: "#666",
               fontSize: "clamp(8px, 1vw, 12px)",
               fontWeight: 700,
               letterSpacing: "0.25em",
-              textTransform: "uppercase"
+              textTransform: "uppercase",
+              marginTop: "24px",
             }}
             transition={{
               layout: { type: "spring", stiffness: 60, damping: 15 },
