@@ -40,8 +40,8 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/workshop.jpg"
-        alt="Alex Hofmann's Workshop — isometric view"
+        src="/Room.svg"
+        alt="Room"
         style={{ width: "100%", height: "auto", display: "block" }}
         draggable={false}
       />
