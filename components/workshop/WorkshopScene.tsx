@@ -36,13 +36,13 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      style={{ position: "relative", width: "100%", maxWidth: `${IMG_W}px`, margin: "0 auto", userSelect: "none" }}
+      style={{ position: "relative", width: "100%", maxWidth: `${IMG_W}px`, maxHeight: "100%", margin: "0 auto", userSelect: "none", display: "flex", alignItems: "center", justifyContent: "center" }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/Room.svg"
         alt="Room"
-        style={{ width: "100%", height: "auto", display: "block" }}
+        style={{ width: "100%", height: "100%", maxHeight: "100%", objectFit: "contain", display: "block" }}
         draggable={false}
       />
 

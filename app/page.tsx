@@ -101,6 +101,7 @@ export default function Home() {
   const [splashDone, setSplashDone] = useState(false);
   const [isLit, setIsLit] = useState(false);
   const [logoPhase, setLogoPhase] = useState("initial");
+  const [footerRevealed, setFooterRevealed] = useState(false);
   const sceneContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -214,7 +215,7 @@ export default function Home() {
         <header style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
           height: "60px",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
+          display: "flex", alignItems: "center", justifyContent: "flex-end",
           padding: "0 clamp(16px, 4vw, 32px)",
           background: "rgba(255,255,255,0.7)",
           borderBottom: `1px solid ${P.border}`,
@@ -222,44 +223,6 @@ export default function Home() {
         }}>
           {/* Logo spacer */}
           <div style={{ width: "clamp(140px, 20vw, 300px)" }} />
-
-          {/* Tab Switcher in Header */}
-          <div style={{ 
-            display: "flex", 
-            gap: "2px",
-            background: "#f0f4ec", 
-            padding: "2px", 
-            borderRadius: "4px",
-            border: `1px solid ${P.border}`,
-            scale: "clamp(0.8, 1vw, 1)"
-          }}>
-            {[
-              { id: "fun", label: "FUN", icon: <Gamepad2 size={12} /> },
-              { id: "boring", label: "BORING", icon: <FileText size={12} /> }
-            ].map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setActiveTab(t.id as any)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  padding: "6px clamp(10px, 2vw, 20px)",
-                  fontSize: "clamp(8px, 0.9vw, 9px)",
-                  fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  borderRadius: "2px",
-                  cursor: "pointer",
-                  border: "none",
-                  transition: "all 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
-                  background: activeTab === t.id ? "#ff0000" : "transparent",
-                  color: activeTab === t.id ? "#fff" : P.muted,
-                }}
-              >
-                {t.icon} {t.label}
-              </button>
-            ))}
-          </div>
 
           <div style={{ 
             display: "flex", 
@@ -285,15 +248,15 @@ export default function Home() {
         <main style={{ paddingTop: "60px" }}>
           <AnimatePresence mode="wait">
             {activeTab === "fun" ? (
-              <motion.section 
+              <motion.section
                 key="fun"
                 initial={{ opacity: 0, filter: "blur(10px)" }}
                 animate={{ opacity: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, filter: "blur(10px)" }}
                 transition={{ duration: 0.4 }}
-                style={{ position: "relative", width: "100%", overflow: "hidden" }}
+                style={{ position: "relative", width: "100%", height: "calc(100vh - 140px)", overflow: "hidden", marginTop: "60px" }}
               >
-                <div ref={sceneContainerRef} style={{ position: "relative" }}>
+                <div ref={sceneContainerRef} style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <WorkshopScene
                     onHotspotClick={(h, origin) => {
                       if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
@@ -329,6 +292,93 @@ export default function Home() {
             )}
           </AnimatePresence>
         </main>
+
+        {/* ── FOOTER ── */}
+        <motion.footer
+          initial={{ opacity: 0, filter: "blur(20px)" }}
+          animate={{
+            opacity: footerRevealed ? 1 : 0.3,
+            filter: footerRevealed ? "blur(0px)" : "blur(8px)",
+          }}
+          transition={{ duration: 0.4 }}
+          style={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 99,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "16px",
+            padding: "24px",
+            background: "rgba(255,255,255,0.9)",
+            backdropFilter: "blur(20px)",
+            borderTop: `1px solid ${P.border}`,
+            pointerEvents: footerRevealed ? "all" : "none",
+          }}
+        >
+          {!footerRevealed && (
+            <button
+              onClick={() => setFooterRevealed(true)}
+              style={{
+                padding: "12px 24px",
+                fontSize: "14px",
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                background: "transparent",
+                border: "none",
+                color: P.muted,
+                cursor: "pointer",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = P.text)}
+              onMouseLeave={(e) => (e.currentTarget.style.color = P.muted)}
+            >
+              See All
+            </button>
+          )}
+
+          {footerRevealed && (
+            <div style={{
+              display: "flex",
+              gap: "8px",
+              background: "#f0f4ec",
+              padding: "6px",
+              borderRadius: "6px",
+              border: `1px solid ${P.border}`,
+            }}>
+              {[
+                { id: "fun", label: "FUN", icon: <Gamepad2 size={16} /> },
+                { id: "boring", label: "BORING", icon: <FileText size={16} /> }
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setActiveTab(t.id as any)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "10px 20px",
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    letterSpacing: "0.12em",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    border: "none",
+                    transition: "all 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+                    background: activeTab === t.id ? "#ff0000" : "transparent",
+                    color: activeTab === t.id ? "#fff" : P.muted,
+                  }}
+                >
+                  {t.icon} {t.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </motion.footer>
       </div>
     </div>
   );
