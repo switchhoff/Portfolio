@@ -1,21 +1,20 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  Mail, 
-  MapPin, 
-  Calendar, 
-  Sparkles, 
-  GraduationCap, 
-  Briefcase, 
+import {
+  Mail,
+  MapPin,
+  Calendar,
+  Sparkles,
+  GraduationCap,
+  Briefcase,
   Code,
   Send,
   ArrowUpRight,
   Cpu,
   Layers,
   Zap,
-  Box,
-  Github
+  Box
 } from "lucide-react";
 import { type Project } from "@/lib/projects";
 import "./BoringView.css";
@@ -193,7 +192,7 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                     {proj.name}
                   </h3>
                   <a href={`https://github.com/${proj.repo}`} target="_blank" className="text-text-dim hover:text-accent transition-all transform hover:scale-110">
-                    <Github size={20} />
+                    <Code size={20} />
                   </a>
                 </div>
                 <p className="text-sm text-text-muted leading-relaxed mb-12 flex-grow">
