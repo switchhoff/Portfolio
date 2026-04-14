@@ -11,40 +11,34 @@ import BoringView from "@/components/resume/BoringView";
 import { Gamepad2, FileText } from "lucide-react";
 
 // ─── Custom Cursor ────────────────────────────────────────────────────────────
-function CustomCursor({ color, activeTab }: { color: string | null; activeTab: string }) {
+function CustomCursor({ color, activeTab, logoPhase }: { color: string | null; activeTab: string; logoPhase: string }) {
   const [pos, setPos] = useState({ x: -100, y: -100 });
   const [clicked, setClicked] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const move = (e: MouseEvent) => {
-      setPos({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
-    };
+    const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
     const down = () => { setClicked(true); setTimeout(() => setClicked(false), 160); };
     window.addEventListener("mousemove", move);
     window.addEventListener("mousedown", down);
     return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mousedown", down); };
-  }, [isVisible]);
+  }, []);
 
   if (activeTab === "boring") return null;
 
-  const isClickable = color !== null;
-  const glowColor = isClickable ? "#ffd700" : "#2d5a3d";
-  
+  // Only show glow after switch animation (phase: light_mode or final)
+  const showGlow = logoPhase === "light_mode" || logoPhase === "final";
+  const isClickable = color !== null && showGlow;
+  const glowColor = isClickable ? "#ffd700" : "transparent";
+
   return (
     <div style={{
       position: "fixed", top: 0, left: 0, width: 24, height: 24,
       border: `1.5px solid ${glowColor}`,
       borderRadius: "50%", pointerEvents: "none", zIndex: 10000,
-      opacity: isVisible ? 1 : 0,
       transform: `translate(${pos.x - 12}px, ${pos.y - 12}px) scale(${clicked ? 0.8 : 1})`,
-      transition: "transform 0.1s ease-out, border-color 0.2s, box-shadow 0.2s, opacity 0.3s",
+      transition: "transform 0.1s ease-out, border-color 0.2s, box-shadow 0.2s",
       boxShadow: isClickable ? `0 0 16px ${glowColor}, inset 0 0 8px ${glowColor}40` : "none",
-      display: "flex", alignItems: "center", justifyContent: "center"
-    }}>
-      <div style={{ width: 3, height: 3, background: glowColor, borderRadius: "50%" }} />
-    </div>
+    }} />
   );
 }
 
@@ -87,7 +81,7 @@ export default function Home() {
 
   return (
     <div style={{ background: P.surface, minHeight: "100vh", fontFamily: "var(--font-mono)" }}>
-      {ready && <CustomCursor color={hoverSpot?.color ?? null} activeTab={activeTab} />}
+      {ready && <CustomCursor color={hoverSpot?.color ?? null} activeTab={activeTab} logoPhase={logoPhase} />}
 
       {/* ── SPLASH BACKDROP ── */}
       <div style={{
