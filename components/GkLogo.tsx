@@ -72,9 +72,10 @@ interface GkLogoProps {
   onLightMode?: () => void;
   onPhaseChange?: (phase: string) => void;
   isHeader?: boolean;
+  onHeaderClick?: () => void;
 }
 
-export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhaseChange, isHeader = false }) => {
+export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhaseChange, isHeader = false, onHeaderClick }) => {
   const [phase, setPhase] = useState<"initial" | "activated" | "switch_animating" | "glowing" | "light_mode" | "letters_red" | "final">("initial");
   const [isLightMode, setIsLightMode] = useState(false);
   const [flickerActive, setFlickerActive] = useState(false);
@@ -112,7 +113,11 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
   if (!mounted) return <div className="aspect-[1200/302] w-full" />;
 
   const handlePowerClick = () => {
-    if (phase !== "initial" || isHeader) return;
+    if (isHeader) {
+      if (onHeaderClick) onHeaderClick();
+      return;
+    }
+    if (phase !== "initial") return;
 
     // 0ms: All components appear (except switch black)
     setPhase("activated");

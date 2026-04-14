@@ -102,6 +102,8 @@ export default function Home() {
   const [isLit, setIsLit] = useState(false);
   const [logoPhase, setLogoPhase] = useState("initial");
   const [footerRevealed, setFooterRevealed] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [showDarkModePopup, setShowDarkModePopup] = useState(false);
   const sceneContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -120,17 +122,29 @@ export default function Home() {
     };
   }, [activeTab]);
 
+  const handleDarkModeToggle = () => {
+    setDarkMode(!darkMode);
+    setShowDarkModePopup(true);
+    setTimeout(() => setShowDarkModePopup(false), 3000);
+  };
+
   return (
-    <div style={{ background: P.surface, minHeight: "100vh", fontFamily: "var(--font-mono)" }}>
+    <div style={{
+      background: darkMode ? "#1a1a1a" : P.surface,
+      minHeight: "100vh",
+      fontFamily: "var(--font-mono)",
+      color: darkMode ? "#ffffff" : P.text,
+      transition: "background 0.5s, color 0.5s"
+    }}>
       {ready && <CustomCursor activeTab={activeTab} />}
 
       {/* ── SPLASH BACKDROP ── */}
       <div style={{
         position: "fixed", inset: 0, zIndex: 110,
-        background: isLit ? "#ffffff" : "#0a0f0a",
+        background: darkMode ? "#000000" : (isLit ? "#ffffff" : "#0a0f0a"),
         opacity: splashDone ? 0 : 1,
         pointerEvents: splashDone ? "none" : "all",
-        transition: "opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1)",
+        transition: "opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s",
       }} />
 
       {/* ── SHARED LOGO TRANSITION CONTAINER ── */}
@@ -175,6 +189,7 @@ export default function Home() {
               onComplete={() => setSplashDone(true)}
               onLightMode={() => setIsLit(true)}
               onPhaseChange={setLogoPhase}
+              onHeaderClick={handleDarkModeToggle}
             />
           </motion.div>
           
@@ -217,9 +232,10 @@ export default function Home() {
           height: "60px",
           display: "flex", alignItems: "center", justifyContent: "flex-end",
           padding: "0 clamp(16px, 4vw, 32px)",
-          background: "rgba(255,255,255,0.7)",
-          borderBottom: `1px solid ${P.border}`,
+          background: darkMode ? "rgba(26,26,26,0.9)" : "rgba(255,255,255,0.7)",
+          borderBottom: `1px solid ${darkMode ? "#333" : P.border}`,
           backdropFilter: "blur(20px)",
+          transition: "background 0.5s, border-color 0.5s",
         }}>
           {/* Logo spacer */}
           <div style={{ width: "clamp(140px, 20vw, 300px)" }} />
@@ -313,10 +329,11 @@ export default function Home() {
             justifyContent: "center",
             gap: "16px",
             padding: "24px",
-            background: "rgba(255,255,255,0.9)",
+            background: darkMode ? "rgba(26,26,26,0.95)" : "rgba(255,255,255,0.9)",
             backdropFilter: "blur(20px)",
-            borderTop: `1px solid ${P.border}`,
+            borderTop: `1px solid ${darkMode ? "#333" : P.border}`,
             pointerEvents: footerRevealed ? "all" : "none",
+            transition: "background 0.5s, border-color 0.5s",
           }}
         >
           {!footerRevealed && (
@@ -379,6 +396,34 @@ export default function Home() {
             </div>
           )}
         </motion.footer>
+
+        {/* ── DARK MODE POPUP ── */}
+        {showDarkModePopup && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: "fixed",
+              top: "90px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              background: darkMode ? "#2a2a2a" : "#ffffff",
+              border: `1px solid ${darkMode ? "#444" : P.border}`,
+              borderRadius: "8px",
+              padding: "16px 24px",
+              fontSize: "14px",
+              fontWeight: 600,
+              color: darkMode ? "#ffffff" : P.text,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              zIndex: 200,
+              pointerEvents: "none",
+            }}
+          >
+            Nice, you found secret dark mode
+          </motion.div>
+        )}
       </div>
     </div>
   );
