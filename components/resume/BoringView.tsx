@@ -158,13 +158,9 @@ export default function BoringView({ projects, age }: BoringViewProps) {
             {projects.map((proj, i) => (
               <div key={proj.id} className="proj-card">
                 <div className="proj-image">
-                  {proj.image ? (
-                    <img src={proj.image} alt={proj.name} className="object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300 uppercase">
-                      [DATA_STREAM_{i}]
-                    </div>
-                  )}
+                  <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300 uppercase">
+                    [DATA_STREAM_{i}]
+                  </div>
                   <div className="absolute top-3 right-3">
                     <ExternalLink size={14} className="text-red-600 opacity-0 group-hover:opacity-100" />
                   </div>
