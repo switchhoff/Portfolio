@@ -190,6 +190,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Habitat",
     category: "projects",
     description: "A habit tracker that rewards consistency by growing virtual plants and trees — build streaks, unlock new species, and watch your garden flourish.",
+    tags: ["SOFTWARE", "PERSONAL"],
     links: [{ github: "https://github.com/switchhoff/Habitat", label: "GitHub" }],
   },
   42: {

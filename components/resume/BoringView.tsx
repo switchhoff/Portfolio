@@ -16,9 +16,9 @@ interface BoringViewProps {
 }
 
 const WORK = [
-  { title: "Chief Engineer", company: "Fortifyedge", period: "2024 — Present", note: "Leading engineering for Human Monitoring on Ruggedized Edge devices." },
-  { title: "Software Systems Engineer", company: "Tonbo Systems", period: "2023", note: "Integrated tactical sensors into Augmented Reality and HUD systems." },
-  { title: "Engineer", company: "DefendTex", period: "2022 — 2023", note: "R&D focused on Navigation systems for Unmanned Ground Vehicles." },
+  { title: "Chief Engineer", company: "Fortifyedge", period: "2025 — NOW", note: "Project Lead integrating thermal sights with Team Awareness Kit (TAK) for situational awareness systems." },
+  { title: "Software Systems Engineer", company: "Tonbo Systems", period: "2025", note: "Project Lead working to integrate thermal sights with Team Awareness Kit (TAK) and deliver network-connected future soldier system kit." },
+  { title: "Engineer", company: "DefendTex", period: "2022 — 2024", note: "Electronics/Software Engineer developing autonomy subsystem for unmanned ground vehicle. Thermal object detection, GStreamer pipelines, ArduPilot implementation." },
 ];
 
 const GithubIcon = ({ size = 20 }: { size?: number }) => (
@@ -34,17 +34,19 @@ const LinkedinIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 const INTERESTS = [
-  "Tactical UI/UX",
-  "Embedded Systems",
-  "Hardware Design",
-  "Systems Logic",
-  "Autonomous Nav",
-  "Rapid Prototyping"
+  "Golf — HCP 38, Member at Berwick Montuna Golf Club",
+  "Photography — @alexhofmannphotography",
+  "Board Games — Dune Imperium, Wingspan, Ark Nova",
+  "Reading — Brotherband Series, Wolf of the Plains, Courtney Series",
+  "Art — Hans Heysen, Albert Namatjira, Matthew Bell",
+  "Craft — Sewing, Embroidery, Crochet",
+  "Saxophone",
+  "Movies — Ocean's Eleven, Lord of the Rings, Pirates of the Caribbean",
 ];
 
 const EDUCATION = [
-  { degree: "Master of Electrical Engineering", school: "Monash University", period: "2021 - 2023", details: "Autonomous Systems Focus" },
-  { degree: "Bachelor of Mechatronics & Robotics", school: "Monash University", period: "2017 - 2021", details: "AI and Robotics Major" },
+  { degree: "Master of Electrical Engineering", school: "Monash University", period: "2024", details: "Specialization: Artificial Intelligence | 2024 Master of Engineering Academic Medal Winner" },
+  { degree: "Bachelor of Robotics and Mechatronics Engineering", school: "Monash University", period: "2020–2023", details: "Minor: Software Engineering | Dean's Honour List 2020–2023" },
 ];
 
 export default function BoringView({ projects, age }: BoringViewProps) {
@@ -120,9 +122,9 @@ export default function BoringView({ projects, age }: BoringViewProps) {
 
         {/* ── SECTION 02: EXPERIENCE & EDUCATION ── */}
         <Section number="02" title="EXPERIENCE & EDUCATION">
-          <div className="grid md:grid-cols-2 gap-[clamp(2rem, 5vw, 4rem)]">
-            <div className="space-y-10">
-              <h3 className="text-lg font-bold text-red-600 uppercase mb-8">Professional Timeline</h3>
+          <div className="flex flex-col items-center gap-[clamp(2rem, 5vw, 4rem)] w-full">
+            <div className="w-full max-w-2xl space-y-10">
+              <h3 className="text-lg font-bold text-red-600 uppercase mb-8 text-center">Professional Timeline</h3>
               {WORK.map((w, i) => (
                 <div key={i} className="exp-card">
                   <div className="exp-node" />
@@ -136,13 +138,13 @@ export default function BoringView({ projects, age }: BoringViewProps) {
               ))}
             </div>
 
-            <div className="space-y-8">
-              <h3 className="text-lg font-bold text-red-600 uppercase mb-8">Academic Root</h3>
+            <div className="w-full max-w-2xl space-y-8">
+              <h3 className="text-lg font-bold text-red-600 uppercase mb-8 text-center">Education</h3>
               {EDUCATION.map((edu, i) => (
                 <div key={i} className="edu-card">
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="text-sm font-bold uppercase">{edu.degree}</h4>
-                    <span className="text-[10px] text-gray-400">{edu.period}</span>
+                    <span className="text-[10px] text-gray-400 ml-4 shrink-0">{edu.period}</span>
                   </div>
                   <p className="text-red-600 text-[10px] font-bold uppercase mb-2">{edu.school}</p>
                   <p className="text-[11px] text-gray-500 leading-relaxed">{edu.details}</p>
