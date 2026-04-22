@@ -530,5 +530,39 @@
         { "name": "Between continents — global perspective" }
       ]
     }
+  },
+  {
+    "id": "golf",
+    "label": "Golf Club",
+    "svgElement": "golf_club",
+    "color": "#98D8C8",
+    "category": "interests",
+    "type": "popup",
+    "points": "",
+    "popup": {
+      "title": "Golf",
+      "items": [
+        { "name": "Precision sport" },
+        { "name": "Outdoor recreation" },
+        { "name": "Strategic thinking" }
+      ]
+    }
+  },
+  {
+    "id": "saxophone",
+    "label": "Saxophone",
+    "svgElement": "saxophone",
+    "color": "#98D8C8",
+    "category": "interests",
+    "type": "popup",
+    "points": "",
+    "popup": {
+      "title": "Saxophone",
+      "items": [
+        { "name": "Jazz improvisation" },
+        { "name": "Musical expression" },
+        { "name": "Jazz standards" }
+      ]
+    }
   }
 ]

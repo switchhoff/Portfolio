@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const GK_PATHS = [
@@ -80,6 +80,8 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
   const [isLightMode, setIsLightMode] = useState(false);
   const [flickerActive, setFlickerActive] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [powerOffset, setPowerOffset] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (onPhaseChange) onPhaseChange(phase);
@@ -109,6 +111,17 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
       return () => clearInterval(interval);
     }
   }, [phase]);
+
+  // Calculate offset so power symbol is centered on page in initial phase
+  useLayoutEffect(() => {
+    if (isHeader || !containerRef.current) return;
+    const { width, height } = containerRef.current.getBoundingClientRect();
+    if (width === 0) return;
+    // Power symbol center in SVG coords (after scaleY flip): x≈1070/12000, y≈520/3020
+    const x = (0.5 - 1070 / 12000) * width;
+    const y = (0.5 - 520 / 3020) * height;
+    setPowerOffset({ x, y });
+  }, [mounted, isHeader]);
 
   if (!mounted) return <div className="aspect-[1200/302] w-full" />;
 
@@ -185,22 +198,54 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
   };
 
   return (
-    <motion.div 
+    <motion.div
       className={`flex items-center justify-center transition-opacity duration-1000`}
       initial={false}
-      animate={isHeader ? "header" : "splash"}
+      animate={{
+        x: (phase === "initial" && !isHeader) ? powerOffset.x : 0,
+        y: (phase === "initial" && !isHeader) ? powerOffset.y : 0,
+      }}
+      transition={{
+        x: { duration: phase === "initial" ? 0 : 0.8, ease: "easeInOut" },
+        y: { duration: phase === "initial" ? 0 : 0.8, ease: "easeInOut" },
+        layout: { type: "spring", stiffness: 60, damping: 15 },
+      }}
     >
-      <div className="relative w-full max-w-4xl aspect-[1200/302]">
+      <div ref={containerRef} className="relative w-full max-w-4xl aspect-[1200/302]">
         <svg 
           viewBox="0 0 12000 3020" 
           className="w-full h-full overflow-visible" 
           style={{ transform: "scaleY(-1)" }}
         >
+          {/* Power symbol group — transparent rect makes entire interior clickable */}
+          <g
+            onClick={phase === "initial" || isHeader ? handlePowerClick : undefined}
+            data-clickable="true"
+            style={{ cursor: "none" }}
+          >
+            <rect x="740" y="2220" width="660" height="560" fill="transparent" />
+            {GK_SCHEMA.POWER.map((i) => (
+              <motion.path
+                key={i}
+                d={GK_PATHS[i]}
+                initial={{ fill: "rgba(0,0,0,0)" }}
+                animate={{
+                  fill: getPathColor(i),
+                  filter: getPathColor(i) !== "rgba(0,0,0,0)"
+                    ? `drop-shadow(0 0 15px ${getPathColor(i)}80)`
+                    : "none"
+                }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+              />
+            ))}
+          </g>
+
           {GK_PATHS.map((d, i) => {
             const group = Object.entries(GK_SCHEMA).find(([_, indices]) => indices.includes(i))?.[0];
             const isSwitch = group === "SWITCH";
             const isPower = group === "POWER";
-            
+            if (isPower) return null;
+
             return (
               <motion.path
                 key={i}
@@ -217,8 +262,6 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
                   duration: isSwitch ? 2 : 1.5,
                   ease: "easeInOut"
                 }}
-                onClick={isPower ? handlePowerClick : undefined}
-                style={{ cursor: isPower ? "pointer" : "default" }}
               />
             );
           })}
@@ -242,15 +285,6 @@ export const GkLogo: React.FC<GkLogoProps> = ({ onComplete, onLightMode, onPhase
           />
         )}
 
-        {phase === "initial" && !isLightMode && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute bottom-[-150px] left-1/2 -translate-x-1/2 text-zinc-600 text-[18px] font-medium tracking-[0.3em] whitespace-nowrap"
-          >
-            CLICK POWER TO ENGAGE
-          </motion.div>
-        )}
       </div>
     </motion.div>
   );

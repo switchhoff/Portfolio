@@ -1,9 +1,9 @@
 {
   "projects": {
-    "default": "hoffswitch"
+    "default": "hoff-switch"
   },
   "targets": {
-    "hoffswitch": {
+    "hoff-switch": {
       "hosting": {
         "hoffswitch": ["hoffswitch"]
       }

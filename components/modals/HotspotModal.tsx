@@ -29,23 +29,17 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
     const modal = modalRef.current.getBoundingClientRect();
     const mw = modal.width || 380;
     const mh = modal.height || 300;
-    const gap = 16;
-
     // If no click origin (e.g. cheat guide), center in container
     const origin = clickOrigin ?? { x: containerRect.width / 2, y: containerRect.height / 2 };
 
-    let left = origin.x + gap;
+    // Center popup exactly on cursor
+    let left = origin.x - mw / 2;
     let arrowSide: "left" | "right" = "left";
 
-    // Flip left if overflows right
-    if (left + mw > containerRect.width) {
-      left = origin.x - mw - gap;
-      arrowSide = "right";
-    }
-    // Clamp left
+    // Clamp horizontally
     left = Math.max(8, Math.min(left, containerRect.width - mw - 8));
 
-    // Vertical: center on click, clamp to container
+    // Center vertically on cursor, clamp to container
     let top = origin.y - mh / 2;
     top = Math.max(8, Math.min(top, containerRect.height - mh - 8));
 

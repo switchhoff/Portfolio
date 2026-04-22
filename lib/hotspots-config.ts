@@ -144,7 +144,7 @@ export interface CheatGuideCategory {
 export const CHEAT_GUIDE_CATEGORIES: CheatGuideCategory[] = [
   { id: 'projects',   label: 'Projects',   color: '#3498db', description: 'Apps, games, portfolio projects' },
   { id: 'experience', label: 'Experience',  color: '#e74c3c', description: 'Education & professional work' },
-  { id: 'popups',     label: 'Interests',   color: '#f1c40f', description: 'Games & favourite books' },
+  { id: 'popups',     label: 'Interests',   color: '#8e44ad', description: 'Games & favourite books' },
   { id: 'about',      label: 'About',       color: '#2d5a3d', description: 'Bio & background' },
   { id: 'contact',    label: 'Contact',     color: '#27ae60', description: 'Get in touch' },
 ];

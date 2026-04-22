@@ -32,6 +32,7 @@ html {
 
 body { background: var(--bg); min-height: 100vh; cursor: none !important; }
 * { cursor: none !important; }
+button, a, input, svg, path, [role="button"] { cursor: none !important; }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }

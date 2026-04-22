@@ -59,19 +59,17 @@ function CustomCursor({ activeTab }: { activeTab: string }) {
     return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mousedown", down); };
   }, []);
 
-  if (activeTab === "boring") return null;
-
   return (
     <div style={{
       position: "fixed", top: 0, left: 0, width: 24, height: 24,
-      border: isClickable ? `6px solid #ffd700` : `2px solid #000000`,
+      border: isClickable ? `4px solid #ffd700` : `1px solid #000000`,
       borderRadius: "50%", pointerEvents: "none", zIndex: 10000,
       transform: `translate(${pos.x - 12}px, ${pos.y - 12}px) scale(${clicked ? 0.85 : 1})`,
       transition: "transform 0.1s ease-out, border 0.2s, box-shadow 0.2s",
       boxShadow: `0 0 0 2px #000000`,
       display: "flex", alignItems: "center", justifyContent: "center"
     }}>
-      <div style={{ width: 6, height: 6, background: "#ffffff", borderRadius: "50%" }} />
+      <div style={{ width: 6, height: 6, background: isClickable ? "#ffd700" : "#ffffff", borderRadius: "50%" }} />
     </div>
   );
 }
@@ -101,20 +99,14 @@ export default function Home() {
   const [splashDone, setSplashDone] = useState(false);
   const [isLit, setIsLit] = useState(false);
   const [logoPhase, setLogoPhase] = useState("initial");
-  const [footerRevealed, setFooterRevealed] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [showDarkModePopup, setShowDarkModePopup] = useState(false);
   const sceneContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (activeTab === "fun") {
-      document.documentElement.style.cursor = "none";
-      document.body.style.cursor = "none";
-      document.body.style.pointerEvents = "auto";
-    } else {
-      document.documentElement.style.cursor = "default";
-      document.body.style.cursor = "default";
-    }
+    document.documentElement.style.cursor = "none";
+    document.body.style.cursor = "none";
+    document.body.style.pointerEvents = "auto";
     setReady(true);
     return () => {
       document.documentElement.style.cursor = "";
@@ -130,7 +122,7 @@ export default function Home() {
 
   return (
     <div style={{
-      background: darkMode ? "#1a1a1a" : P.surface,
+      background: darkMode ? "#1a1a1a" : "#ffffff",
       minHeight: "100vh",
       fontFamily: "var(--font-mono)",
       color: darkMode ? "#ffffff" : P.text,
@@ -216,8 +208,82 @@ export default function Home() {
           >
             by Alex Hofmann
           </motion.div>
+
         </motion.div>
       </LayoutGroup>
+
+      {/* ── SPLASH PROMPT (centered independently from logo) ── */}
+      {!splashDone && logoPhase === "initial" && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 125,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            paddingTop: "68vh",
+            pointerEvents: "none",
+            gap: "12px",
+          }}
+        >
+          <span style={{
+            color: "#e0e0e0",
+            fontSize: "clamp(10px, 1.2vw, 18px)",
+            fontWeight: 700,
+            letterSpacing: "0.3em",
+            textTransform: "uppercase",
+            fontFamily: "var(--font-mono)",
+          }}>
+            CLICK THE POWER BUTTON
+          </span>
+          <span style={{
+            color: "#c0c0c0",
+            fontSize: "clamp(8px, 0.9vw, 11px)",
+            fontWeight: 600,
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            fontFamily: "var(--font-mono)",
+          }}>
+            OR
+          </span>
+          <button
+            onClick={() => setSplashDone(true)}
+            style={{
+              pointerEvents: "all",
+              padding: "8px 20px",
+              background: "transparent",
+              border: "1px solid #ffffff",
+              color: "#ffffff",
+              fontSize: "clamp(7px, 0.9vw, 11px)",
+              fontWeight: 600,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              cursor: "none",
+              transition: "all 0.3s ease",
+              borderRadius: "2px",
+              fontFamily: "var(--font-mono)",
+            }}
+            onMouseEnter={(e) => {
+              const t = e.currentTarget as HTMLButtonElement;
+              t.style.borderColor = "#ffd700";
+              t.style.color = "#ffd700";
+            }}
+            onMouseLeave={(e) => {
+              const t = e.currentTarget as HTMLButtonElement;
+              t.style.borderColor = "#ffffff";
+              t.style.color = "#ffffff";
+            }}
+            data-clickable="true"
+          >
+            Skip
+          </button>
+        </motion.div>
+      )}
 
       {/* ── SITE CONTENT ── */}
       <div style={{
@@ -232,14 +298,13 @@ export default function Home() {
           top: 0,
           left: 0,
           right: 0,
-          height: "80px",
+          height: "60px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           padding: "0 clamp(1.5rem, 5vw, 4rem)",
           background: darkMode ? "rgba(26,26,26,0.9)" : "rgba(255,255,255,0.7)",
           backdropFilter: "blur(12px)",
-          borderBottom: darkMode ? "1px solid rgba(255,255,255,0.05)" : "1px solid rgba(0,0,0,0.05)",
           zIndex: 100,
           transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
         }}>
@@ -316,29 +381,47 @@ export default function Home() {
                 animate={{ opacity: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, filter: "blur(10px)" }}
                 transition={{ duration: 0.4 }}
-                style={{ position: "relative", width: "100%", height: "calc(100vh - 140px)", overflow: "hidden", marginTop: "60px" }}
+                style={{ position: "relative", width: "100vw", height: "calc(100vh - 60px)", overflow: "hidden", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}
               >
-                <div ref={sceneContainerRef} style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <WorkshopScene
-                    onHotspotClick={(h, origin) => {
-                      if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
-                      else { setActive(h); setClickOrigin(origin); }
+                {/* Shared container — fills viewport at 16:9 */}
+                <div style={{
+                  position: "relative",
+                  width: "min(100vw, calc((100vh - 60px) * 16 / 9))",
+                  height: "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
+                  aspectRatio: "16 / 9",
+                }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/OffswitchBKGHIGH.png"
+                    alt="Background"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                      objectPosition: "center",
+                      pointerEvents: "none",
                     }}
-                    activeId={active?.id ?? null}
-                    highlightCategory={highlightCategory}
-                    onHoverChange={setHoverSpot}
+                    draggable={false}
                   />
-                  <HotspotModal
-                    hotspot={active}
-                    clickOrigin={clickOrigin}
-                    containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
-                    onClose={() => { setActive(null); setClickOrigin(null); }}
-                  />
-                  <CheatGuide
-                    onHotspotSelect={(h) => { setActive(h); setClickOrigin(null); }}
-                    activeCategory={highlightCategory}
-                    onCategoryChange={setHighlightCategory}
-                  />
+                  <div ref={sceneContainerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10 }}>
+                    <WorkshopScene
+                      onHotspotClick={(h, origin) => {
+                        if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
+                        else { setActive(h); setClickOrigin(origin); }
+                      }}
+                      activeId={active?.id ?? null}
+                      highlightCategory={highlightCategory}
+                      onHoverChange={setHoverSpot}
+                    />
+                    <HotspotModal
+                      hotspot={active}
+                      clickOrigin={clickOrigin}
+                      containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
+                      onClose={() => { setActive(null); setClickOrigin(null); }}
+                    />
+                  </div>
                 </div>
               </motion.section>
             ) : (
@@ -355,21 +438,6 @@ export default function Home() {
           </AnimatePresence>
         </main>
 
-        {activeTab === "fun" && (
-          <div style={{
-            position: "fixed",
-            bottom: "24px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 99,
-          }}>
-            <CheatGuide
-              onHotspotSelect={(h) => { setActive(h); setClickOrigin(null); }}
-              activeCategory={highlightCategory}
-              onCategoryChange={setHighlightCategory}
-            />
-          </div>
-        )}
 
 
         {/* ── DARK MODE POPUP ── */}
