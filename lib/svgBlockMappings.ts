@@ -1,4 +1,18 @@
 export const BLOCK_MAPPINGS = {
+  about: [
+    { fillPath: 34, strokePath: 35 },
+    { fillPath: 76, strokePath: 77 },
+  ],
+  interests: [
+    { fillPath: 4, strokePath: 5 },
+    { fillPath: 8, strokePath: 9 },
+    { fillPath: 10, strokePath: 11 },
+    { fillPath: 18, strokePath: 19 },
+    { fillPath: 24, strokePath: 25 },
+    { fillPath: 28, strokePath: 29 },
+    { fillPath: 82, strokePath: 83 },
+    { fillPath: 94, strokePath: 95 },
+  ],
   projects: [
     { fillPath: 2, strokePath: 3 },
     { fillPath: 6, strokePath: 7 },
@@ -19,30 +33,10 @@ export const BLOCK_MAPPINGS = {
     { fillPath: 84, strokePath: 85 },
     { fillPath: 86, strokePath: 87 },
   ],
-  interests: [
-    { fillPath: 4, strokePath: 5 },
-    { fillPath: 8, strokePath: 9 },
-    { fillPath: 10, strokePath: 11 },
-    { fillPath: 18, strokePath: 19 },
-    { fillPath: 24, strokePath: 25 },
-    { fillPath: 28, strokePath: 29 },
-    { fillPath: 82, strokePath: 83 },
-  ],
-  generic: [
-    { fillPath: 20, strokePath: 21 },
-    { fillPath: 52, strokePath: 53 },
-    { fillPath: 54, strokePath: 55 },
-    { fillPath: 56, strokePath: 57 },
-    { fillPath: 78, strokePath: 79 },
-    { fillPath: 80, strokePath: 81 },
-    { fillPath: 88, strokePath: 89 },
-    { fillPath: 90, strokePath: 91 },
-    { fillPath: 92, strokePath: 93 },
-    { fillPath: 94, strokePath: 95 },
-  ],
-  about: [
-    { fillPath: 34, strokePath: 35 },
-    { fillPath: 76, strokePath: 77 },
+  education: [
+    { fillPath: 70, strokePath: 71 },
+    { fillPath: 72, strokePath: 73 },
+    { fillPath: 74, strokePath: 75 },
   ],
   experience: [
     { fillPath: 50, strokePath: 51 },
@@ -52,13 +46,19 @@ export const BLOCK_MAPPINGS = {
     { fillPath: 64, strokePath: 65 },
     { fillPath: 66, strokePath: 67 },
     { fillPath: 68, strokePath: 69 },
+    { fillPath: 88, strokePath: 89 },
     { fillPath: 96, strokePath: 97 },
     { fillPath: 98, strokePath: 99 },
   ],
-  education: [
-    { fillPath: 70, strokePath: 71 },
-    { fillPath: 72, strokePath: 73 },
-    { fillPath: 74, strokePath: 75 },
+  generic: [
+    { fillPath: 20, strokePath: 21 },
+    { fillPath: 52, strokePath: 53 },
+    { fillPath: 54, strokePath: 55 },
+    { fillPath: 56, strokePath: 57 },
+    { fillPath: 78, strokePath: 79 },
+    { fillPath: 80, strokePath: 81 },
+    { fillPath: 90, strokePath: 91 },
+    { fillPath: 92, strokePath: 93 },
   ],
 };
 

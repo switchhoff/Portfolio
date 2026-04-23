@@ -42,6 +42,7 @@ export default function CheatGuide({ onHotspotSelect, activeCategory, onCategory
           borderTop: `1px solid ${getCategoryColor(activeCategory)}30`,
           display: "flex", gap: 6, flexWrap: "wrap",
           overflowX: "auto",
+          cursor: "pointer",
         }}>
           {activeHotspots.map(h => (
             <button
@@ -71,6 +72,7 @@ export default function CheatGuide({ onHotspotSelect, activeCategory, onCategory
         background: "rgba(255,255,255,0.92)",
         backdropFilter: "blur(12px)",
         borderTop: "1px solid rgba(220,229,214,0.6)",
+        cursor: "pointer",
       }}>
         {CHEAT_GUIDE_CATEGORIES.map(cat => {
           const isActive = activeCategory === cat.id;

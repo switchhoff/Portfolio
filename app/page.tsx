@@ -301,7 +301,7 @@ export default function Home() {
           height: "60px",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "space-between",
           padding: "0 clamp(1.5rem, 5vw, 4rem)",
           background: darkMode ? "rgba(26,26,26,0.9)" : "rgba(255,255,255,0.7)",
           backdropFilter: "blur(12px)",
