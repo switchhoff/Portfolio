@@ -70,13 +70,13 @@ export default function AmbientPlayer() {
   return (
     <div style={{
       position: "absolute",
-      left: "-2px",
-      top: "42%",
-      transform: "rotate(-35deg)",
+      left: "24%",
+      top: "19%",
+      transform: "rotate(-25deg)",
       transformOrigin: "left center",
       display: "flex",
       alignItems: "center",
-      gap: "7px",
+      gap: "8px",
       zIndex: 18,
       pointerEvents: "auto",
       whiteSpace: "nowrap",
@@ -85,29 +85,52 @@ export default function AmbientPlayer() {
         onClick={toggle}
         title={playing ? "Stop ambiance" : "Play ambiance"}
         style={{
-          width: 18, height: 18,
-          borderRadius: "50%",
-          border: "1px solid rgba(0,0,0,0.45)",
-          background: playing ? "rgba(0,0,0,0.12)" : "transparent",
-          color: "rgba(0,0,0,0.6)",
+          width: 20, height: 20,
+          border: "none",
+          background: "transparent",
+          color: "rgba(0,0,0,0.55)",
           cursor: "pointer",
-          fontSize: "7px",
           display: "flex", alignItems: "center", justifyContent: "center",
           flexShrink: 0,
-          transition: "all 0.2s",
+          padding: 0,
+          transition: "color 0.2s",
         }}
       >
-        {playing ? "■" : "▶"}
+        {playing ? (
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="4" height="12" rx="1" fill="rgba(0,0,0,0.6)"/>
+            <rect x="10" y="2" width="4" height="12" rx="1" fill="rgba(0,0,0,0.6)"/>
+          </svg>
+        ) : (
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 2.5C4 2.04 4.5 1.77 4.87 2.04L13.37 7.54C13.71 7.78 13.71 8.22 13.37 8.46L4.87 13.96C4.5 14.23 4 13.96 4 13.5V2.5Z" fill="rgba(0,0,0,0.6)"/>
+          </svg>
+        )}
       </button>
-      <span style={{
-        fontSize: "9px",
-        fontFamily: "'JetBrains Mono', monospace",
-        color: "rgba(0,0,0,0.45)",
-        letterSpacing: "0.06em",
-        fontStyle: "italic",
+      <div style={{
+        display: "flex",
+        flexDirection: "row",
+        gap: "6px",
       }}>
-        Website Ambiance: Going Nowhere Slowly — Seven Day Story
-      </span>
+        <div style={{
+          fontSize: "9px",
+          fontFamily: "'JetBrains Mono', monospace",
+          color: "rgba(0,0,0,0.55)",
+          letterSpacing: "0.06em",
+          fontWeight: 600,
+        }}>
+          Website Ambiance
+        </div>
+        <div style={{
+          fontSize: "8px",
+          fontFamily: "'JetBrains Mono', monospace",
+          color: "rgba(0,0,0,0.4)",
+          letterSpacing: "0.06em",
+          fontStyle: "italic",
+        }}>
+          Going Nowhere Slowly — Seven Day Story
+        </div>
+      </div>
     </div>
   );
 }

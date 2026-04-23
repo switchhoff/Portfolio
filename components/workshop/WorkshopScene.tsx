@@ -354,8 +354,8 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       {/* Menu Bar */}
       <div style={{
         position: "absolute",
-        top: "105px",
-        right: "65px",
+        top: "175px",
+        right: "75px",
         display: "flex",
         flexDirection: "column",
         gap: 0,
@@ -744,9 +744,9 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                 boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
                 zIndex: 65,
                 fontFamily: "'JetBrains Mono', monospace",
-                width: (pathData?.category === "generic" || !pathData?.description) ? "auto" : "380px",
+                width: (pathData?.category === "generic" || !pathData?.description) ? "auto" : "420px",
                 minWidth: (pathData?.category === "generic" || !pathData?.description) ? "140px" : "320px",
-                maxWidth: "380px",
+                maxWidth: "420px",
               }}
               onClick={(e) => e.stopPropagation()}
             >
