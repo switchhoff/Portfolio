@@ -37,12 +37,13 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
   const visitedPathsRef = useRef<Set<number>>(new Set());
   const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
 
+  const FILTER_ORDER = ["about", "interests", "projects", "education", "experience"];
   const FILTER_GROUPS: Record<string, number[]> = Object.fromEntries(
-    Object.entries(BLOCK_MAPPINGS)
-      .filter(([k]) => k !== "generic")
-      .map(([category, blocks]) => [
+    FILTER_ORDER
+      .filter(k => BLOCK_MAPPINGS[k as keyof typeof BLOCK_MAPPINGS])
+      .map(category => [
         category,
-        blocks.flatMap(b => [b.fillPath, b.strokePath]),
+        BLOCK_MAPPINGS[category as keyof typeof BLOCK_MAPPINGS].flatMap(b => [b.fillPath, b.strokePath]),
       ])
   );
   const filterPaths: Set<number> | null = activeFilters.size === 0 ? null : new Set(

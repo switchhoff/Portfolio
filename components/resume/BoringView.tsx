@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  Mail, 
+import {
+  Mail,
   ExternalLink,
   Send,
   MapPin
@@ -34,7 +34,7 @@ const LinkedinIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 const INTERESTS = [
-  { title: "Golf", subtitle: "HCP 38 · Berwick Montuna Golf Club", link: "https://www.berwickmontuna.com.au/" },
+  { title: "Golf", subtitle: "HCP 38 · Berwick Montuna Golf Club" },
   { title: "Photography", subtitle: "@alexhofmannphotography" },
   { title: "Board Games", subtitle: "Dune Imperium · Wingspan · Ark Nova" },
   { title: "Reading", subtitle: "Brotherband Series · Wolf of the Plains · Courtney Series" },
@@ -45,8 +45,8 @@ const INTERESTS = [
 ];
 
 const EDUCATION = [
-  { degree: "Master of Electrical Engineering", school: "Monash University", period: "2024", details: "Specialization: Artificial Intelligence | 2024 Master of Engineering Academic Medal Winner" },
-  { degree: "Bachelor of Robotics and Mechatronics Engineering", school: "Monash University", period: "2020–2023", details: "Minor: Software Engineering | Dean's Honour List 2020–2023" },
+  { degree: "Master of Electrical Engineering", school: "Monash University", period: "2024", details: "Specialization: Artificial Intelligence · 2024 Master of Engineering Academic Medal Winner" },
+  { degree: "Bachelor of Robotics and Mechatronics Engineering", school: "Monash University", period: "2020–2023", details: "Minor: Software Engineering · Dean's Honour List 2020–2023" },
 ];
 
 export default function BoringView({ projects, age }: BoringViewProps) {
@@ -107,16 +107,12 @@ export default function BoringView({ projects, age }: BoringViewProps) {
 
                 <div className="w-full max-w-xl mt-8">
                   <h3 className="text-xs font-bold text-red-600 mb-6 uppercase tracking-widest text-center">Interests</h3>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-2">
                     {INTERESTS.map((interest, i) => (
-                      <div key={interest.title} className="interest-tag">
+                      <div key={interest.title} className="interest-tag justify-center">
                         <span className="interest-idx">[{String(i + 1).padStart(2, '0')}]</span>
                         <span className="text-xs uppercase font-semibold">{interest.title}</span>
-                        {interest.link ? (
-                          <a href={interest.link} target="_blank" rel="noopener noreferrer" className="text-[10px] text-gray-400 leading-relaxed hover:text-red-600 transition-colors">{interest.subtitle}</a>
-                        ) : (
-                          <span className="text-[10px] text-gray-400 leading-relaxed">{interest.subtitle}</span>
-                        )}
+                        <span className="text-[10px] text-gray-400 leading-relaxed">{interest.subtitle}</span>
                       </div>
                     ))}
                   </div>
@@ -280,6 +276,7 @@ function Section({ number, title, children }: { number: string; title: string, c
         className="mb-12"
       >
         <div className="section-marker">
+          <span className="section-number">{number}</span>
           <div className="section-line" />
         </div>
         <h2 className="section-title">{title}</h2>
