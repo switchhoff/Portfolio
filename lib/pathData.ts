@@ -6,7 +6,7 @@ export interface PathObject {
   date?: string;
   company?: string;
   role?: string;
-  items?: (string | { label: string; href?: string; sub?: boolean; image?: string })[];
+  items?: (string | { label: string; href?: string; sub?: boolean; image?: string; audio?: string; action?: string })[];
   entries?: { date: string; title: string }[];
   subtext?: string;
   image?: string;
@@ -26,9 +26,9 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 2,
     name: "Monsoon",
     category: "projects",
-    description: "A thematic reskin of Dune: Imperium set in the world of Wilbur Smith's Monsoon — following the Courtney Family's adventures on the high seas along the coast of East Africa. Same engine, entirely new world.",
+    description: "I am in the process of creating a thematic reskin of Dune: Imperium, based on the book Monsoon by Wilbur Smith — following the Courtney Family's adventures on the high seas of East Africa. I'm working to map all elements into consistent, aesthetic equivalents and redesign the base to suit my vision. Sneak peek at some concept art below.",
     image: "/General Pieces.png",
-    tags: ["DESIGN", "GAMES"],
+    tags: ["GAME DESIGN", "ART"],
     links: [],
   },
   4: {
@@ -57,52 +57,62 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Golf",
     category: "interests",
     description: "",
-    items: ["HCP = 38", "Member at Berwick Montuna Golf Club"],
+    items: [
+      "HCP = 38",
+      { label: "Berwick Montuna Golf Club", href: "https://www.berwickmontuna.com.au/", sub: false },
+      { label: "Hit me up to connect for a round", action: "golf_form" },
+    ],
     links: [],
   },
   10: {
     path: 10,
     name: "Saxophone",
     category: "interests",
-    description: "",
+    description: "Favourites",
+    items: [
+      { label: "Daisy Bell", audio: "/audio/Daisy.m4a" },
+      { label: "The Entertainer", audio: "/audio/Entertainer.m4a" },
+      { label: "Stitches", audio: "/audio/Stitches.m4a" },
+    ],
     links: [],
   },
   12: {
     path: 12,
     name: "Votemotm",
     category: "projects",
-    description: "",
-    items: [
-      "PWAs for Team Man of the Match Voting and Fan Engagement for Victorian State League Soccer Club",
-      "30+ Users across Players, Coaches, Administration and Fans",
-    ],
+    description: "I've built a set of progressive web apps for my football team as a platform for man of the match voting, fan engagement and stat tracking — reducing unnecessary messages, confusion about game locations, and directly connecting fans to players. Currently 30+ users across Players, Coaches, Admin and Fans, with plans to deploy to the wider community.",
+    image: "/kdfcmotm.png",
+    tags: ["DATA ANALYTICS", "SPORT"],
     links: [{ github: "https://github.com/switchhoff/Votemotm", label: "GitHub" }],
   },
   14: {
     path: 14,
     name: "BeNFL",
     category: "projects",
-    description: "NFL Ball",
+    description: "I've built a web-scraping platform for a custom use case: avoiding sport spoilers before watching the game. It collects stats from every NFL game and runs them through a custom algorithm designed by my brother to calculate Watchability — without revealing the score. The user can then identify the best game of the week to watch on replay.",
+    image: "/benfl.png",
+    tags: ["DATA ANALYTICS", "SPORT"],
     links: [{ github: "https://github.com/switchhoff/BeNFL", label: "GitHub" }],
   },
   16: {
     path: 16,
     name: "PawsButton",
     category: "projects",
-    description: "",
-    items: [
-      "Shared household pet care tracker — logs feeding, walks, and care tasks across all household members",
-      "Prevents double-feeding and missed meals with real-time household sync",
-      "Push notifications alert the household when pets are overdue for food or a walk",
-    ],
+    description: "I've built a household pet care tracking app that logs feeding, walks and more. Every member of the household has an account and is notified when the pets have or have not been fed — preventing double feeding, missed meals, or worst of all, no evening walk around the block.",
+    image: "/pawsbutton.png",
+    tags: ["SOFTWARE", "PETS"],
     links: [{ github: "https://github.com/switchhoff/PawsButton", label: "GitHub" }],
   },
   18: {
     path: 18,
     name: "Reading",
     category: "interests",
-    description: "Favourite Books",
-    items: ["Brotherband Series", "Wolf of the Plains", "Courtney Series"],
+    description: "Favourites",
+    items: [
+      { label: "Brotherband Chronicles", href: "https://flanagan.fandom.com/wiki/The_Brotherband_Chronicles", image: "https://static.wikia.nocookie.net/rangersapprentice/images/0/0d/The_Outcasts_%28Eng_1%29.jpg/revision/latest/scale-to-width-down/1000?cb=20190506222054" },
+      { label: "Conqueror Series", href: "https://en.wikipedia.org/wiki/Wolf_of_the_Plains", image: "https://upload.wikimedia.org/wikipedia/en/thumb/d/db/ConnIggulden_WolfOfThePlains.jpg/250px-ConnIggulden_WolfOfThePlains.jpg" },
+      { label: "Courtney Novels", href: "https://en.wikipedia.org/wiki/The_Courtney_Novels", image: "https://upload.wikimedia.org/wikipedia/en/thumb/7/74/Monsoon_-_bookcover.jpg/250px-Monsoon_-_bookcover.jpg" },
+    ],
     links: [],
   },
   20: {
@@ -116,11 +126,13 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 22,
     name: "Cave Disto",
     category: "projects",
-    description: "",
+    description: "I'm prototyping a laser measuring device running on a Raspberry Pi Pico for my brother to take caving. The purpose is to fuse gyroscope and compass data with IR laser TOF measurements to map out previously undiscovered caves.",
+    image: "/cavedisto.png",
     items: [
-      "Waterproof, rugged laser distance measuring device built for caving — helping map unknown cave systems",
-      "Fuses gyroscope, compass, and laser distance measurements into a compact, form-factor case",
-      "Designed for my brother with long battery life and the durability to handle the underground environment",
+      "Waterproof and ruggedized for wet, damp, dark conditions",
+      "Redundant gyroscopes, laser sensor, and battery management system",
+      "LCD screen with a simple, intuitive button interface",
+      "Standalone low-power design for extended underground use",
     ],
     tags: ["HARDWARE", "MICROCONTROLLER"],
     links: [{ github: "https://github.com/switchhoff/CaveDisto", label: "GitHub" }],
@@ -129,7 +141,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 24,
     name: "Craft",
     category: "interests",
-    description: "",
+    description: "I enjoy a chill evening creating useful little items out of fabric — putting logos onto beanies, making pouches for camping items, or crocheting a glasses case.",
     items: ["Sewing", "Embroidery", "Crochet"],
     links: [],
   },
@@ -379,12 +391,13 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 82,
     name: "Board Games",
     category: "interests",
-    description: "Favourite Games",
+    description: "Favourites",
     items: [
       { label: "Dune Imperium", href: "https://boardgamegeek.com/boardgame/316554/dune-imperium", image: "https://cf.geekdo-images.com/PhjygpWSo-0labGrPBMyyg__itemrep@2x/img/Jo0nBF30UyHL5WSuh1xWppwt1cY=/fit-in/492x600/filters:strip_icc()/pic5666597.jpg" },
       { label: "Wingspan", href: "https://boardgamegeek.com/boardgame/266192/wingspan", image: "https://cf.geekdo-images.com/yLZJCVLlIx4c7eJEWUNJ7w__itemrep@2x/img/veohwKEtFpERbDq7xGMggHqLKX8=/fit-in/492x600/filters:strip_icc()/pic4458123.jpg" },
       { label: "Ark Nova", href: "https://boardgamegeek.com/boardgame/342942/ark-nova", image: "https://cf.geekdo-images.com/SoU8p28Sk1s8MSvoM4N8pQ__itemrep@2x/img/Pr8zSaMINlALYjR0agud0_EFESs=/fit-in/492x600/filters:strip_icc()/pic6293412.jpg" },
     ],
+    subtext: "I'm pretty competitive and enjoy playing any number of board games with friends and foes, often in the evening and into the early hours of the morning.",
     links: [],
   },
   84: {
@@ -398,7 +411,9 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 86,
     name: "BinThereStoreThat",
     category: "projects",
-    description: "Storage Solution",
+    description: "I've created a method for labelling, organising and finding items at home using QR code stickers and a tracking interface. I log the contents of large storage boxes across the garage, shed and workshop — then find any item by searching the database, or identify a box's contents without needing to unstack and open it.",
+    image: "/binthere.png",
+    tags: ["SOFTWARE", "STORAGE"],
     links: [{ github: "https://github.com/switchhoff/BinThereStoreThat", label: "GitHub" }],
   },
   88: {
@@ -427,7 +442,7 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   94: {
     path: 94,
-    name: "Video Games",
+    name: "Favourites",
     category: "interests",
     description: "Favourite Video Games",
     items: [
@@ -435,7 +450,11 @@ export const PATH_DATA: Record<number, PathObject> = {
       { label: "Civilization V", href: "https://civilization.fandom.com/wiki/Civilization_V", image: "https://images.ctfassets.net/wn7ipiv9ue5v/2ROTJ11e217xt6VmC5F0tq/3f83f5639df2cb3567d69ec49a655c8c/2KGMKT_CIV5_COMPLETE_AG_FOB_NO_RATING_1.jpg" },
       { label: "Fall Guys", href: "https://www.fallguys.com/en-US", image: "https://i.redd.it/oetdev0d40pd1.png" },
     ],
-    links: [],
+    links: [
+      { external: "https://terraria.org/", label: "Terraria" },
+      { external: "https://store.steampowered.com/app/8930/Sid_Meiers_Civilization_V/", label: "Civilization V" },
+      { external: "https://www.fallguys.com/", label: "Fall Guys" },
+    ],
   },
   96: {
     path: 96,

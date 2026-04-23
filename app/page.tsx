@@ -77,7 +77,9 @@ function CustomCursor({ activeTab }: { activeTab: string }) {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const PROJECTS = getProjects();
 const BIRTHDAY = new Date(2001, 7, 29);
-const AGE = Math.floor((Date.now() - BIRTHDAY.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+function computeAge() {
+  return Math.floor((Date.now() - BIRTHDAY.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+}
 
 const P = {
   bg: "#f6f8f3",
@@ -97,6 +99,7 @@ export default function Home() {
   const [hoverSpot, setHoverSpot] = useState<Hotspot | null>(null);
   const [ready, setReady] = useState(false);
   const [splashDone, setSplashDone] = useState(false);
+  const [age] = useState(() => computeAge());
   const [isLit, setIsLit] = useState(false);
   const [logoPhase, setLogoPhase] = useState("initial");
   const [darkMode, setDarkMode] = useState(false);
@@ -121,7 +124,7 @@ export default function Home() {
   };
 
   return (
-    <div style={{
+    <div suppressHydrationWarning style={{
       background: darkMode ? "#1a1a1a" : "#ffffff",
       minHeight: "100vh",
       fontFamily: "var(--font-mono)",
@@ -432,7 +435,7 @@ export default function Home() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.4 }}
               >
-                <BoringView projects={PROJECTS} age={AGE} />
+                <BoringView projects={PROJECTS} age={age} />
               </motion.section>
             )}
           </AnimatePresence>

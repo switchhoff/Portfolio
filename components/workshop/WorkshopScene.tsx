@@ -4,6 +4,9 @@ import { getMappedHotspots, getCategoryColor, type Hotspot } from "@/lib/hotspot
 import { BLOCK_MAPPINGS, CATEGORY_COLORS } from "@/lib/svgBlockMappings";
 import { getPathData } from "@/lib/pathData";
 import { WeatherWindow } from "./WeatherWindow";
+import AmbientPlayer from "./AmbientPlayer";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 interface Props {
   onHotspotClick: (hotspot: Hotspot, clickOrigin: { x: number; y: number }) => void;
@@ -36,6 +39,13 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
   const [visitedPaths, setVisitedPaths] = useState<Set<number>>(new Set());
   const visitedPathsRef = useRef<Set<number>>(new Set());
   const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
+  const [golfForm, setGolfForm] = useState<{ name: string; number: string } | null>(null);
+  const [golfSending, setGolfSending] = useState(false);
+  const [golfSent, setGolfSent] = useState(false);
+  const [golfError, setGolfError] = useState("");
+  const [playingAudio, setPlayingAudio] = useState<string | null>(null);
+  const [audioVolume, setAudioVolume] = useState(0.5);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const FILTER_ORDER = ["about", "interests", "projects", "education", "experience"];
   const FILTER_GROUPS: Record<string, number[]> = Object.fromEntries(
@@ -344,12 +354,12 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       {/* Menu Bar */}
       <div style={{
         position: "absolute",
-        top: "80px",
-        right: "40px",
+        top: "105px",
+        right: "65px",
         display: "flex",
         flexDirection: "column",
         gap: 0,
-        zIndex: 60,
+        zIndex: 55,
         background: "rgba(10,15,10,0.82)",
         backdropFilter: "blur(8px)",
         border: "1px solid rgba(255,215,0,0.25)",
@@ -454,13 +464,16 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
           );
         })}
       </div>
+      {/* Ambient player — angled text + play button just above scene */}
+      <AmbientPlayer />
+
       {/* Weather window SVG layer — same coordinate space as blocks */}
       <svg
         viewBox="0 0 960 540"
         style={{
           position: "absolute",
           inset: 0,
-          left: "-0.73%",
+          left: "-0.83%",
           width: "100%",
           height: "100%",
           pointerEvents: "none",
@@ -478,7 +491,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
         style={{
           position: "absolute",
           inset: 0,
-          left: "-0.73%",
+          left: "-0.83%",
           width: "100%",
           height: "100%",
           pointerEvents: "auto",
@@ -599,6 +612,67 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
         </svg>
       )}
 
+      {/* Golf form modal */}
+      {golfForm !== null && (
+        <>
+          <div style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(0,0,0,0.3)" }}
+            onClick={() => setGolfForm(null)} />
+          <div style={{
+            position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
+            background: "#fff", border: "2px solid #27ae60", borderRadius: "8px",
+            padding: "20px 24px", zIndex: 61, width: "300px",
+            fontFamily: "'JetBrains Mono', monospace",
+          }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ fontSize: "11px", fontWeight: 700, color: "#27ae60", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>Golf</div>
+            <div style={{ fontSize: "15px", fontWeight: 700, color: "#111", marginBottom: "14px" }}>Connect for a Round</div>
+            {golfSent ? (
+              <div style={{ textAlign: "center", padding: "16px 0", color: "#27ae60", fontSize: "13px", fontWeight: 600 }}>
+                ⛳ Request sent! I'll be in touch.
+                <br /><button onClick={() => setGolfForm(null)} style={{ marginTop: "12px", background: "none", border: "1px solid #27ae60", color: "#27ae60", padding: "6px 14px", cursor: "pointer", fontFamily: "inherit", fontSize: "11px" }}>Close</button>
+              </div>
+            ) : (
+              <form onSubmit={async e => {
+                e.preventDefault();
+                setGolfSending(true);
+                setGolfError("");
+                try {
+                  await addDoc(collection(db, "golf_requests"), {
+                    name: golfForm.name,
+                    number: golfForm.number,
+                    createdAt: serverTimestamp(),
+                  });
+                  setGolfSent(true);
+                } catch {
+                  setGolfError("Failed to send. Try emailing me directly.");
+                } finally {
+                  setGolfSending(false);
+                }
+              }}>
+                <div style={{ marginBottom: "10px" }}>
+                  <label style={{ fontSize: "10px", fontWeight: 700, color: "#888", letterSpacing: "0.1em", textTransform: "uppercase", display: "block", marginBottom: "4px" }}>Name</label>
+                  <input required value={golfForm.name} onChange={e => setGolfForm(f => f && ({ ...f, name: e.target.value }))}
+                    placeholder="Your name" style={{ width: "100%", border: "1px solid #ddd", padding: "7px 10px", fontSize: "13px", fontFamily: "inherit", boxSizing: "border-box", outline: "none" }} />
+                </div>
+                <div style={{ marginBottom: "14px" }}>
+                  <label style={{ fontSize: "10px", fontWeight: 700, color: "#888", letterSpacing: "0.1em", textTransform: "uppercase", display: "block", marginBottom: "4px" }}>Phone Number</label>
+                  <input required value={golfForm.number} onChange={e => setGolfForm(f => f && ({ ...f, number: e.target.value }))}
+                    placeholder="Your number" type="tel" style={{ width: "100%", border: "1px solid #ddd", padding: "7px 10px", fontSize: "13px", fontFamily: "inherit", boxSizing: "border-box", outline: "none" }} />
+                </div>
+                {golfError && <div style={{ color: "#e74c3c", fontSize: "11px", marginBottom: "10px" }}>{golfError}</div>}
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button type="button" onClick={() => setGolfForm(null)} style={{ flex: 1, padding: "8px", background: "none", border: "1px solid #ddd", cursor: "pointer", fontFamily: "inherit", fontSize: "12px" }}>Cancel</button>
+                  <button type="submit" disabled={golfSending} style={{ flex: 1, padding: "8px", background: "#27ae60", border: "none", color: "#fff", cursor: "pointer", fontFamily: "inherit", fontSize: "12px", fontWeight: 700 }}>
+                    {golfSending ? "Sending..." : "Send ⛳"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </>
+      )}
+
       {/* Tooltip near cursor */}
       {hoveredSpot && !activeId && (
         <div
@@ -617,14 +691,14 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
           }}
         >
           <div style={{
-            fontSize: "10px", fontWeight: 600, color: getCategoryColor(hoveredSpot.category),
+            fontSize: "13px", fontWeight: 600, color: getCategoryColor(hoveredSpot.category),
             letterSpacing: "0.14em", textTransform: "uppercase",
             fontFamily: "'JetBrains Mono', monospace",
           }}>
             {hoveredSpot.label}
           </div>
           <div style={{
-            fontSize: "9px", color: "#000",
+            fontSize: "11px", color: "#000",
             letterSpacing: "0.06em", marginTop: "2px",
             fontFamily: "'JetBrains Mono', monospace",
           }}>
@@ -644,7 +718,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
               style={{
                 position: "fixed",
                 inset: 0,
-                zIndex: 40,
+                zIndex: 56,
               }}
               onClick={() => {
                 const allPaths = blockSvgRef.current?.querySelectorAll("path") ?? [];
@@ -668,11 +742,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                 padding: "12px 14px",
                 pointerEvents: "auto",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
-                zIndex: 50,
+                zIndex: 65,
                 fontFamily: "'JetBrains Mono', monospace",
-                width: (pathData?.category === "generic" || !pathData?.description) ? "auto" : "280px",
-                minWidth: (pathData?.category === "generic" || !pathData?.description) ? "120px" : "240px",
-                maxWidth: "280px",
+                width: (pathData?.category === "generic" || !pathData?.description) ? "auto" : "380px",
+                minWidth: (pathData?.category === "generic" || !pathData?.description) ? "140px" : "320px",
+                maxWidth: "380px",
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -710,7 +784,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                   /* Generic popup - centered text only */
                   <div style={{
                     textAlign: "center",
-                    fontSize: "9px",
+                    fontSize: "13px",
                     color: "#555",
                     lineHeight: "1.5",
                     padding: "4px 0",
@@ -728,7 +802,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                       marginBottom: "6px",
                     }}>
                       <span style={{
-                        fontSize: "9px",
+                        fontSize: "12px",
                         fontWeight: 700,
                         color: categoryColor,
                         letterSpacing: "0.08em",
@@ -737,7 +811,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         {pathData.category}
                       </span>
                       <span style={{
-                        fontSize: "11px",
+                        fontSize: "15px",
                         fontWeight: 600,
                         color: "#222",
                         textAlign: "right",
@@ -767,7 +841,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                             display: "grid",
                             gridTemplateColumns: "auto 1fr",
                             gap: "5px 12px",
-                            fontSize: "9px",
+                            fontSize: "13px",
                           }}>
                             {pathData.entries.map((entry, i) => (
                               <React.Fragment key={i}>
@@ -792,7 +866,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                           {pathData.subtext && (
                             <div style={{
                               marginTop: "6px",
-                              fontSize: "8px",
+                              fontSize: "12px",
                               color: "#000",
                               lineHeight: "1.6",
                               whiteSpace: "pre-line",
@@ -815,14 +889,14 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                             fontWeight: 600,
                             color: categoryColor,
                             lineHeight: "1.4",
-                            fontSize: "9px",
+                            fontSize: "13px",
                           }}>
                             {pathData.date}
                           </div>
 
                           {/* Role — right of date */}
                           <div style={{
-                            fontSize: "9px",
+                            fontSize: "13px",
                             color: "#000",
                             fontWeight: 600,
                             marginBottom: "2px",
@@ -835,7 +909,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                             gridColumn: "1 / -1",
                             color: "#000",
                             lineHeight: "1.5",
-                            fontSize: "8px",
+                            fontSize: "12px",
                           }}>
                             {pathData.items && pathData.items.map((item, idx) => (
                               <div key={idx} style={{ marginBottom: "2px" }}>
@@ -858,7 +932,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                               marginBottom: "8px",
                             }}>
                               <div style={{
-                                fontSize: "9px",
+                                fontSize: "13px",
                                 fontWeight: 600,
                                 color: "#222",
                                 marginBottom: "4px",
@@ -866,7 +940,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                 {pathData.description}
                               </div>
                               <div style={{
-                                fontSize: "8px",
+                                fontSize: "12px",
                                 color: "#000",
                                 lineHeight: "1.5",
                               }}>
@@ -884,15 +958,68 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                           <img src={item.image} alt={item.label}
                                             style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", borderRadius: "3px", display: "block" }}
                                           />
-                                          <div style={{ fontSize: "7px", color: "#555", textAlign: "center", marginTop: "2px", lineHeight: 1.2 }}>{item.label}</div>
+                                          <div style={{ fontSize: "10px", color: "#555", textAlign: "center", marginTop: "2px", lineHeight: 1.2 }}>{item.label}</div>
                                         </a>
                                       );
                                     })}
                                   </div>
                                 ) : pathData.items.map((item, idx) => {
                                   if (typeof item === "string") {
+                                    return <div key={idx} style={{ marginBottom: "2px" }}>• {item}</div>;
+                                  }
+                                  // Audio button
+                                  if (item.audio) {
+                                    const isPlaying = playingAudio === item.audio;
                                     return (
-                                      <div key={idx} style={{ marginBottom: "2px" }}>• {item}</div>
+                                      <div key={idx} style={{ marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+                                        <button
+                                          onClick={() => {
+                                            if (isPlaying) {
+                                              audioRef.current?.pause();
+                                              setPlayingAudio(null);
+                                              window.dispatchEvent(new Event("sax-audio-end"));
+                                            } else {
+                                              if (audioRef.current) audioRef.current.pause();
+                                              const a = new Audio(item.audio);
+                                              a.volume = audioVolume;
+                                              audioRef.current = a;
+                                              a.play();
+                                              window.dispatchEvent(new Event("sax-audio-start"));
+                                              setPlayingAudio(item.audio!);
+                                              a.onended = () => {
+                                                setPlayingAudio(null);
+                                                window.dispatchEvent(new Event("sax-audio-end"));
+                                              };
+                                            }
+                                          }}
+                                          style={{
+                                            width: 26, height: 26, borderRadius: "50%",
+                                            border: `1.5px solid ${categoryColor}`,
+                                            background: isPlaying ? categoryColor : "transparent",
+                                            color: isPlaying ? "#fff" : categoryColor,
+                                            cursor: "pointer", fontSize: "9px",
+                                            display: "flex", alignItems: "center", justifyContent: "center",
+                                            flexShrink: 0, fontFamily: "inherit",
+                                          }}
+                                        >{isPlaying ? "■" : "▶"}</button>
+                                        <span style={{ fontSize: "12px", color: "#000" }}>{item.label}</span>
+                                      </div>
+                                    );
+                                  }
+                                  // Golf form trigger
+                                  if (item.action === "golf_form") {
+                                    return (
+                                      <div key={idx} style={{ marginBottom: "2px" }}>
+                                        {"• "}
+                                        <button
+                                          onClick={() => { setGolfForm({ name: "", number: "" }); setGolfSent(false); setGolfError(""); }}
+                                          style={{
+                                            background: "none", border: "none", padding: 0, cursor: "pointer",
+                                            color: categoryColor, textDecoration: "underline", textUnderlineOffset: "2px",
+                                            fontSize: "12px", fontFamily: "inherit", fontWeight: 600,
+                                          }}
+                                        >{item.label}</button>
+                                      </div>
                                     );
                                   }
                                   return (
@@ -900,7 +1027,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                       {item.sub ? "◦" : "•"}{" "}
                                       {item.href ? (
                                         <a href={item.href} target="_blank" rel="noopener noreferrer"
-                                          style={{ color: "#000", textDecoration: "underline" }}>
+                                          style={{ color: "#000", textDecoration: "underline", textUnderlineOffset: "2px" }}>
                                           {item.label}
                                         </a>
                                       ) : item.label}
@@ -908,11 +1035,28 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                   );
                                 })}
                               </div>
+                              {/* Volume slider — only when card has audio items */}
+                              {pathData.items?.some(i => typeof i !== "string" && i.audio) && (
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "10px", paddingTop: "8px", borderTop: `1px solid ${categoryColor}22` }}>
+                                  <span style={{ fontSize: "10px", color: "#888", whiteSpace: "nowrap" }}>🔊</span>
+                                  <input
+                                    type="range" min={0} max={1} step={0.01}
+                                    value={audioVolume}
+                                    onChange={e => {
+                                      const v = parseFloat(e.target.value);
+                                      setAudioVolume(v);
+                                      if (audioRef.current) audioRef.current.volume = v;
+                                    }}
+                                    style={{ flex: 1, accentColor: categoryColor, cursor: "pointer", height: "4px" }}
+                                  />
+                                  <span style={{ fontSize: "10px", color: "#888", minWidth: "28px", textAlign: "right" }}>{Math.round(audioVolume * 100)}%</span>
+                                </div>
+                              )}
                             </div>
                           ) : (
                             /* Regular description */
                             <div style={{
-                              fontSize: "9px",
+                              fontSize: "13px",
                               color: "#000",
                               lineHeight: "1.4",
                               marginBottom: "8px",
@@ -953,7 +1097,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                               target={url.startsWith("tel:") || url.startsWith("mailto:") ? undefined : "_blank"}
                               rel="noopener noreferrer"
                               style={{
-                                fontSize: "10px",
+                                fontSize: "14px",
                                 color: "#000",
                                 textDecoration: "none",
                                 fontWeight: 600,
@@ -982,6 +1126,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         {pathData.links.map((link, idx) => {
                           const url = link.github || link.instagram || link.printables || link.external;
                           if (!url) return null;
+                          const isExternal = link.external && !url.startsWith("tel:") && !url.startsWith("mailto:");
                           return (
                             <a
                               key={idx}
@@ -989,15 +1134,24 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                               target={url.startsWith("tel:") || url.startsWith("mailto:") ? undefined : "_blank"}
                               rel="noopener noreferrer"
                               style={{
-                                fontSize: "8px",
+                                fontSize: "12px",
                                 color: "#000",
-                                textDecoration: "none",
+                                textDecoration: isExternal ? "underline" : "none",
+                                textUnderlineOffset: "3px",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "3px",
                                 transition: "opacity 0.2s",
                               }}
                               onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
                               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                             >
-                              🔗 {link.label || "Link"}
+                              {link.label || "Link"}
+                              {isExternal && (
+                                <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
+                                  <path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                              )}
                             </a>
                           );
                         })}
@@ -1009,11 +1163,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         {pathData.imageLink ? (
                           <a href={pathData.imageLink} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={pathData.image} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} />
+                            <img src={pathData.image} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} onError={e => { (e.currentTarget.parentElement!.parentElement as HTMLElement).style.display = "none"; }} />
                           </a>
                         ) : (
                           /* eslint-disable-next-line @next/next/no-img-element */
-                          <img src={pathData.image} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} />
+                          <img src={pathData.image} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} onError={e => { (e.currentTarget.parentElement as HTMLElement).style.display = "none"; }} />
                         )}
                       </div>
                     )}
@@ -1025,7 +1179,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                           <span key={tag} style={{
                             flex: 1,
                             textAlign: "center",
-                            fontSize: "7px",
+                            fontSize: "10px",
                             fontWeight: 700,
                             letterSpacing: "0.12em",
                             padding: "3px 6px",
@@ -1041,7 +1195,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                   </div>
                 )
               ) : (
-                <div style={{ fontSize: "10px", color: "#000" }}>
+                <div style={{ fontSize: "14px", color: "#000" }}>
                   Path #{clickedPath.index}
                 </div>
               )}
