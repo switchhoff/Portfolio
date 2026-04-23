@@ -16,9 +16,9 @@ interface BoringViewProps {
 }
 
 const WORK = [
-  { title: "Chief Engineer", company: "Fortifyedge", period: "2025 — NOW", note: "Project Lead integrating thermal sights with Team Awareness Kit (TAK) for situational awareness systems." },
-  { title: "Software Systems Engineer", company: "Tonbo Systems", period: "2025", note: "Project Lead working to integrate thermal sights with Team Awareness Kit (TAK) and deliver network-connected future soldier system kit." },
-  { title: "Engineer", company: "DefendTex", period: "2022 — 2024", note: "Electronics/Software Engineer developing autonomy subsystem for unmanned ground vehicle. Thermal object detection, GStreamer pipelines, ArduPilot implementation." },
+  { title: "Project Lead", company: "Fortifyedge", period: "2025 — NOW", note: "Integrating thermal sights with Team Awareness Kit (TAK) for situational awareness systems. Responsible for hardware selection, embedded firmware, and customer requirement derivation." },
+  { title: "Software Systems Engineer", company: "Tonbo Systems", period: "2025", note: "Delivering network-connected future soldier system kits. Work spans hardware integration, software architecture, and translating operational requirements into engineering specifications." },
+  { title: "Electronics & Software Engineer", company: "DefendTex", period: "2022 — 2024", note: "Developed the autonomy subsystem for an unmanned ground vehicle — from hardware bring-up and thermal object detection through to GStreamer pipelines and ArduPilot integration." },
 ];
 
 const GithubIcon = ({ size = 20 }: { size?: number }) => (
@@ -34,14 +34,14 @@ const LinkedinIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 const INTERESTS = [
-  "Golf — HCP 38, Member at Berwick Montuna Golf Club",
-  "Photography — @alexhofmannphotography",
-  "Board Games — Dune Imperium, Wingspan, Ark Nova",
-  "Reading — Brotherband Series, Wolf of the Plains, Courtney Series",
-  "Art — Hans Heysen, Albert Namatjira, Matthew Bell",
-  "Craft — Sewing, Embroidery, Crochet",
-  "Saxophone",
-  "Movies — Ocean's Eleven, Lord of the Rings, Pirates of the Caribbean",
+  { title: "Golf", subtitle: "HCP 38 · Berwick Montuna Golf Club", link: "https://www.berwickmontuna.com.au/" },
+  { title: "Photography", subtitle: "@alexhofmannphotography" },
+  { title: "Board Games", subtitle: "Dune Imperium · Wingspan · Ark Nova" },
+  { title: "Reading", subtitle: "Brotherband Series · Wolf of the Plains · Courtney Series" },
+  { title: "Art", subtitle: "Hans Heysen · Albert Namatjira · Matthew Bell" },
+  { title: "Craft", subtitle: "Sewing · Embroidery · Crochet" },
+  { title: "Saxophone", subtitle: "Alto saxophone" },
+  { title: "Movies", subtitle: "Ocean's Eleven · Lord of the Rings · Pirates of the Caribbean" },
 ];
 
 const EDUCATION = [
@@ -75,173 +75,191 @@ export default function BoringView({ projects, age }: BoringViewProps) {
   return (
     <div className="min-h-screen w-full bg-white text-black">
       <div className="minimal-grid" />
-      
-      <div className="relative z-10 w-full max-w-[1200px] mx-auto px-[clamp(1.5rem, 5vw, 4rem)] py-[clamp(3rem, 10vh, 8rem)] space-y-[clamp(4rem, 15vh, 12rem)]">
-        
-        {/* ── SECTION 01: ABOUT ── */}
-        <Section number="01" title="ABOUT ME">
-          <div className="flex flex-col items-center justify-center gap-[clamp(2rem, 5vh, 4rem)] text-center max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative w-[clamp(80px, 10vw, 120px)] aspect-square bg-gray-100 border border-minimal-border flex items-center justify-center"
-            >
-              <div className="absolute inset-0 border border-red-600 translate-x-[4px] translate-y-[4px] -z-10" />
-              <div className="text-[clamp(8px, 0.8vw, 10px)] text-gray-400 font-mono tracking-tighter">
-                [ALEX_H]
-              </div>
-            </motion.div>
 
-            <div className="space-y-8 flex flex-col items-center">
-              <div className="space-y-6 max-w-2xl">
-                <p className="text-xl font-medium leading-relaxed">
-                  I'm Alex Hofmann, a chief engineer focused on building <span className="text-red-600">resilient systems</span> for forward-deployed environments. 
-                  I bridge the gap between firmware and high-level platforms.
-                </p>
-                <p className="text-sm text-gray-600 leading-7">
-                  Currently based in Melbourne, specialized in Human Monitoring and tactical edge devices. 
-                  My work combines rigorous engineering with intuitive systems logic.
-                </p>
-              </div>
+      <div className="relative z-10 w-full px-[clamp(1.5rem, 5vw, 4rem)] py-[clamp(3rem, 10vh, 6rem)]">
 
-              <div className="w-full max-w-2xl">
-                <h3 className="text-xs font-bold text-red-600 mb-6 uppercase tracking-widest text-center">Interests</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {INTERESTS.map((interest, i) => (
-                    <div key={interest} className="interest-tag">
-                      <span className="interest-idx">[{String(i + 1).padStart(2, '0')}]</span>
-                      <span className="text-xs uppercase font-semibold">{interest}</span>
+        {/* ── ROW 1: ABOUT + PROJECTS ── */}
+        <div className="boring-cols mb-[clamp(4rem,10vh,8rem)]">
+
+          {/* SECTION 01: ABOUT */}
+          <div className="boring-col">
+            <Section number="01" title="ABOUT ME">
+              <div className="flex flex-col items-center gap-[clamp(2rem, 4vh, 3rem)] text-center">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  className="relative w-[clamp(80px, 10vw, 120px)] aspect-square bg-gray-100 border border-minimal-border overflow-hidden"
+                >
+                  <div className="absolute inset-0 border border-red-600 translate-x-[4px] translate-y-[4px] -z-10" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/alex.jpeg" alt="Alex Hofmann" className="w-full h-full object-cover" />
+                </motion.div>
+
+                <div className="space-y-6 max-w-xl">
+                  <p className="text-xl font-medium leading-relaxed">
+                    I'm Alex Hofmann, an engineer building <span className="text-red-600">resilient systems</span> for forward-deployed environments — across hardware, software, and everything in between.
+                  </p>
+                  <p className="text-sm text-gray-600 leading-7">
+                    I work across the full stack of a system: from hardware selection and bring-up, through embedded and application software, to working directly with customers to derive requirements and shape what gets built. Currently based in Melbourne, focused on tactical edge devices and situational awareness systems.
+                  </p>
+                </div>
+
+                <div className="w-full max-w-xl mt-8">
+                  <h3 className="text-xs font-bold text-red-600 mb-6 uppercase tracking-widest text-center">Interests</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {INTERESTS.map((interest, i) => (
+                      <div key={interest.title} className="interest-tag">
+                        <span className="interest-idx">[{String(i + 1).padStart(2, '0')}]</span>
+                        <span className="text-xs uppercase font-semibold">{interest.title}</span>
+                        {interest.link ? (
+                          <a href={interest.link} target="_blank" rel="noopener noreferrer" className="text-[10px] text-gray-400 leading-relaxed hover:text-red-600 transition-colors">{interest.subtitle}</a>
+                        ) : (
+                          <span className="text-[10px] text-gray-400 leading-relaxed">{interest.subtitle}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Section>
+          </div>
+
+          {/* SECTION 02: PROJECTS */}
+          <div className="boring-col">
+            <Section number="02" title="LIVE OPERATIONS">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(1rem, 2vw, 2rem)]">
+                {projects.map((proj, i) => (
+                  <div key={proj.id} className="proj-card">
+                    <div className="proj-image">
+                      <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300 uppercase">
+                        [DATA_STREAM_{i}]
+                      </div>
+                      <div className="absolute top-3 right-3">
+                        <ExternalLink size={14} className="text-red-600 opacity-0 group-hover:opacity-100" />
+                      </div>
+                    </div>
+                    <div className="p-6 space-y-4 text-center flex flex-col items-center">
+                      <h4 className="text-sm font-black uppercase flex flex-col items-center gap-2">
+                        {proj.name}
+                        <a href={`https://github.com/${proj.repo}`} target="_blank" className="hover:text-red-600 transition-colors">
+                          <GithubIcon size={14} />
+                        </a>
+                      </h4>
+                      <p className="text-[11px] text-gray-600 leading-relaxed h-12 overflow-hidden text-center">
+                        {proj.tagline}
+                      </p>
+                      <div className="flex flex-wrap gap-1 justify-center">
+                        {proj.tags.map(t => <span key={t} className="proj-tech-tag">{t}</span>)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Section>
+          </div>
+
+        </div>
+
+        {/* ── ROW 2: EXPERIENCE & EDUCATION + CONTACT ── */}
+        <div className="boring-cols">
+
+          {/* SECTION 03: EXPERIENCE & EDUCATION */}
+          <div className="boring-col">
+            <Section number="03" title="EXPERIENCE & EDUCATION">
+              <div className="flex flex-col items-center gap-[clamp(2rem, 5vw, 4rem)] w-full">
+                <div className="w-full space-y-10">
+                  <h3 className="text-lg font-bold text-red-600 uppercase mb-8 text-center">Professional Timeline</h3>
+                  {WORK.map((w, i) => (
+                    <div key={i} className="exp-card">
+                      <div className="exp-node" />
+                      <h4 className="text-base font-bold uppercase">{w.title}</h4>
+                      <div className="flex gap-4 items-center mt-1 mb-3">
+                        <span className="text-red-600 text-[10px] font-bold uppercase">{w.company}</span>
+                        <span className="text-gray-400 text-[10px] uppercase">{w.period}</span>
+                      </div>
+                      <p className="text-xs text-gray-600 leading-6">{w.note}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="w-full space-y-8">
+                  <h3 className="text-lg font-bold text-red-600 uppercase mb-8 text-center">Education</h3>
+                  {EDUCATION.map((edu, i) => (
+                    <div key={i} className="edu-card text-center">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="text-sm font-bold uppercase">{edu.degree}</h4>
+                        <span className="text-[10px] text-gray-400 ml-4 shrink-0">{edu.period}</span>
+                      </div>
+                      <p className="text-red-600 text-[10px] font-bold uppercase mb-2">{edu.school}</p>
+                      <p className="text-[11px] text-gray-500 leading-relaxed">{edu.details}</p>
                     </div>
                   ))}
                 </div>
               </div>
-            </div>
+            </Section>
           </div>
-        </Section>
 
-        {/* ── SECTION 02: EXPERIENCE & EDUCATION ── */}
-        <Section number="02" title="EXPERIENCE & EDUCATION">
-          <div className="flex flex-col items-center gap-[clamp(2rem, 5vw, 4rem)] w-full">
-            <div className="w-full max-w-2xl space-y-10">
-              <h3 className="text-lg font-bold text-red-600 uppercase mb-8 text-center">Professional Timeline</h3>
-              {WORK.map((w, i) => (
-                <div key={i} className="exp-card">
-                  <div className="exp-node" />
-                  <h4 className="text-base font-bold uppercase">{w.title}</h4>
-                  <div className="flex gap-4 items-center mt-1 mb-3">
-                    <span className="text-red-600 text-[10px] font-bold uppercase">{w.company}</span>
-                    <span className="text-gray-400 text-[10px] uppercase">{w.period}</span>
+          {/* SECTION 04: CONTACT */}
+          <div className="boring-col">
+            <Section number="04" title="CONTACT">
+              <div className="space-y-12">
+                {sent ? (
+                  <div className="text-center py-12 border border-red-600 bg-red-600/5">
+                    <Send className="mx-auto mb-4 text-red-600" />
+                    <h3 className="text-lg font-bold uppercase mb-2">Transmission Received</h3>
+                    <p className="text-xs text-gray-500">I'll get back to you shortly.</p>
+                    <button onClick={() => setSent(false)} className="mt-8 text-[10px] font-bold border-b border-red-600 uppercase">Resend</button>
                   </div>
-                  <p className="text-xs text-gray-600 leading-6">{w.note}</p>
-                </div>
-              ))}
-            </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 border border-minimal-border p-6">
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-gray-400">Node ID</label>
+                        <input type="text" required placeholder="YOUR NAME" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="minimal-input" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-gray-400">Return URL</label>
+                        <input type="email" required placeholder="EMAIL" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className="minimal-input" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-gray-400">Channel Path</label>
+                      <input type="text" required placeholder="SUBJECT" value={form.subject} onChange={e => setForm(f => ({ ...f, subject: e.target.value }))} className="minimal-input" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-gray-400">Payload</label>
+                      <textarea rows={5} required placeholder="MESSAGE..." value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} className="minimal-input resize-none" />
+                    </div>
+                    {formError && <p className="text-red-600 text-[10px] font-bold uppercase text-center">{formError}</p>}
+                    <button type="submit" disabled={sending} className="minimal-submit">
+                      {sending ? "TRANSMITTING..." : "SEND MESSAGE"}
+                    </button>
+                  </form>
+                )}
 
-            <div className="w-full max-w-2xl space-y-8">
-              <h3 className="text-lg font-bold text-red-600 uppercase mb-8 text-center">Education</h3>
-              {EDUCATION.map((edu, i) => (
-                <div key={i} className="edu-card">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="text-sm font-bold uppercase">{edu.degree}</h4>
-                    <span className="text-[10px] text-gray-400 ml-4 shrink-0">{edu.period}</span>
-                  </div>
-                  <p className="text-red-600 text-[10px] font-bold uppercase mb-2">{edu.school}</p>
-                  <p className="text-[11px] text-gray-500 leading-relaxed">{edu.details}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Section>
-
-        {/* ── SECTION 03: PROJECTS ── */}
-        <Section number="03" title="LIVE OPERATIONS">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-[clamp(1rem, 2vw, 2rem)]">
-            {projects.map((proj, i) => (
-              <div key={proj.id} className="proj-card">
-                <div className="proj-image">
-                  <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300 uppercase">
-                    [DATA_STREAM_{i}]
-                  </div>
-                  <div className="absolute top-3 right-3">
-                    <ExternalLink size={14} className="text-red-600 opacity-0 group-hover:opacity-100" />
-                  </div>
-                </div>
-                <div className="p-6 space-y-4 text-center flex flex-col items-center">
-                  <h4 className="text-sm font-black uppercase flex flex-col items-center gap-2">
-                    {proj.name}
-                    <a href={`https://github.com/${proj.repo}`} target="_blank" className="hover:text-red-600 transition-colors">
-                      <GithubIcon size={14} />
-                    </a>
-                  </h4>
-                  <p className="text-[11px] text-gray-600 leading-relaxed h-12 overflow-hidden text-center">
-                    {proj.tagline}
-                  </p>
-                  <div className="flex flex-wrap gap-1 justify-center">
-                    {proj.tags.map(t => <span key={t} className="proj-tech-tag">{t}</span>)}
+                <div className="flex flex-wrap justify-center gap-8 pt-16 opacity-60">
+                  <a href="mailto:alexanderhofmann@outlook.com.au" className="flex items-center gap-2 text-[10px] font-bold hover:text-red-600">
+                    <Mail size={12} /> alexanderhofmann@outlook.com.au
+                  </a>
+                  <a href="https://github.com/switchhoff" className="flex items-center gap-2 text-[10px] font-bold hover:text-red-600 transition-colors">
+                    <GithubIcon size={12} /> switchhoff
+                  </a>
+                  <a href="https://linkedin.com/in/hofmannalexb/" className="flex items-center gap-2 text-[10px] font-bold hover:text-red-600 transition-colors">
+                    <LinkedinIcon size={12} /> linkedin
+                  </a>
+                  <div className="flex items-center gap-2 text-[10px] font-bold">
+                    <MapPin size={12} /> Melbourne, VIC
                   </div>
                 </div>
               </div>
-            ))}
+            </Section>
           </div>
-        </Section>
 
-        {/* ── SECTION 04: CONTACT ── */}
-        <Section number="04" title="CONTACT">
-          <div className="max-w-2xl mx-auto space-y-12">
-            {sent ? (
-              <div className="text-center py-12 border border-red-600 bg-red-600/5">
-                <Send className="mx-auto mb-4 text-red-600" />
-                <h3 className="text-lg font-bold uppercase mb-2">Transmission Received</h3>
-                <p className="text-xs text-gray-500">I'll get back to you shortly.</p>
-                <button onClick={() => setSent(false)} className="mt-8 text-[10px] font-bold border-b border-red-600 uppercase">Resend</button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-gray-400">Node ID</label>
-                    <input type="text" required placeholder="YOUR NAME" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="minimal-input" />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-gray-400">Return URL</label>
-                    <input type="email" required placeholder="EMAIL" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className="minimal-input" />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-gray-400">Channel Path</label>
-                  <input type="text" required placeholder="SUBJECT" value={form.subject} onChange={e => setForm(f => ({ ...f, subject: e.target.value }))} className="minimal-input" />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-gray-400">Payload</label>
-                  <textarea rows={5} required placeholder="MESSAGE..." value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} className="minimal-input resize-none" />
-                </div>
-                {formError && <p className="text-red-600 text-[10px] font-bold uppercase text-center">{formError}</p>}
-                <button type="submit" disabled={sending} className="minimal-submit">
-                  {sending ? "TRANSMITTING..." : "SEND MESSAGE"}
-                </button>
-              </form>
-            )}
+        </div>
 
-            <div className="flex flex-wrap justify-center gap-8 pt-8 opacity-60">
-               <a href="mailto:alex@hoffswitch.com" className="flex items-center gap-2 text-[10px] font-bold hover:text-red-600">
-                 <Mail size={12} /> alex@hoffswitch.com
-               </a>
-               <a href="https://github.com/switchhoff" className="flex items-center gap-2 text-[10px] font-bold hover:text-red-600 transition-colors">
-                 <GithubIcon size={12} /> switchhoff
-               </a>
-               <a href="https://linkedin.com/in/hofmannalexb/" className="flex items-center gap-2 text-[10px] font-bold hover:text-red-600 transition-colors">
-                 <LinkedinIcon size={12} /> linkedin
-               </a>
-               <div className="flex items-center gap-2 text-[10px] font-bold">
-                 <MapPin size={12} /> Melbourne, VIC
-               </div>
-            </div>
-          </div>
-        </Section>
-
-        <footer className="pt-24 pb-8 flex justify-between items-center opacity-30 text-[10px] font-bold uppercase tracking-widest border-t border-minimal-border">
-          <div>© 2025 HOFFSWITCH </div>
+        <footer className="mt-[clamp(4rem,10vh,8rem)] pb-8 flex justify-between items-center opacity-30 text-[10px] font-bold uppercase tracking-widest border-t border-minimal-border pt-8">
+          <div>© 2025 HOFFSWITCH</div>
           <div className="flex gap-4">
             <a href="#">Security</a>
             <a href="#">Protocol</a>
@@ -262,7 +280,6 @@ function Section({ number, title, children }: { number: string; title: string, c
         className="mb-12"
       >
         <div className="section-marker">
-          <span className="section-number">{number}</span>
           <div className="section-line" />
         </div>
         <h2 className="section-title">{title}</h2>

@@ -6,9 +6,11 @@ export interface PathObject {
   date?: string;
   company?: string;
   role?: string;
-  items?: (string | { label: string; href?: string; sub?: boolean })[];
+  items?: (string | { label: string; href?: string; sub?: boolean; image?: string })[];
   entries?: { date: string; title: string }[];
   subtext?: string;
+  image?: string;
+  imageLink?: string;
   tags?: string[];
   links?: {
     github?: string;
@@ -25,6 +27,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Monsoon",
     category: "projects",
     description: "A thematic reskin of Dune: Imperium set in the world of Wilbur Smith's Monsoon — following the Courtney Family's adventures on the high seas along the coast of East Africa. Same engine, entirely new world.",
+    image: "/General Pieces.png",
     tags: ["DESIGN", "GAMES"],
     links: [],
   },
@@ -34,10 +37,10 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "interests",
     description: "Favourite Artists:",
     items: [
+      { label: "Bateleur Eagle by Matthew Bell", href: "https://matthewbellart.co.za/" },
       "Hans Heysen",
       "Albert Namatjira",
       "Matthew Bell",
-      { label: "Bateleur Eagle by Matthew Bell", href: "https://matthewbellart.co.za/", sub: true },
     ],
     links: [],
   },
@@ -96,7 +99,7 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   18: {
     path: 18,
-    name: "Reading, Books",
+    name: "Reading",
     category: "interests",
     description: "Favourite Books",
     items: ["Brotherband Series", "Wolf of the Plains", "Courtney Series"],
@@ -135,6 +138,8 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Photography",
     category: "interests",
     description: "",
+    image: "/instagram.png",
+    imageLink: "https://www.instagram.com/p/BkkMocYHvOt/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
     links: [{ instagram: "https://www.instagram.com/alexhofmannphotography/", label: "@alexhofmannphotography" }],
   },
   28: {
@@ -156,7 +161,8 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 32,
     name: "Shout a Round",
     category: "projects",
-    description: "Beer Tracker",
+    description: "Simple app that tracks whose round it is to buy drinks in your different group of friends.",
+    tags: ["SOFTWARE", "DRINKS"],
     links: [],
   },
   34: {
@@ -338,9 +344,10 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "High Powered Rocketry",
     category: "education",
     date: "2022-2023",
-    company: "Monash University",
+    company: "Monash High Powered Rocketry",
     role: "Flight Systems Member",
     description: "Conducted research on non-combustible rocket deployment systems. Composite manufacturing of rocket body components.",
+    tags: ["ROCKETRY", "MANUFACTURING"],
     links: [],
   },
   74: {
@@ -348,9 +355,10 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Monash Uncrewed Aerial Systems",
     category: "education",
     date: "2021-2022",
-    company: "Monash University",
+    company: "Monash Uncrewed Aerial Systems",
     role: "Aerostructures Training Officer",
     description: "Sub-team manager responsible for composite manufacturing. Lead role in design and manufacture of destructive testing system.",
+    tags: ["DRONES", "STUDENT TEAMS"],
     links: [],
   },
   76: {
@@ -372,7 +380,11 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Board Games",
     category: "interests",
     description: "Favourite Games",
-    items: ["Dune Imperium", "Wingspan", "Ark Nova"],
+    items: [
+      { label: "Dune Imperium", href: "https://boardgamegeek.com/boardgame/316554/dune-imperium", image: "https://cf.geekdo-images.com/PhjygpWSo-0labGrPBMyyg__itemrep@2x/img/Jo0nBF30UyHL5WSuh1xWppwt1cY=/fit-in/492x600/filters:strip_icc()/pic5666597.jpg" },
+      { label: "Wingspan", href: "https://boardgamegeek.com/boardgame/266192/wingspan", image: "https://cf.geekdo-images.com/yLZJCVLlIx4c7eJEWUNJ7w__itemrep@2x/img/veohwKEtFpERbDq7xGMggHqLKX8=/fit-in/492x600/filters:strip_icc()/pic4458123.jpg" },
+      { label: "Ark Nova", href: "https://boardgamegeek.com/boardgame/342942/ark-nova", image: "https://cf.geekdo-images.com/SoU8p28Sk1s8MSvoM4N8pQ__itemrep@2x/img/Pr8zSaMINlALYjR0agud0_EFESs=/fit-in/492x600/filters:strip_icc()/pic6293412.jpg" },
+    ],
     links: [],
   },
   84: {
@@ -391,9 +403,12 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   88: {
     path: 88,
-    name: "Candle",
-    category: "generic",
-    description: "Just a Candle",
+    name: "Monash University",
+    category: "experience",
+    role: "Teaching Associate",
+    date: "2025",
+    description: "Teaching final-year students the fundamentals of AI and its application in the physical world of robotics.",
+    items: ["ECE4179 Neural Networks", "ECE4078 Intelligent Robotics"],
     links: [],
   },
   90: {
@@ -412,9 +427,14 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   94: {
     path: 94,
-    name: "Chair",
-    category: "generic",
-    description: "Just a Chair",
+    name: "Video Games",
+    category: "interests",
+    description: "Favourite Video Games",
+    items: [
+      { label: "Terraria", href: "https://terraria.wiki.gg/", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVNzn3aErkS59Ym_qhqbZYFd8laElFfxviQ&s" },
+      { label: "Civilization V", href: "https://civilization.fandom.com/wiki/Civilization_V", image: "https://images.ctfassets.net/wn7ipiv9ue5v/2ROTJ11e217xt6VmC5F0tq/3f83f5639df2cb3567d69ec49a655c8c/2KGMKT_CIV5_COMPLETE_AG_FOB_NO_RATING_1.jpg" },
+      { label: "Fall Guys", href: "https://www.fallguys.com/en-US", image: "https://i.redd.it/oetdev0d40pd1.png" },
+    ],
     links: [],
   },
   96: {

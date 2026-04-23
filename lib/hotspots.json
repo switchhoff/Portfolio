@@ -249,7 +249,7 @@
     "label": "Games",
     "svgElement": "computer",
     "color": "#f1c40f",
-    "category": "popups",
+    "category": "interests",
     "type": "popup",
     "points": "",
     "popup": {
@@ -268,7 +268,7 @@
     "label": "Books",
     "svgElement": "bookshelf",
     "color": "#f1c40f",
-    "category": "popups",
+    "category": "interests",
     "type": "popup",
     "points": "",
     "popup": {
@@ -284,15 +284,15 @@
     "id": "diploma",
     "label": "Diploma",
     "svgElement": "diploma_wall",
-    "color": "#e74c3c",
-    "category": "experience",
+    "color": "#e67e22",
+    "category": "education",
     "type": "experience",
     "points": "",
     "experience": {
       "title": "Education",
       "items": [
-        { "degree": "Master of Electrical Engineering", "institution": "Monash University" },
-        { "degree": "Bachelor of Mechatronics & Robotics Engineering (AI)", "institution": "Monash University", "note": "AI Specialisation" },
+        { "degree": "Master of Electrical Engineering", "institution": "Monash University", "note": "2024 Master of Engineering Academic Medal Winner" },
+        { "degree": "Bachelor of Mechatronics & Robotics Engineering (AI)", "institution": "Monash University", "note": "AI Specialisation | Dean's Honour List 2020–2023" },
         { "degree": "Minor — Software Engineering", "institution": "Monash University" }
       ]
     }
@@ -358,7 +358,7 @@
       "period": "University",
       "role": "Team Member",
       "description": "Design and build high-powered rocket systems. Avionics, structural engineering, launch operations. Competition-level payload delivery.",
-      "tags": ["Rocketry", "Avionics", "Aerospace"]
+      "tags": ["Rocketry", "Avionics", "Aerospace", "Manufacturing"]
     }
   },
   {
@@ -374,7 +374,7 @@
       "period": "University",
       "role": "Team Member",
       "description": "Design and operate autonomous drones. Flight control systems, mission planning, computer vision integration.",
-      "tags": ["UAS", "Drones", "Autonomy"]
+      "tags": ["UAS", "Drones", "Autonomy", "Manufacturing"]
     }
   },
   {
@@ -391,6 +391,21 @@
       "role": "Designer",
       "description": "Designed low-cost water filtration units using sand, plastic bottles, and locally-available materials for communities in Vanuatu. Rapid prototyping, deployment-ready solution.",
       "tags": ["Humanitarian", "Water", "Hackathon"]
+    }
+  },
+  {
+    "id": "candle",
+    "label": "Candle",
+    "svgElement": "candle",
+    "color": "#e74c3c",
+    "category": "experience",
+    "type": "experience",
+    "points": "",
+    "experience": {
+      "title": "Monash University",
+      "period": "2025",
+      "role": "Teaching Associate",
+      "tags": ["ECE4179 Neural Networks", "ECE4078 Intelligent Robotics"]
     }
   },
   {
@@ -447,7 +462,7 @@
     "label": "Crafting",
     "svgElement": "sewing_machine",
     "color": "#f1c40f",
-    "category": "popups",
+    "category": "interests",
     "type": "popup",
     "points": "",
     "popup": {
@@ -562,6 +577,28 @@
         { "name": "Jazz improvisation" },
         { "name": "Musical expression" },
         { "name": "Jazz standards" }
+      ],
+      "songs": [
+        { "name": "Daisy Bell", "audio": "/audio/daisy-bell.mp3", "link": "https://www.youtube.com/watch?v=vHxxGFqK4O8" },
+        { "name": "The Entertainer", "audio": "/audio/the-entertainer.mp3", "link": "https://www.youtube.com/watch?v=STjcT9ExiaY" },
+        { "name": "Stitches", "audio": "/audio/stitches.mp3", "link": "https://www.youtube.com/watch?v=qywMxj-G1MM" }
+      ]
+    }
+  },
+  {
+    "id": "video_games",
+    "label": "Video Games",
+    "svgElement": "chair",
+    "color": "#98D8C8",
+    "category": "interests",
+    "type": "popup",
+    "points": "",
+    "popup": {
+      "title": "Video Games",
+      "items": [
+        { "name": "Terraria" },
+        { "name": "Civilization V" },
+        { "name": "Fall Guys" }
       ]
     }
   }

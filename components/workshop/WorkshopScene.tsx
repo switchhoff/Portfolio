@@ -343,8 +343,8 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       {/* Menu Bar */}
       <div style={{
         position: "absolute",
-        top: "12px",
-        right: "12px",
+        top: "80px",
+        right: "40px",
         display: "flex",
         flexDirection: "column",
         gap: 0,
@@ -352,9 +352,9 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
         background: "rgba(10,15,10,0.82)",
         backdropFilter: "blur(8px)",
         border: "1px solid rgba(255,215,0,0.25)",
-        borderRadius: "6px",
+        borderRadius: "8px",
         overflow: "hidden",
-        minWidth: "140px",
+        minWidth: "180px",
         fontFamily: "'JetBrains Mono', monospace",
       }}>
         {/* Cheats master toggle row */}
@@ -367,13 +367,13 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "8px 12px",
+            padding: "10px 16px",
             cursor: "pointer",
             borderBottom: "1px solid rgba(255,215,0,0.15)",
             userSelect: "none",
           }}
         >
-          <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", color: "#FFD700" }}>
+          <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", color: "#FFD700" }}>
             CHEATS
           </span>
           {/* Sliding toggle */}
@@ -415,7 +415,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "7px 12px",
+                padding: "9px 16px",
                 cursor: cheatMode ? "pointer" : "not-allowed",
                 opacity: cheatMode ? 1 : 0.35,
                 borderBottom: "1px solid rgba(255,255,255,0.05)",
@@ -424,7 +424,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
               }}
             >
               <span style={{
-                fontSize: 9, fontWeight: 600, letterSpacing: "0.1em",
+                fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 color: isActive ? categoryColor : "rgba(255,255,255,0.5)",
                 transition: "color 0.2s",
@@ -819,26 +819,33 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                             {pathData.date}
                           </div>
 
-                          {/* Role/name — right of date */}
-                          {pathData.name && (
-                            <div style={{
-                              fontSize: "9px",
-                              color: "#000",
-                              fontWeight: 600,
-                              marginBottom: "2px",
-                            }}>
-                              {pathData.name}
-                            </div>
-                          )}
+                          {/* Role — right of date */}
+                          <div style={{
+                            fontSize: "9px",
+                            color: "#000",
+                            fontWeight: 600,
+                            marginBottom: "2px",
+                          }}>
+                            {pathData.role ?? pathData.name}
+                          </div>
 
-                          {/* Description spans full width */}
+                          {/* Items + description span full width */}
                           <div style={{
                             gridColumn: "1 / -1",
                             color: "#000",
-                            lineHeight: "1.3",
+                            lineHeight: "1.5",
                             fontSize: "8px",
                           }}>
-                            {pathData.description}
+                            {pathData.items && pathData.items.map((item, idx) => (
+                              <div key={idx} style={{ marginBottom: "2px" }}>
+                                • {typeof item === "string" ? item : item.label}
+                              </div>
+                            ))}
+                            {pathData.description && (
+                              <div style={{ marginTop: pathData.items?.length ? "4px" : 0, color: "#555" }}>
+                                {pathData.description}
+                              </div>
+                            )}
                           </div>
                         </div>
                       ) : (
@@ -862,7 +869,26 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                 color: "#000",
                                 lineHeight: "1.5",
                               }}>
-                                {pathData.items.map((item, idx) => {
+                                {/* Image grid for items that have images */}
+                                {pathData.items.some(i => typeof i !== "string" && i.image) ? (
+                                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px", marginBottom: "4px" }}>
+                                    {pathData.items.map((item, idx) => {
+                                      if (typeof item === "string" || !item.image) return null;
+                                      return (
+                                        <a key={idx} href={item.href} target="_blank" rel="noopener noreferrer"
+                                          style={{ display: "block", textDecoration: "none" }}
+                                          title={item.label}
+                                        >
+                                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                                          <img src={item.image} alt={item.label}
+                                            style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", borderRadius: "3px", display: "block" }}
+                                          />
+                                          <div style={{ fontSize: "7px", color: "#555", textAlign: "center", marginTop: "2px", lineHeight: 1.2 }}>{item.label}</div>
+                                        </a>
+                                      );
+                                    })}
+                                  </div>
+                                ) : pathData.items.map((item, idx) => {
                                   if (typeof item === "string") {
                                     return (
                                       <div key={idx} style={{ marginBottom: "2px" }}>• {item}</div>
@@ -976,6 +1002,21 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         })}
                       </div>
                     )}
+                    {/* Inline image */}
+                    {pathData.image && (
+                      <div style={{ marginTop: "8px", borderRadius: "4px", overflow: "hidden" }}>
+                        {pathData.imageLink ? (
+                          <a href={pathData.imageLink} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={pathData.image} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} />
+                          </a>
+                        ) : (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img src={pathData.image} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} />
+                        )}
+                      </div>
+                    )}
+
                     {/* Tags */}
                     {pathData.tags && pathData.tags.length > 0 && (
                       <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginTop: "8px", width: "100%" }}>
