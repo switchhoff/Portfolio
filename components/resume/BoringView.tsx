@@ -12,14 +12,15 @@ interface BoringViewProps {
 
 const WORK = [
   {
-    title: "Project Lead",
+    title: "Chief Engineer",
     company: "Fortifyedge",
     period: "2025 — NOW",
-    note: "Integrating thermal sights with Team Awareness Kit (TAK) for situational awareness systems. Responsible for hardware selection, embedded firmware, and customer requirement derivation.",
+    note: "I work on architecturing and implementing robust software solutions implementing tactical AI models for edge deployment supporting human machine interface teaming for frontline workers and defense applications. Leading a team of interns, I deploy full-stack dashboards linked to my wearable apps to translate complex signals into actionable insights for end-users.",
     tags: ["Hardware", "Embedded", "TAK", "Firmware"],
     color: "#ef4444",
     color2: "#f97316",
     emoji: "🎯",
+    photo: null,
   },
   {
     title: "Software Systems Engineer",
@@ -30,6 +31,7 @@ const WORK = [
     color: "#f97316",
     color2: "#f59e0b",
     emoji: "🔧",
+    photo: null,
   },
   {
     title: "Electronics & Software Engineer",
@@ -40,6 +42,7 @@ const WORK = [
     color: "#f59e0b",
     color2: "#eab308",
     emoji: "🤖",
+    photo: null,
   },
 ];
 
@@ -203,12 +206,25 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                     background: `linear-gradient(135deg, ${w.color}, ${w.color2})`,
                     border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
                   }} />
-                  <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", transition: "box-shadow 0.3s" }}>
-                    {/* Image / colour banner */}
-                    <div style={{ height: "120px", background: `linear-gradient(135deg, ${w.color}, ${w.color2})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3.5rem", opacity: 0.9 }}>
-                      {w.emoji}
+                  <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", transition: "box-shadow 0.3s", display: "flex", gap: 0 }}>
+                    {/* Photo placeholder */}
+                    <div style={{ width: "160px", flexShrink: 0, background: `linear-gradient(135deg, ${w.color}22, ${w.color2}11)`, borderRight: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.5rem", padding: "1.5rem 0.75rem" }}>
+                      {w.photo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={w.photo} alt={w.company} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      ) : (
+                        <>
+                          <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `linear-gradient(135deg, ${w.color}44, ${w.color2}44)`, border: `2px dashed ${w.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={w.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                              <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+                            </svg>
+                          </div>
+                          <span style={{ fontSize: "0.7rem", color: dm ? "#4b5563" : "#9ca3af", textAlign: "center", lineHeight: 1.4 }}>Photo</span>
+                        </>
+                      )}
                     </div>
-                    <div style={{ padding: "1.75rem 2rem 2rem" }}>
+                    {/* Content */}
+                    <div style={{ padding: "1.75rem 2rem 2rem", flex: 1 }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
                         <div>
                           <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem" }}>{w.title}</h3>
