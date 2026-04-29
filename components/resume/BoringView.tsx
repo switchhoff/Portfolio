@@ -22,7 +22,7 @@ const WORK = [
   {
     title: "Software Systems Engineer",
     company: "Tonbo Systems",
-    period: "2025",
+    period: "2024 — 2025",
     note: "Delivering network-connected future soldier system kits. Work spans hardware integration, software architecture, and translating operational requirements into engineering specifications.",
     tags: ["Systems", "Software", "Hardware Integration"],
     color: "#f97316",
@@ -44,8 +44,8 @@ const EDUCATION = [
     degree: "Master of Electrical Engineering",
     school: "Monash University",
     period: "2024",
-    description: "Specialization: Artificial Intelligence",
-    achievements: ["Academic Medal Winner 2024", "Dean's Honour List"],
+    description: "",
+    achievements: ["Academic Medal Winner 2024"],
     color: "#ef4444",
     color2: "#f43f5e",
   },
@@ -54,7 +54,7 @@ const EDUCATION = [
     school: "Monash University",
     period: "2020 – 2023",
     description: "Minor: Software Engineering",
-    achievements: ["Dean's Honour List 2020–2023"],
+    achievements: ["Specialization: Artificial Intelligence", "Dean's Honour List 2020–2023"],
     color: "#f97316",
     color2: "#ef4444",
   },
@@ -326,8 +326,8 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                   <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                       {[
-                        { label: "Name", key: "name", type: "text", placeholder: "Alex Hofmann" },
-                        { label: "Email", key: "email", type: "email", placeholder: "you@example.com" },
+                        { label: "Name", key: "name", type: "text", placeholder: "..." },
+                        { label: "Email", key: "email", type: "email", placeholder: "..." },
                       ].map(f => (
                         <div key={f.key}>
                           <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>{f.label}</label>
@@ -340,14 +340,14 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                     </div>
                     <div>
                       <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Subject</label>
-                      <input type="text" required placeholder="What's this about?" value={form.subject} onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
+                      <input type="text" required placeholder="..." value={form.subject} onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
                         style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: "2px solid #e5e7eb", background: "#f9fafb", fontSize: "1rem", outline: "none" }}
                         onFocus={e => (e.target.style.borderColor = "#f87171")}
                         onBlur={e => (e.target.style.borderColor = "#e5e7eb")} />
                     </div>
                     <div>
                       <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Message</label>
-                      <textarea rows={5} required placeholder="Tell me about your project..." value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
+                      <textarea rows={5} required placeholder="..." value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                         style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: "2px solid #e5e7eb", background: "#f9fafb", fontSize: "1rem", outline: "none", resize: "none" }}
                         onFocus={e => (e.target.style.borderColor = "#f87171")}
                         onBlur={e => (e.target.style.borderColor = "#e5e7eb")} />
