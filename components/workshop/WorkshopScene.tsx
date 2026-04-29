@@ -122,57 +122,97 @@ const GROUP_PATHS = new Map<number, number[]>([
   [78, [78, 80]],
 ]);
 
-function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?: string, link?: string}[], categoryColor: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?: string, link?: string, label?: string}[], categoryColor: string }) {
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const scroll = (dir: "left" | "right") => {
-    if (containerRef.current) {
-      const scrollAmount = containerRef.current.clientWidth;
-      containerRef.current.scrollBy({ left: dir === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
-    }
+    setActiveIndex(prev => {
+      if (dir === "left") return Math.max(0, prev - 1);
+      return Math.min(images.length - 1, prev + 1);
+    });
   };
 
   return (
-    <div style={{ position: "relative", marginBottom: "8px", borderRadius: "4px", overflow: "hidden" }}>
+    <div style={{ position: "relative", marginBottom: "12px" }}>
       <div 
-        ref={containerRef}
         style={{ 
+          position: "relative",
+          width: "100%",
+          aspectRatio: "4/3",
           display: "flex", 
-          overflowX: "auto", 
-          scrollSnapType: "x mandatory", 
-          scrollbarWidth: "none", 
-          msOverflowStyle: "none" 
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        {images.map((img, i) => (
-          <div key={i} style={{ flex: "0 0 100%", scrollSnapAlign: "start", position: "relative" }}>
-            {img.link ? (
-              <a href={img.link} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img.src} alt={img.alt || ""} style={{ width: "100%", display: "block", objectFit: "cover" }} />
-              </a>
-            ) : (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={img.src} alt={img.alt || ""} style={{ width: "100%", display: "block", objectFit: "cover" }} />
-            )}
-          </div>
-        ))}
+        {images.map((img, i) => {
+          const offset = i - activeIndex;
+          const absOffset = Math.abs(offset);
+          const scale = absOffset === 0 ? 1 : Math.max(0.7, 1 - absOffset * 0.15);
+          const opacity = absOffset === 0 ? 1 : Math.max(0, 0.6 - absOffset * 0.2);
+          const zIndex = 10 - absOffset;
+          const translateX = offset * 60; // percentage
+          
+          return (
+            <div 
+              key={i} 
+              style={{ 
+                position: "absolute",
+                transition: "all 0.3s ease-out",
+                transform: `translateX(${translateX}%) scale(${scale})`,
+                opacity: opacity,
+                zIndex: zIndex,
+                width: "80%",
+                height: "100%",
+                boxShadow: absOffset === 0 ? "0 10px 20px rgba(0,0,0,0.3)" : "0 4px 8px rgba(0,0,0,0.1)",
+                borderRadius: "8px",
+                overflow: "hidden",
+                cursor: absOffset === 0 ? "default" : "pointer",
+              }}
+              onClick={() => setActiveIndex(i)}
+            >
+              {img.link ? (
+                <a href={absOffset === 0 ? img.link : undefined} target="_blank" rel="noopener noreferrer" style={{ display: "block", height: "100%" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }} />
+                </a>
+              ) : (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }} />
+              )}
+            </div>
+          );
+        })}
       </div>
       
+      <div style={{ 
+        textAlign: "center", 
+        marginTop: "12px", 
+        fontSize: "13px", 
+        fontWeight: 600, 
+        color: "#333",
+        height: "16px",
+      }}>
+        {images[activeIndex]?.label || ""}
+      </div>
+
       {images.length > 1 && (
         <>
-          <button 
-            onClick={(e) => { e.stopPropagation(); scroll("left"); }}
-            style={{ position: "absolute", left: "4px", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.5)", color: "#fff", border: "none", borderRadius: "50%", width: "24px", height: "24px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", zIndex: 10 }}
-          >
-            {"<"}
-          </button>
-          <button 
-            onClick={(e) => { e.stopPropagation(); scroll("right"); }}
-            style={{ position: "absolute", right: "4px", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.5)", color: "#fff", border: "none", borderRadius: "50%", width: "24px", height: "24px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", zIndex: 10 }}
-          >
-            {">"}
-          </button>
+          {activeIndex > 0 && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); scroll("left"); }}
+              style={{ position: "absolute", left: "-10px", top: "calc(50% - 8px)", transform: "translateY(-50%)", background: categoryColor, color: "#fff", border: "none", borderRadius: "50%", width: "24px", height: "24px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", zIndex: 20, opacity: 0.9, boxShadow: "0 2px 4px rgba(0,0,0,0.2)" }}
+            >
+              {"<"}
+            </button>
+          )}
+          {activeIndex < images.length - 1 && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); scroll("right"); }}
+              style={{ position: "absolute", right: "-10px", top: "calc(50% - 8px)", transform: "translateY(-50%)", background: categoryColor, color: "#fff", border: "none", borderRadius: "50%", width: "24px", height: "24px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", zIndex: 20, opacity: 0.9, boxShadow: "0 2px 4px rgba(0,0,0,0.2)" }}
+            >
+              {">"}
+            </button>
+          )}
         </>
       )}
     </div>
@@ -993,6 +1033,20 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                           }
                           if (block.type === 'link_dock') {
                             return <LinkDock key={idx} links={block.links} categoryColor={categoryColor} />;
+                          }
+                          if (block.type === 'button' && block.action === 'golf_form') {
+                            return (
+                              <div key={idx} style={{ marginBottom: "2px" }}>
+                                <button
+                                  onClick={() => { setGolfForm({ name: "", number: "" }); setGolfSent(false); setGolfError(""); }}
+                                  style={{
+                                    background: "none", border: "none", padding: 0, cursor: "pointer",
+                                    color: categoryColor, textDecoration: "underline", textUnderlineOffset: "2px",
+                                    fontSize: "12px", fontFamily: "inherit", fontWeight: 600,
+                                  }}
+                                >{block.label}</button>
+                              </div>
+                            );
                           }
                           return null;
                         })}

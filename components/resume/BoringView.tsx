@@ -16,7 +16,7 @@ interface BoringViewProps {
 
 // Visual-only metadata — all text sourced from pathData.ts
 const WORK_VISUAL: Record<number, { color: string; color2: string; photo: string | null }> = {
-  64: { color: "#ef4444", color2: "#f97316", photo: null }, // Fortifyedge  (path 64)
+  64: { color: "#ef4444", color2: "#f97316", photo: "/singapore2.jpg" }, // Fortifyedge  (path 64)
   88: { color: "#f97316", color2: "#f59e0b", photo: null }, // Monash TA    (path 88)
   68: { color: "#f59e0b", color2: "#eab308", photo: null }, // Tonbo        (path 68)
   66: { color: "#eab308", color2: "#facc15", photo: null }, // DefendTex    (path 66)

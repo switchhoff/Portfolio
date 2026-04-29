@@ -3,7 +3,9 @@ export type ContentBlock =
   | { type: 'image' | 'gif'; src: string; alt?: string; link?: string }
   | { type: 'gallery'; images: { src: string; alt?: string; link?: string }[] }
   | { type: 'audio'; src: string; label: string }
-  | { type: 'link'; url: string; label?: string; icon?: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone'; fontSize?: string | number };
+  | { type: 'link'; url: string; label?: string; icon?: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone'; fontSize?: string | number }
+  | { type: 'link_dock'; links: { url: string; label: string; icon: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone' }[] }
+  | { type: 'button'; label: string; action: 'golf_form' };
 
 export interface PathObject {
   path: number;
@@ -68,13 +70,12 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 8,
     name: "Golf",
     category: "interests",
-    description: "",
-    items: [
-      "HCP = 38",
-      { label: "Berwick Montuna Golf Club", href: "https://www.berwickmontuna.com.au/", sub: false },
-      { label: "Hit me up to connect for a round", action: "golf_form" },
+    content: [
+      { type: 'text', text: "HCP = 38 😬" },
+      { type: 'link', url: "https://www.berwickmontuna.com.au/", label: "Berwick Montuna Golf Club", icon: "external" },
+      { type: 'gif', src: "/golf.gif" },
+      { type: 'button', label: "Hit me up to connect for a round", action: "golf_form" }
     ],
-    links: [],
   },
   10: {
     path: 10,
@@ -224,8 +225,14 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 42,
     name: "World Map",
     category: "projects",
-    description: "A custom world travel map built as a woodworking project — continents cut, stained, and assembled by hand on a backing board, tracking every country visited.",
-    items: ["Germany", "India", "Singapore", "South Africa", "Thailand"],
+    content: [
+      { type: 'text', text: "A custom world travel map built as a woodworking project — continents cut, stained, and assembled by hand on a backing board, tracking every country visited." },
+      { type: 'gallery', images: [
+        { src: "/thailand.jpg" },
+        { src: "/singapore.jpg" },
+        { src: "/india.jpg" }
+      ]}
+    ],
     tags: ["WOODWORKING", "TRAVEL"],
     links: [],
   },
