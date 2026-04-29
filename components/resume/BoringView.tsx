@@ -168,21 +168,19 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
             {/* Bio */}
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div style={{ display: "inline-block", padding: "0.4rem 1rem", background: dm ? "rgba(239,68,68,0.15)" : "#fef2f2", color: "#dc2626", borderRadius: "9999px", fontSize: "0.9rem", marginBottom: "1.5rem", border: `1px solid ${dm ? "rgba(239,68,68,0.3)" : "#fee2e2"}` }}>
-                Melbourne, VIC · Open to opportunities
+                Melbourne, VIC
               </div>
               <h1 style={{ fontSize: "3.5rem", fontWeight: 300, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem", lineHeight: 1.1 }}>Alex Hofmann</h1>
-              <p style={{ fontSize: "1.35rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "1.5rem" }}>Electronics & Software Engineer</p>
+              <p style={{ fontSize: "1.35rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "1.5rem" }}>Engineer</p>
               <p style={{ fontSize: "1.05rem", color: dm ? "#d1d5db" : "#374151", lineHeight: 1.8, marginBottom: "1rem" }}>
-                Building <span style={{ color: "#dc2626", fontWeight: 500 }}>resilient systems</span> for forward-deployed environments — across hardware, software, and everything in between.
+                Building, making, creating <span style={{ color: "#dc2626", fontWeight: 500 }}>cool things</span>.
+              </p>
+              <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "1rem" }}>
+                I'm adaptable, working from hardware electronics through to full-stack software, moving with the times — both building AI and building with AI to achieve fast outcomes.
               </p>
               <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "2rem" }}>
-                I work across the full stack of a system: from hardware selection and bring-up, through embedded and application software, to working directly with customers to derive requirements and shape what gets built.
+                I've been R&D, forward deployed and a team lead across complex mechatronics environments in predominantly the defense industry. I've taught final year university students the fundamentals of AI in the morning and watched on as my unmanned vehicle vision system autonomously drives down a road in the afternoon.
               </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                {SKILLS.map(s => (
-                  <span key={s} style={{ padding: "0.4rem 1rem", background: dm ? "#1a1a1a" : "#fff", border: `2px solid ${dm ? "#2a2a2a" : "#e5e7eb"}`, borderRadius: "9999px", fontSize: "0.9rem", color: dm ? "#d1d5db" : "#4b5563" }}>{s}</span>
-                ))}
-              </div>
             </motion.div>
           </div>
         </div>
