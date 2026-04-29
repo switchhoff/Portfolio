@@ -1113,11 +1113,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                     {pathData.description && pathData.links && pathData.links.length > 0 && (
                       <div style={{
                         display: "flex",
-                        gap: "6px",
-                        flexWrap: "wrap",
+                        flexDirection: "column",
+                        gap: "5px",
                         borderTop: `1px solid ${categoryColor}44`,
-                        paddingTop: "6px",
-                        marginTop: "6px",
+                        paddingTop: "8px",
+                        marginTop: "8px",
                       }}>
                         {pathData.links.map((link, idx) => {
                           const url = link.github || link.instagram || link.printables || link.external;
