@@ -478,32 +478,39 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
         boxShadow: dm ? "0 8px 32px rgba(0,0,0,0.4)" : "0 8px 32px rgba(0,0,0,0.1)",
         transition: "all 0.3s ease",
       }}>
-        {/* Cheats master toggle row */}
+        {/* ── CHEATS MASTER TOGGLE ── */}
         <div
           onClick={() => {
             setCheatMode(!cheatMode);
+            // If turning off cheats, clear all active highlights
             if (cheatMode) setActiveFilters(new Set());
           }}
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "10px 16px",
+            padding: "12px 16px",
             cursor: "pointer",
-            borderBottom: "1px solid rgba(255,215,0,0.15)",
+            borderBottom: dm ? "1px solid rgba(255, 215, 0, 0.15)" : "1px solid rgba(0, 0, 0, 0.08)",
             userSelect: "none",
+            background: cheatMode ? (dm ? "rgba(255, 215, 0, 0.05)" : "rgba(217, 119, 6, 0.03)") : "transparent",
           }}
         >
-          <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", color: "#FFD700" }}>
+          <span style={{ 
+            fontSize: 12, 
+            fontWeight: 700, 
+            letterSpacing: "0.12em", 
+            color: dm ? "#FFD700" : "#d97706" 
+          }}>
             CHEATS
           </span>
-          {/* Sliding toggle */}
+          {/* Master Sliding Toggle */}
           <div style={{
             width: 32, height: 16,
-            background: cheatMode ? "#FFD700" : "rgba(255,255,255,0.1)",
+            background: cheatMode ? (dm ? "#FFD700" : "#d97706") : (dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"),
             borderRadius: 8,
             position: "relative",
-            transition: "background 0.2s",
+            transition: "all 0.2s ease",
             flexShrink: 0,
           }}>
             <div style={{
@@ -511,13 +518,13 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
               top: 2, left: cheatMode ? 18 : 2,
               width: 12, height: 12,
               borderRadius: "50%",
-              background: cheatMode ? "#000" : "rgba(255,255,255,0.5)",
-              transition: "left 0.2s, background 0.2s",
+              background: cheatMode ? (dm ? "#000" : "#fff") : (dm ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.3)"),
+              transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
             }} />
           </div>
         </div>
 
-        {/* Filter toggle rows */}
+        {/* ── CATEGORY FILTER ROWS ── */}
         {Object.entries(FILTER_GROUPS).map(([name, paths]) => {
           const categoryColor = CATEGORY_COLORS[name] || "#999999";
           const isActive = activeFilters.has(name);
@@ -525,7 +532,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             <div
               key={name}
               onClick={() => {
-                if (!cheatMode) return;
+                if (!cheatMode) return; // Only allow category toggling if master cheat is ON
                 setActiveFilters(prev => {
                   const next = new Set(prev);
                   isActive ? next.delete(name) : next.add(name);
@@ -536,29 +543,30 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "9px 16px",
+                padding: "10px 16px",
                 cursor: cheatMode ? "pointer" : "not-allowed",
-                opacity: cheatMode ? 1 : 0.35,
-                borderBottom: "1px solid rgba(255,255,255,0.05)",
+                opacity: cheatMode ? 1 : 0.3,
+                borderBottom: dm ? "1px solid rgba(255,255,255,0.05)" : "1px solid rgba(0,0,0,0.03)",
                 userSelect: "none",
-                transition: "opacity 0.2s",
+                transition: "all 0.2s ease",
+                background: isActive ? `${categoryColor}10` : "transparent",
               }}
             >
               <span style={{
-                fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
+                fontSize: 10, fontWeight: 600, letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: isActive ? categoryColor : "rgba(255,255,255,0.5)",
+                color: isActive ? categoryColor : (dm ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.5)"),
                 transition: "color 0.2s",
               }}>
                 {name}
               </span>
-              {/* Sliding toggle */}
+              {/* Category Sliding Toggle */}
               <div style={{
                 width: 28, height: 14,
-                background: isActive ? categoryColor : "rgba(255,255,255,0.1)",
+                background: isActive ? categoryColor : (dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)"),
                 borderRadius: 7,
                 position: "relative",
-                transition: "background 0.2s",
+                transition: "all 0.2s ease",
                 flexShrink: 0,
               }}>
                 <div style={{
@@ -566,8 +574,8 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                   top: 2, left: isActive ? 16 : 2,
                   width: 10, height: 10,
                   borderRadius: "50%",
-                  background: isActive ? "#000" : "rgba(255,255,255,0.5)",
-                  transition: "left 0.2s, background 0.2s",
+                  background: isActive ? (dm ? "#000" : "#fff") : (dm ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.2)"),
+                  transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 }} />
               </div>
             </div>

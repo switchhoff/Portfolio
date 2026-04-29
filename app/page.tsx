@@ -485,6 +485,7 @@ export default function Home() {
                         activeId={active?.id ?? null}
                         highlightCategory={highlightCategory}
                         onHoverChange={setHoverSpot}
+                        darkMode={darkMode}
                       />
                       <HotspotModal
                         hotspot={active}
