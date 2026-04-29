@@ -780,11 +780,13 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                   <div style={{ paddingRight: "18px" }}>
                     {/* Category tag (left) and Name (right) */}
                     <div style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "baseline",
+                      display: "grid",
+                      gridTemplateColumns: "1fr auto 1fr",
+                      alignItems: "center",
                       marginBottom: "6px",
+                      gap: "6px",
                     }}>
+                      {/* Left — category */}
                       <span style={{
                         fontSize: "12px",
                         fontWeight: 700,
@@ -794,17 +796,15 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                       }}>
                         {pathData.category}
                       </span>
+                      {/* Centre — name + dev badge */}
                       <span style={{
                         fontSize: "15px",
                         fontWeight: 600,
                         color: "#222",
-                        flex: 1,
-                        marginLeft: "8px",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "flex-end",
-                        gap: "6px",
-                        textAlign: "right",
+                        gap: "5px",
+                        whiteSpace: "nowrap",
                       }}>
                         {(pathData.category === "experience" || pathData.category === "education") && pathData.company
                           ? pathData.company
@@ -812,6 +812,21 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         <span style={{ fontSize: "10px", fontWeight: 700, color: categoryColor, opacity: 0.7, background: `${categoryColor}18`, borderRadius: "4px", padding: "1px 5px", fontFamily: "monospace", flexShrink: 0 }}>
                           #{pathData.path}
                         </span>
+                      </span>
+                      {/* Right — WIP tag */}
+                      <span style={{ display: "flex", justifyContent: "flex-end" }}>
+                        {pathData.wip && (
+                          <span style={{
+                            fontSize: "9px", fontWeight: 700,
+                            color: "#f59e0b", background: "rgba(245,158,11,0.12)",
+                            border: "1px solid rgba(245,158,11,0.35)",
+                            borderRadius: "4px", padding: "2px 6px",
+                            letterSpacing: "0.08em", textTransform: "uppercase",
+                            whiteSpace: "nowrap",
+                          }}>
+                            WIP
+                          </span>
+                        )}
                       </span>
                     </div>
 

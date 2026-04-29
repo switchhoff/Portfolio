@@ -12,6 +12,7 @@ export interface PathObject {
   image?: string;
   imageLink?: string;
   tags?: string[];
+  wip?: boolean;
   links?: {
     github?: string;
     instagram?: string;
@@ -28,6 +29,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "projects",
     description: "I am in the process of creating a thematic reskin of Dune: Imperium, based on the book Monsoon by Wilbur Smith — following the Courtney Family's adventures on the high seas of East Africa. I'm working to map all elements into consistent, aesthetic equivalents and redesign the base to suit my vision. Sneak peek at some concept art below.",
     image: "/General Pieces.png",
+    wip: true,
     tags: ["GAME DESIGN", "ART"],
     links: [],
   },
@@ -48,6 +50,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Threadquarters",
     category: "projects",
     description: "Jacket",
+    wip: true,
     tags: ["SOFTWARE", "CLOTHING"],
     links: [{ github: "https://github.com/switchhoff/Threadquarters", label: "GitHub" }],
   },
@@ -151,7 +154,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     description: "",
     image: "/instagram.png",
     imageLink: "https://www.instagram.com/p/BkkMocYHvOt/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-    links: [{ instagram: "https://www.instagram.com/alexhofmannphotography/", label: "@alexhofmannphotography" }],
+    items: [{ label: "@alexhofmannphotography", href: "https://www.instagram.com/alexhofmannphotography/" }],
   },
   28: {
     path: 28,
@@ -203,6 +206,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Habitat",
     category: "projects",
     description: "A habit tracker that rewards consistency by growing virtual plants and trees — build streaks, unlock new species, and watch your garden flourish.",
+    wip: true,
     tags: ["SOFTWARE", "PERSONAL"],
     links: [{ github: "https://github.com/switchhoff/Habitat", label: "GitHub" }],
   },
@@ -228,6 +232,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "SixClicks",
     category: "projects",
     description: "I made this basic LinkedIn scraper Chrome extension to build out a node map of my professional connections.",
+    wip: true,
     tags: ["VISUALIZATION", "NETWORK", "CHROME"],
     links: [{ github: "https://github.com/switchhoff/SixClicks", label: "GitHub" }],
   },
@@ -270,33 +275,33 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   58: {
     path: 58,
-    name: "Ron Johnston Medal Winner",
+    name: "Humanitarian Innovation Hackathon PowerPots",
     category: "experience",
     date: "2023",
     company: "Humanitarian Innovation Hackathon",
-    role: "PowerPots",
+    role: "Ron Johnston Medal Winner",
     description: "Sand filter solution for water filtration in Vanuatu through community education and innovative product prototyping.",
     tags: ["HACKATHON"],
     links: [],
   },
   60: {
     path: 60,
-    name: "Winner",
+    name: "Robot Building Competition",
     category: "experience",
     date: "2021 & 2022",
-    company: "Robot Building Competition",
-    role: "Winner",
+    company: "Monash Engineering",
+    role: "Robot Building Competition Winner",
     description: "Completed challenges requiring robots to line-follow specific colour segments at speed — precision engineering under competitive conditions.",
     tags: ["HACKATHON"],
     links: [],
   },
   62: {
     path: 62,
-    name: "Winner",
+    name: "HardHack",
     category: "experience",
     date: "2022",
-    company: "Monash HardHack",
-    role: "Winner",
+    company: "Monash Engineering",
+    role: "HardHack Winner",
     description: "Designed, built, and tested small unmanned aquatic vehicle with underwater sonar topology mapping.",
     tags: ["HACKATHON"],
     links: [],
@@ -308,8 +313,8 @@ export const PATH_DATA: Record<number, PathObject> = {
     date: "2025 — NOW",
     company: "Fortifyedge",
     role: "Chief Engineer",
-    description: "I work on architecturing and implementing robust software solutions implementing tactical AI models for edge deployment supporting human machine interface teaming for frontline workers and defense applications. Leading a team of interns, I deploy full-stack dashboards linked to my wearable apps to translate complex signals into actionable insights for end-users.",
-    tags: ["Edge", "Wearables", "Software", "Lead"],
+    description: "I work on architecturing and implementing robust software solutions implementing tactical AI models for edge deployment supporting human machine interface teaming for frontline workers and defense applications. Leading a team of interns, I deploy full-stack dashboards linked to my wearable apps to translate complex signals into actionable insights for end-users. I work directly with end-users including military, police and firefighter operators to derive requirements, implement features and create useful data insights.",
+    tags: ["EDGE COMPUTING", "WEARABLES", "FDE"],
     links: [],
   },
   66: {
@@ -319,8 +324,8 @@ export const PATH_DATA: Record<number, PathObject> = {
     date: "2022 — 2024",
     company: "DefendTex",
     role: "Electronics & Software Engineer",
-    description: "Developed the autonomy subsystem for an unmanned ground vehicle — from hardware bring-up and thermal object detection through to GStreamer pipelines and ArduPilot integration.",
-    tags: ["Autonomy", "Computer Vision", "ArduPilot", "GStreamer"],
+    description: "I developed the autonomy subsystem for an unmanned ground vehicle - computer vision GStreamer pipelines and ArduPilot integration. I also worked across the mechanical frame and electrical subsystems of the vehicle.",
+    tags: ["AUTONOMY", "COMPUTER VISION ", "UGV"],
     links: [],
   },
   68: {
@@ -330,8 +335,8 @@ export const PATH_DATA: Record<number, PathObject> = {
     date: "2024 — 2025",
     company: "Tonbo Systems",
     role: "Software Systems Engineer",
-    description: "I led the work on delivering network-connected future soldier system kits. Hardware integration, software architecture, and translating operational requirements into engineering specifications within a start-up environment.",
-    tags: ["ATAK", "Software", "Hardware Integration"],
+    description: "I led the work on delivering network-connected future soldier system kits. Hardware integration, software architecture, and translating operational requirements into engineering specifications within a start-up environment. I worked on Augmented Reality headset integration with tactical military thermal sensors and ATAK plugin development.",
+    tags: ["ATAK", "SYSTEMS", "AR"],
     links: [],
   },
   70: {
@@ -409,6 +414,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "LoverLamp",
     category: "projects",
     description: "Smart Lamp",
+    wip: true,
     links: [],
   },
   86: {
@@ -422,12 +428,14 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   88: {
     path: 88,
-    name: "Monash University",
+    name: "Teaching Associate",
     category: "experience",
     role: "Teaching Associate",
+    company: "Monash University",
     date: "2025",
-    description: "Teaching final-year students the fundamentals of AI and its application in the physical world of robotics.",
+    description: "I've taught students the fundamentals of AI development, and how to apply the concepts of cutting-edge robotic control to achieve their project outcomes. This included covering fundamentals of SLAM, path planning and object avoidance, as well as training custom AI models. ",
     items: ["ECE4179 Neural Networks", "ECE4078 Intelligent Robotics"],
+    tags: ["TEACHING", "AI", "ROBOTICS"],
     links: [],
   },
   90: {
@@ -467,6 +475,41 @@ export const PATH_DATA: Record<number, PathObject> = {
     tags: ["HACKATHON"],
     links: [],
   },
+  98: {
+    path: 98,
+    name: "Hiking",
+    category: "interests",
+    description: "",
+    items: [
+      "Overland Track",
+      { label: "Table Mountain", href: "https://www.strava.com/activities/13270686802" },
+      { label: "Mt Kosciuszko", href: "https://www.strava.com/activities/16636317218" }
+    ],
+    links: [],
+  },
+  100: {
+    path: 100,
+    name: "Soccer",
+    category: "interests",
+    description: "",
+    items: [
+      "Keysborough District FC",
+      "Monash University SC",
+      "Adelaide City FC"
+    ],
+    links: [],
+  },
+  102: {
+    path: 102,
+    name: "Running",
+    category: "interests",
+    description: "",
+    items: [
+      { label: "Elephant Strava Art", href: "https://www.strava.com/activities/3486637449/flyover", sub: false },
+      { label: "Turtle Strava Art", href: "https://www.strava.com/activities/5795277420", sub: false }
+    ],
+    links: [],
+  }
 };
 
 export function getPathData(path: number): PathObject | null {
