@@ -3,12 +3,9 @@
     "rules": "firestore.rules"
   },
   "hosting": {
-    "site": "hoffswitch",
+    "site": "offswitch",
     "public": "out",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      { "source": "**", "destination": "/index.html" }
-    ],
     "headers": [
       {
         "source": "**/*.@(jpg|jpeg|png|gif|webp|svg|ico)",

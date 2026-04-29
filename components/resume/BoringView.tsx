@@ -1,14 +1,8 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Mail,
-  ExternalLink,
-  Send,
-  MapPin
-} from "lucide-react";
+import { Mail, MapPin, Send } from "lucide-react";
 import { type Project } from "@/lib/projects";
-import "./BoringView.css";
 
 interface BoringViewProps {
   projects: Project[];
@@ -16,10 +10,68 @@ interface BoringViewProps {
 }
 
 const WORK = [
-  { title: "Project Lead", company: "Fortifyedge", period: "2025 — NOW", note: "Integrating thermal sights with Team Awareness Kit (TAK) for situational awareness systems. Responsible for hardware selection, embedded firmware, and customer requirement derivation." },
-  { title: "Software Systems Engineer", company: "Tonbo Systems", period: "2025", note: "Delivering network-connected future soldier system kits. Work spans hardware integration, software architecture, and translating operational requirements into engineering specifications." },
-  { title: "Electronics & Software Engineer", company: "DefendTex", period: "2022 — 2024", note: "Developed the autonomy subsystem for an unmanned ground vehicle — from hardware bring-up and thermal object detection through to GStreamer pipelines and ArduPilot integration." },
+  {
+    title: "Project Lead",
+    company: "Fortifyedge",
+    period: "2025 — NOW",
+    note: "Integrating thermal sights with Team Awareness Kit (TAK) for situational awareness systems. Responsible for hardware selection, embedded firmware, and customer requirement derivation.",
+    tags: ["Hardware", "Embedded", "TAK", "Firmware"],
+    color: "#ef4444",
+    color2: "#f97316",
+  },
+  {
+    title: "Software Systems Engineer",
+    company: "Tonbo Systems",
+    period: "2025",
+    note: "Delivering network-connected future soldier system kits. Work spans hardware integration, software architecture, and translating operational requirements into engineering specifications.",
+    tags: ["Systems", "Software", "Hardware Integration"],
+    color: "#f97316",
+    color2: "#f59e0b",
+  },
+  {
+    title: "Electronics & Software Engineer",
+    company: "DefendTex",
+    period: "2022 — 2024",
+    note: "Developed the autonomy subsystem for an unmanned ground vehicle — from hardware bring-up and thermal object detection through to GStreamer pipelines and ArduPilot integration.",
+    tags: ["Autonomy", "Computer Vision", "ArduPilot", "GStreamer"],
+    color: "#f59e0b",
+    color2: "#eab308",
+  },
 ];
+
+const EDUCATION = [
+  {
+    degree: "Master of Electrical Engineering",
+    school: "Monash University",
+    period: "2024",
+    description: "Specialization: Artificial Intelligence",
+    achievements: ["Academic Medal Winner 2024", "Dean's Honour List"],
+    color: "#ef4444",
+    color2: "#f43f5e",
+  },
+  {
+    degree: "Bachelor of Robotics and Mechatronics Engineering",
+    school: "Monash University",
+    period: "2020 – 2023",
+    description: "Minor: Software Engineering",
+    achievements: ["Dean's Honour List 2020–2023"],
+    color: "#f97316",
+    color2: "#ef4444",
+  },
+];
+
+const INTERESTS = [
+  { title: "Golf", subtitle: "HCP 38 · Berwick Montuna Golf Club" },
+  { title: "Photography", subtitle: "@alexhofmannphotography" },
+  { title: "Board Games", subtitle: "Dune Imperium · Wingspan · Ark Nova" },
+  { title: "Reading", subtitle: "Brotherband Series · Wolf of the Plains · Courtney Series" },
+  { title: "Art", subtitle: "Hans Heysen · Albert Namatjira · Matthew Bell" },
+  { title: "Craft", subtitle: "Sewing · Embroidery · Crochet" },
+  { title: "Saxophone", subtitle: "Alto · Baritone" },
+  { title: "Movies", subtitle: "Ocean's Eleven · Lord of the Rings · Pirates of the Caribbean" },
+];
+
+const SKILLS = ["Embedded Systems", "Computer Vision", "ArduPilot", "TAK", "Python", "C/C++", "React", "Next.js"];
 
 const GithubIcon = ({ size = 20 }: { size?: number }) => (
   <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width={size} height={size}>
@@ -33,21 +85,28 @@ const LinkedinIcon = ({ size = 20 }: { size?: number }) => (
   </svg>
 );
 
-const INTERESTS = [
-  { title: "Golf", subtitle: "HCP 38 · Berwick Montuna Golf Club" },
-  { title: "Photography", subtitle: "@alexhofmannphotography" },
-  { title: "Board Games", subtitle: "Dune Imperium · Wingspan · Ark Nova" },
-  { title: "Reading", subtitle: "Brotherband Series · Wolf of the Plains · Courtney Series" },
-  { title: "Art", subtitle: "Hans Heysen · Albert Namatjira · Matthew Bell" },
-  { title: "Craft", subtitle: "Sewing · Embroidery · Crochet" },
-  { title: "Saxophone", subtitle: "Alto saxophone" },
-  { title: "Movies", subtitle: "Ocean's Eleven · Lord of the Rings · Pirates of the Caribbean" },
-];
+const S = {
+  font: "var(--font-inter), system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif",
+  section: { padding: "7rem clamp(1.5rem, 6vw, 6rem)" },
+  inner: { maxWidth: "1100px", margin: "0 auto" },
+  innerWide: { maxWidth: "1280px", margin: "0 auto" },
+  heading: { fontSize: "3rem", fontWeight: 300, color: "#111827", marginBottom: "1rem", lineHeight: 1.15 },
+  bar: (color1: string, color2: string) => ({
+    height: "6px", width: "96px", borderRadius: "9999px",
+    background: `linear-gradient(to right, ${color1}, ${color2})`,
+    marginBottom: "4rem",
+  }),
+};
 
-const EDUCATION = [
-  { degree: "Master of Electrical Engineering", school: "Monash University", period: "2024", details: "Specialization: Artificial Intelligence · 2024 Master of Engineering Academic Medal Winner" },
-  { degree: "Bachelor of Robotics and Mechatronics Engineering", school: "Monash University", period: "2020–2023", details: "Minor: Software Engineering · Dean's Honour List 2020–2023" },
-];
+function Heading({ title, c1, c2, center }: { title: string; c1: string; c2: string; center?: boolean }) {
+  return (
+    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+      style={{ marginBottom: "4rem", textAlign: center ? "center" : "left" }}>
+      <h2 style={S.heading}>{title}</h2>
+      <div style={{ ...S.bar(c1, c2), ...(center ? { margin: "0 auto 4rem" } : {}) }} />
+    </motion.div>
+  );
+}
 
 export default function BoringView({ projects, age }: BoringViewProps) {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -73,215 +132,242 @@ export default function BoringView({ projects, age }: BoringViewProps) {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white text-black">
-      <div className="minimal-grid" />
+    <div style={{ minHeight: "100vh", width: "100%", background: "#fff", color: "#111827", fontFamily: S.font, fontSize: "16px" }}>
 
-      <div className="relative z-10 w-full px-[clamp(1.5rem, 5vw, 4rem)] py-[clamp(3rem, 10vh, 6rem)]">
-
-        {/* ── ROW 1: ABOUT + PROJECTS ── */}
-        <div className="boring-cols mb-[clamp(4rem,10vh,8rem)]">
-
-          {/* SECTION 01: ABOUT */}
-          <div className="boring-col">
-            <Section number="01" title="ABOUT ME">
-              <div className="flex flex-col items-center gap-[clamp(2rem, 4vh, 3rem)] text-center">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  className="relative w-[clamp(80px, 10vw, 120px)] aspect-square bg-gray-100 border border-minimal-border overflow-hidden"
-                >
-                  <div className="absolute inset-0 border border-red-600 translate-x-[4px] translate-y-[4px] -z-10" />
+      {/* ── ABOUT ── */}
+      <section style={{
+        ...S.section,
+        position: "relative",
+        overflow: "hidden",
+        background: "radial-gradient(circle at 30% 20%, rgba(239,68,68,0.07), transparent 50%), radial-gradient(circle at 70% 80%, rgba(251,146,60,0.07), transparent 50%)",
+      }}>
+        <div style={S.innerWide}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "5rem", alignItems: "center" }}>
+            {/* Photo */}
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+              style={{ display: "flex", justifyContent: "center" }}>
+              <div style={{ position: "relative", width: "220px", height: "220px" }}>
+                <div style={{
+                  position: "absolute", inset: 0,
+                  background: "linear-gradient(135deg, #ef4444, #f97316)",
+                  borderRadius: "1.5rem", transform: "rotate(3deg)", opacity: 0.15, filter: "blur(20px)",
+                }} />
+                <div style={{ position: "relative", width: "100%", height: "100%", borderRadius: "1.5rem", overflow: "hidden", border: "2px solid #f3f4f6", boxShadow: "0 25px 50px rgba(0,0,0,0.15)" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/alex.jpeg" alt="Alex Hofmann" className="w-full h-full object-cover" />
-                </motion.div>
-
-                <div className="space-y-6 max-w-xl">
-                  <p className="text-xl font-medium leading-relaxed">
-                    I'm Alex Hofmann, an engineer building <span className="text-red-600">resilient systems</span> for forward-deployed environments — across hardware, software, and everything in between.
-                  </p>
-                  <p className="text-sm text-gray-600 leading-7">
-                    I work across the full stack of a system: from hardware selection and bring-up, through embedded and application software, to working directly with customers to derive requirements and shape what gets built. Currently based in Melbourne, focused on tactical edge devices and situational awareness systems.
-                  </p>
+                  <img src="/alex.jpeg" alt="Alex Hofmann" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
+              </div>
+            </motion.div>
 
-                <div className="w-full max-w-xl mt-8">
-                  <h3 className="text-xs font-bold text-red-600 mb-6 uppercase tracking-widest text-center">Interests</h3>
-                  <div className="flex flex-col gap-2">
-                    {INTERESTS.map((interest, i) => (
-                      <div key={interest.title} className="interest-tag justify-center">
-                        <span className="interest-idx">[{String(i + 1).padStart(2, '0')}]</span>
-                        <span className="text-xs uppercase font-semibold">{interest.title}</span>
-                        <span className="text-[10px] text-gray-400 leading-relaxed">{interest.subtitle}</span>
+            {/* Bio */}
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <div style={{ display: "inline-block", padding: "0.4rem 1rem", background: "#fef2f2", color: "#dc2626", borderRadius: "9999px", fontSize: "0.9rem", marginBottom: "1.5rem", border: "1px solid #fee2e2" }}>
+                Melbourne, VIC · Open to opportunities
+              </div>
+              <h1 style={{ fontSize: "3.5rem", fontWeight: 300, color: "#111827", marginBottom: "0.5rem", lineHeight: 1.1 }}>Alex Hofmann</h1>
+              <p style={{ fontSize: "1.35rem", color: "#6b7280", marginBottom: "1.5rem" }}>Electronics & Software Engineer</p>
+              <p style={{ fontSize: "1.05rem", color: "#374151", lineHeight: 1.8, marginBottom: "1rem" }}>
+                Building <span style={{ color: "#dc2626", fontWeight: 500 }}>resilient systems</span> for forward-deployed environments — across hardware, software, and everything in between.
+              </p>
+              <p style={{ fontSize: "1rem", color: "#6b7280", lineHeight: 1.8, marginBottom: "2rem" }}>
+                I work across the full stack of a system: from hardware selection and bring-up, through embedded and application software, to working directly with customers to derive requirements and shape what gets built.
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                {SKILLS.map(s => (
+                  <span key={s} style={{ padding: "0.4rem 1rem", background: "#fff", border: "2px solid #e5e7eb", borderRadius: "9999px", fontSize: "0.9rem", color: "#4b5563" }}>{s}</span>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── EXPERIENCE ── */}
+      <section style={{ ...S.section, background: "#fff" }}>
+        <div style={S.inner}>
+          <Heading title="Experience" c1="#ef4444" c2="#f97316" />
+          <div style={{ position: "relative" }}>
+            {/* Timeline line */}
+            <div style={{ position: "absolute", left: "28px", top: 0, bottom: 0, width: "2px", background: "linear-gradient(to bottom, #ef4444, #f97316, #f59e0b)" }} />
+            <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+              {WORK.map((w, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                  style={{ position: "relative", paddingLeft: "5rem" }}>
+                  {/* Dot */}
+                  <div style={{
+                    position: "absolute", left: "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%",
+                    background: `linear-gradient(135deg, ${w.color}, ${w.color2})`,
+                    border: "3px solid #fff", boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                  }} />
+                  <div style={{ background: "#fff", borderRadius: "1.5rem", padding: "2rem", border: "2px solid #f3f4f6", boxShadow: "0 4px 24px rgba(0,0,0,0.07)", transition: "box-shadow 0.3s" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
+                      <div>
+                        <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: "#111827", marginBottom: "0.3rem" }}>{w.title}</h3>
+                        <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${w.color}, ${w.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
+                      </div>
+                      <span style={{ padding: "0.4rem 1rem", background: "#f9fafb", color: "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: "1px solid #e5e7eb" }}>{w.period}</span>
+                    </div>
+                    <p style={{ fontSize: "1rem", color: "#6b7280", lineHeight: 1.75, marginBottom: "1.25rem" }}>{w.note}</p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                      {w.tags.map(t => (
+                        <span key={t} style={{ padding: "0.35rem 0.75rem", background: "#f9fafb", color: "#374151", borderRadius: "0.5rem", fontSize: "0.875rem", border: "1px solid #e5e7eb" }}>{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── EDUCATION ── */}
+      <section style={{ ...S.section, background: "linear-gradient(135deg, #fafafa 0%, #fff5f5 100%)" }}>
+        <div style={S.inner}>
+          <Heading title="Education" c1="#f97316" c2="#ef4444" />
+          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+            {EDUCATION.map((edu, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                style={{ background: "#fff", borderRadius: "1.5rem", overflow: "hidden", border: "2px solid #f3f4f6", boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
+                <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
+                <div style={{ padding: "2.5rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: "#111827", marginBottom: "0.4rem" }}>{edu.degree}</h3>
+                      <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${edu.color}, ${edu.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{edu.school}</p>
+                    </div>
+                    <span style={{ padding: "0.4rem 1.2rem", background: "#f9fafb", color: "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: "1px solid #e5e7eb" }}>{edu.period}</span>
+                  </div>
+                  <p style={{ fontSize: "1rem", color: "#9ca3af", marginBottom: "1.5rem" }}>{edu.description}</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+                    {edu.achievements.map((a, ai) => (
+                      <div key={ai} style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1.1rem", background: "#f9fafb", borderRadius: "0.75rem", border: "1px solid #e5e7eb" }}>
+                        <svg style={{ width: "18px", height: "18px", color: "#ef4444", flexShrink: 0 }} fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span style={{ fontSize: "0.95rem", color: "#374151" }}>{a}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-            </Section>
+              </motion.div>
+            ))}
           </div>
-
-          {/* SECTION 02: PROJECTS */}
-          <div className="boring-col">
-            <Section number="02" title="LIVE OPERATIONS">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(1rem, 2vw, 2rem)]">
-                {projects.map((proj, i) => (
-                  <div key={proj.id} className="proj-card">
-                    <div className="proj-image">
-                      <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300 uppercase">
-                        [DATA_STREAM_{i}]
-                      </div>
-                      <div className="absolute top-3 right-3">
-                        <ExternalLink size={14} className="text-red-600 opacity-0 group-hover:opacity-100" />
-                      </div>
-                    </div>
-                    <div className="p-6 space-y-4 text-center flex flex-col items-center">
-                      <h4 className="text-sm font-black uppercase flex flex-col items-center gap-2">
-                        {proj.name}
-                        <a href={`https://github.com/${proj.repo}`} target="_blank" className="hover:text-red-600 transition-colors">
-                          <GithubIcon size={14} />
-                        </a>
-                      </h4>
-                      <p className="text-[11px] text-gray-600 leading-relaxed h-12 overflow-hidden text-center">
-                        {proj.tagline}
-                      </p>
-                      <div className="flex flex-wrap gap-1 justify-center">
-                        {proj.tags.map(t => <span key={t} className="proj-tech-tag">{t}</span>)}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Section>
-          </div>
-
         </div>
+      </section>
 
-        {/* ── ROW 2: EXPERIENCE & EDUCATION + CONTACT ── */}
-        <div className="boring-cols">
+      {/* ── INTERESTS ── */}
+      <section style={{ ...S.section, background: "#fff" }}>
+        <div style={S.inner}>
+          <Heading title="Interests" c1="#ef4444" c2="#ec4899" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.25rem" }}>
+            {INTERESTS.map((interest, i) => (
+              <motion.div key={interest.title} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+                style={{ background: "#fff", borderRadius: "1rem", padding: "1.5rem", border: "2px solid #f3f4f6", transition: "border-color 0.2s, box-shadow 0.2s" }}
+                whileHover={{ borderColor: "#fecaca", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }}>
+                <div style={{ fontSize: "1rem", fontWeight: 600, color: "#111827", marginBottom: "0.4rem" }}>{interest.title}</div>
+                <div style={{ fontSize: "0.875rem", color: "#9ca3af", lineHeight: 1.6 }}>{interest.subtitle}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          {/* SECTION 03: EXPERIENCE & EDUCATION */}
-          <div className="boring-col">
-            <Section number="03" title="EXPERIENCE & EDUCATION">
-              <div className="flex flex-col items-center gap-[clamp(2rem, 5vw, 4rem)] w-full">
-                <div className="w-full space-y-10">
-                  <h3 className="text-lg font-bold text-red-600 uppercase mb-8 text-center">Professional Timeline</h3>
-                  {WORK.map((w, i) => (
-                    <div key={i} className="exp-card">
-                      <div className="exp-node" />
-                      <h4 className="text-base font-bold uppercase">{w.title}</h4>
-                      <div className="flex gap-4 items-center mt-1 mb-3">
-                        <span className="text-red-600 text-[10px] font-bold uppercase">{w.company}</span>
-                        <span className="text-gray-400 text-[10px] uppercase">{w.period}</span>
-                      </div>
-                      <p className="text-xs text-gray-600 leading-6">{w.note}</p>
+      {/* ── CONTACT ── */}
+      <section style={{ ...S.section, position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #111827 0%, #1e1b4b 50%, #312e81 100%)" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 50%, rgba(239,68,68,0.08), transparent 60%)", pointerEvents: "none" }} />
+        <div style={{ ...S.inner, position: "relative" }}>
+          <Heading title="Get in Touch" c1="#ef4444" c2="#f97316" center />
+
+          <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "2rem" }}>
+            {/* Links panel */}
+            <div style={{ background: "rgba(255,255,255,0.05)", backdropFilter: "blur(12px)", borderRadius: "1.5rem", padding: "2rem", border: "1px solid rgba(255,255,255,0.1)" }}>
+              <h3 style={{ fontSize: "1.3rem", color: "#fff", fontWeight: 300, marginBottom: "2rem" }}>Direct Lines</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                {[
+                  { href: "mailto:alexanderhofmann@outlook.com.au", icon: <Mail size={22} />, label: "Email", value: "alexanderhofmann@outlook.com.au", bg: "rgba(239,68,68,0.15)", color: "#fca5a5" },
+                  { href: "https://github.com/switchhoff", icon: <GithubIcon size={22} />, label: "GitHub", value: "switchhoff", bg: "rgba(255,255,255,0.08)", color: "#d1d5db" },
+                  { href: "https://linkedin.com/in/hofmannalexb/", icon: <LinkedinIcon size={22} />, label: "LinkedIn", value: "hofmannalexb", bg: "rgba(59,130,246,0.15)", color: "#93c5fd" },
+                ].map(item => (
+                  <a key={item.label} href={item.href} target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", gap: "1rem", textDecoration: "none" }}>
+                    <div style={{ width: "52px", height: "52px", borderRadius: "0.875rem", background: item.bg, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", flexShrink: 0 }}>
+                      {item.icon}
                     </div>
-                  ))}
-                </div>
-
-                <div className="w-full space-y-8">
-                  <h3 className="text-lg font-bold text-red-600 uppercase mb-8 text-center">Education</h3>
-                  {EDUCATION.map((edu, i) => (
-                    <div key={i} className="edu-card text-center">
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="text-sm font-bold uppercase">{edu.degree}</h4>
-                        <span className="text-[10px] text-gray-400 ml-4 shrink-0">{edu.period}</span>
-                      </div>
-                      <p className="text-red-600 text-[10px] font-bold uppercase mb-2">{edu.school}</p>
-                      <p className="text-[11px] text-gray-500 leading-relaxed">{edu.details}</p>
+                    <div>
+                      <div style={{ fontSize: "0.75rem", color: item.color, marginBottom: "2px" }}>{item.label}</div>
+                      <div style={{ fontSize: "0.95rem", color: "#fff" }}>{item.value}</div>
                     </div>
-                  ))}
+                  </a>
+                ))}
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                  <div style={{ width: "52px", height: "52px", borderRadius: "0.875rem", background: "rgba(251,146,60,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fdba74", flexShrink: 0 }}>
+                    <MapPin size={22} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: "0.75rem", color: "#fdba74", marginBottom: "2px" }}>Location</div>
+                    <div style={{ fontSize: "0.95rem", color: "#fff" }}>Melbourne, VIC</div>
+                  </div>
                 </div>
               </div>
-            </Section>
-          </div>
+            </div>
 
-          {/* SECTION 04: CONTACT */}
-          <div className="boring-col">
-            <Section number="04" title="CONTACT">
-              <div className="space-y-12">
-                {sent ? (
-                  <div className="text-center py-12 border border-red-600 bg-red-600/5">
-                    <Send className="mx-auto mb-4 text-red-600" />
-                    <h3 className="text-lg font-bold uppercase mb-2">Transmission Received</h3>
-                    <p className="text-xs text-gray-500">I'll get back to you shortly.</p>
-                    <button onClick={() => setSent(false)} className="mt-8 text-[10px] font-bold border-b border-red-600 uppercase">Resend</button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 border border-minimal-border p-6">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-[10px] uppercase font-bold text-gray-400">Node ID</label>
-                        <input type="text" required placeholder="YOUR NAME" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="minimal-input" />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] uppercase font-bold text-gray-400">Return URL</label>
-                        <input type="email" required placeholder="EMAIL" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className="minimal-input" />
-                      </div>
+            {/* Form */}
+            <div style={{ background: "#fff", borderRadius: "1.5rem", padding: "2.5rem", boxShadow: "0 25px 50px rgba(0,0,0,0.25)" }}>
+              {sent ? (
+                <div style={{ textAlign: "center", padding: "3rem 0" }}>
+                  <Send style={{ margin: "0 auto 1rem", color: "#ef4444", width: 32, height: 32 }} />
+                  <h3 style={{ fontSize: "1.3rem", fontWeight: 600, color: "#111827", marginBottom: "0.5rem" }}>Message sent!</h3>
+                  <p style={{ fontSize: "0.95rem", color: "#9ca3af" }}>I'll get back to you shortly.</p>
+                  <button onClick={() => setSent(false)} style={{ marginTop: "2rem", fontSize: "0.8rem", fontWeight: 700, borderBottom: "2px solid #ef4444", color: "#ef4444", textTransform: "uppercase", background: "none", padding: "0 0 2px" }}>Send another</button>
+                </div>
+              ) : (
+                <>
+                  <h3 style={{ fontSize: "1.4rem", fontWeight: 500, color: "#111827", marginBottom: "1.75rem" }}>Send a Message</h3>
+                  <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                      {[
+                        { label: "Name", key: "name", type: "text", placeholder: "Alex Hofmann" },
+                        { label: "Email", key: "email", type: "email", placeholder: "you@example.com" },
+                      ].map(f => (
+                        <div key={f.key}>
+                          <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>{f.label}</label>
+                          <input type={f.type} required placeholder={f.placeholder} value={(form as any)[f.key]} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+                            style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: "2px solid #e5e7eb", background: "#f9fafb", fontSize: "1rem", outline: "none", transition: "border-color 0.2s" }}
+                            onFocus={e => (e.target.style.borderColor = "#f87171")}
+                            onBlur={e => (e.target.style.borderColor = "#e5e7eb")} />
+                        </div>
+                      ))}
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-bold text-gray-400">Channel Path</label>
-                      <input type="text" required placeholder="SUBJECT" value={form.subject} onChange={e => setForm(f => ({ ...f, subject: e.target.value }))} className="minimal-input" />
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Subject</label>
+                      <input type="text" required placeholder="What's this about?" value={form.subject} onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
+                        style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: "2px solid #e5e7eb", background: "#f9fafb", fontSize: "1rem", outline: "none" }}
+                        onFocus={e => (e.target.style.borderColor = "#f87171")}
+                        onBlur={e => (e.target.style.borderColor = "#e5e7eb")} />
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-bold text-gray-400">Payload</label>
-                      <textarea rows={5} required placeholder="MESSAGE..." value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} className="minimal-input resize-none" />
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Message</label>
+                      <textarea rows={5} required placeholder="Tell me about your project..." value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
+                        style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: "2px solid #e5e7eb", background: "#f9fafb", fontSize: "1rem", outline: "none", resize: "none" }}
+                        onFocus={e => (e.target.style.borderColor = "#f87171")}
+                        onBlur={e => (e.target.style.borderColor = "#e5e7eb")} />
                     </div>
-                    {formError && <p className="text-red-600 text-[10px] font-bold uppercase text-center">{formError}</p>}
-                    <button type="submit" disabled={sending} className="minimal-submit">
-                      {sending ? "TRANSMITTING..." : "SEND MESSAGE"}
+                    {formError && <p style={{ color: "#ef4444", fontSize: "0.9rem" }}>{formError}</p>}
+                    <button type="submit" disabled={sending}
+                      style={{ width: "100%", padding: "1rem", borderRadius: "0.75rem", background: "linear-gradient(135deg, #ef4444, #f97316)", color: "#fff", fontSize: "1rem", fontWeight: 600, border: "none", boxShadow: "0 4px 16px rgba(239,68,68,0.3)", transition: "box-shadow 0.2s" }}>
+                      {sending ? "Sending..." : "Send Message"}
                     </button>
                   </form>
-                )}
-
-                <div className="flex flex-wrap justify-center gap-8 pt-16 opacity-60">
-                  <a href="mailto:alexanderhofmann@outlook.com.au" className="flex items-center gap-2 text-[10px] font-bold hover:text-red-600">
-                    <Mail size={12} /> alexanderhofmann@outlook.com.au
-                  </a>
-                  <a href="https://github.com/switchhoff" className="flex items-center gap-2 text-[10px] font-bold hover:text-red-600 transition-colors">
-                    <GithubIcon size={12} /> switchhoff
-                  </a>
-                  <a href="https://linkedin.com/in/hofmannalexb/" className="flex items-center gap-2 text-[10px] font-bold hover:text-red-600 transition-colors">
-                    <LinkedinIcon size={12} /> linkedin
-                  </a>
-                  <div className="flex items-center gap-2 text-[10px] font-bold">
-                    <MapPin size={12} /> Melbourne, VIC
-                  </div>
-                </div>
-              </div>
-            </Section>
+                </>
+              )}
+            </div>
           </div>
-
         </div>
+      </section>
 
-        <footer className="mt-[clamp(4rem,10vh,8rem)] pb-8 flex justify-between items-center opacity-30 text-[10px] font-bold uppercase tracking-widest border-t border-minimal-border pt-8">
-          <div>© 2025 HOFFSWITCH</div>
-          <div className="flex gap-4">
-            <a href="#">Security</a>
-            <a href="#">Protocol</a>
-          </div>
-        </footer>
-      </div>
+      <footer style={{ background: "#111827", color: "#6b7280", padding: "2rem", textAlign: "center", fontSize: "0.875rem" }}>
+        © 2026 Alex Hofmann · hoffswitch
+      </footer>
     </div>
-  );
-}
-
-function Section({ number, title, children }: { number: string; title: string, children: React.ReactNode }) {
-  return (
-    <section>
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mb-12"
-      >
-        <div className="section-marker">
-          <span className="section-number">{number}</span>
-          <div className="section-line" />
-        </div>
-        <h2 className="section-title">{title}</h2>
-      </motion.div>
-      {children}
-    </section>
   );
 }

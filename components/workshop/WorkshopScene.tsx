@@ -4,7 +4,6 @@ import { getMappedHotspots, getCategoryColor, type Hotspot } from "@/lib/hotspot
 import { BLOCK_MAPPINGS, CATEGORY_COLORS } from "@/lib/svgBlockMappings";
 import { getPathData } from "@/lib/pathData";
 import { WeatherWindow } from "./WeatherWindow";
-import AmbientPlayer from "./AmbientPlayer";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
@@ -464,9 +463,6 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
           );
         })}
       </div>
-      {/* Ambient player — angled text + play button just above scene */}
-      <AmbientPlayer />
-
       {/* Weather window SVG layer — same coordinate space as blocks */}
       <svg
         viewBox="0 0 960 540"

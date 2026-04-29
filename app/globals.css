@@ -1,10 +1,76 @@
 @import "tailwindcss";
 
+/* ── Shadcn/Elements design token map ── */
+:root {
+  --font-size: 16px;
+  --background: #ffffff;
+  --foreground: oklch(0.145 0 0);
+  --card: #ffffff;
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: #030213;
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.0058 264.53);
+  --secondary-foreground: #030213;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #e9ebef;
+  --accent-foreground: #030213;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --input: transparent;
+  --input-background: #f3f3f5;
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ── Portfolio custom tokens ── */
 :root {
   --bg:           #f6f8f3;
   --surface:      #ffffff;
   --surface-2:    #f0f4ec;
-  --border:       #dce5d6;
+  --scene-border:       #dce5d6;
   --border-mid:   #c2d0b8;
   --border-strong:#a8bc9c;
   --pine:         #2d5a3d;
@@ -52,15 +118,15 @@ button, a, input, svg, path, [role="button"] { cursor: none !important; }
 
 /* Subtle dot grid */
 .dot-grid {
-  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-image: radial-gradient(circle, var(--scene-border) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
 /* Fine line grid */
 .line-grid {
   background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    linear-gradient(var(--scene-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--scene-border) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -123,7 +189,7 @@ button, a, input, svg, path, [role="button"] { cursor: none !important; }
 /* Card */
 .card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--scene-border);
 }
 .card:hover { border-color: var(--border-mid); }
 
@@ -172,7 +238,7 @@ button, a, input, svg, path, [role="button"] { cursor: none !important; }
   justify-content: center;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--scene-border);
   background: var(--surface);
   color: var(--text-muted);
   transition: all 0.15s;
@@ -186,7 +252,7 @@ button, a, input, svg, path, [role="button"] { cursor: none !important; }
 
 /* Form fields */
 .form-field {
-  border: 1px solid var(--border);
+  border: 1px solid var(--scene-border);
   outline: none;
   transition: border-color 0.15s;
 }

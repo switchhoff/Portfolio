@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   weight: ["300", "400", "500", "600"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -21,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${mono.variable} h-full`}>
+    <html lang="en" className={`${mono.variable} ${inter.variable} h-full`}>
       <body className="scanlines min-h-full flex flex-col">{children}</body>
     </html>
   );

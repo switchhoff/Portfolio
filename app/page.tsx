@@ -8,6 +8,7 @@ import { type Hotspot } from "@/lib/hotspots-config";
 import { GkLogo } from "@/components/GkLogo";
 import { getProjects } from "@/lib/projects";
 import BoringView from "@/components/resume/BoringView";
+import AmbientPlayer from "@/components/workshop/AmbientPlayer";
 import { Gamepad2, FileText } from "lucide-react";
 
 // ─── Custom Cursor ────────────────────────────────────────────────────────────
@@ -440,6 +441,31 @@ export default function Home() {
             )}
           </AnimatePresence>
         </main>
+
+        {/* AmbientPlayer — lives outside AnimatePresence so audio persists on tab switch */}
+        <div style={{
+          position: "fixed",
+          top: "60px",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          pointerEvents: "none",
+          zIndex: 15,
+          opacity: activeTab === "fun" ? 1 : 0,
+          transition: "opacity 0.4s",
+        }}>
+          <div style={{
+            position: "relative",
+            width: "min(100vw, calc((100vh - 60px) * 16 / 9))",
+            height: "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
+            pointerEvents: "none",
+          }}>
+            <AmbientPlayer />
+          </div>
+        </div>
 
 
 

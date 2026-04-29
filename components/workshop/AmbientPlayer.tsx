@@ -21,9 +21,11 @@ function fadeTo(audio: HTMLAudioElement, target: number, ms: number) {
 export default function AmbientPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const playingRef = useRef(false);
 
   useEffect(() => {
+    setMounted(true);
     const audio = new Audio(SRC);
     audio.loop = true;
     audio.volume = FULL_VOLUME;
@@ -67,11 +69,13 @@ export default function AmbientPlayer() {
     }
   }
 
+  if (!mounted) return null;
+
   return (
     <div style={{
       position: "absolute",
       left: "24%",
-      top: "19%",
+      top: "18%",
       transform: "rotate(-25deg)",
       transformOrigin: "left center",
       display: "flex",

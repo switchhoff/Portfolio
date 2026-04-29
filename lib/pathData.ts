@@ -180,7 +180,7 @@ export const PATH_DATA: Record<number, PathObject> = {
   34: {
     path: 34,
     name: "Contact",
-    category: "about",
+    category: "projects",
     description: "",
     links: [
       { external: "tel:+61403326837", label: "+61 403326837" },
@@ -378,7 +378,11 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Alex Hofmann",
     category: "about",
     description: "Melbourne VIC | Age 24. Engineering problem solver with passion for building things. Defence tech background across cutting-edge R&D to forward deployments. Love a challenge.",
-    links: [],
+    links: [
+      { external: "tel:+61403326837", label: "+61 403326837" },
+      { external: "mailto:alexanderhofmann@outlook.com.au", label: "alexanderhofmann@outlook.com.au" },
+      { external: "https://www.linkedin.com/in/hofmannalexb", label: "www.linkedin.com/in/hofmannalexb" },
+    ],
   },
   78: {
     path: 78,
