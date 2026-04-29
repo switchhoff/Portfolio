@@ -810,12 +810,13 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         fontSize: "15px",
                         fontWeight: 600,
                         color: "#222",
-                        textAlign: "right",
                         flex: 1,
                         marginLeft: "8px",
                         display: "flex",
                         alignItems: "center",
+                        justifyContent: "flex-end",
                         gap: "6px",
+                        textAlign: "right",
                       }}>
                         {(pathData.category === "experience" || pathData.category === "education") && pathData.company
                           ? pathData.company
