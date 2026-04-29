@@ -353,7 +353,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       {/* Menu Bar */}
       <div style={{
         position: "absolute",
-        top: "175px",
+        top: "185px",
         right: "75px",
         display: "flex",
         flexDirection: "column",

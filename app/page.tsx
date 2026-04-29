@@ -316,37 +316,63 @@ export default function Home() {
           <div style={{ width: "clamp(140px, 20vw, 300px)" }} />
 
           {/* Tab Switcher in Header */}
-          <div style={{ 
-            display: "flex", 
-            gap: "2px",
-            background: darkMode ? "#2a2a2a" : "#f0f4ec", 
-            padding: "2px", 
-            borderRadius: "4px",
-            border: `1px solid ${darkMode ? "#444" : P.border}`,
-            scale: "clamp(0.8, 1vw, 1)",
-            transition: "background 0.5s, border-color 0.5s",
+          <div style={{
+            position: "relative",
+            display: "flex",
+            background: darkMode ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)",
+            borderRadius: "14px",
+            padding: "4px",
+            border: `1px solid ${darkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
+            boxShadow: "inset 0 1px 3px rgba(0,0,0,0.15)",
           }}>
+            {/* Sliding pill indicator */}
+            <motion.div
+              layout
+              transition={{ type: "spring", stiffness: 500, damping: 40 }}
+              style={{
+                position: "absolute",
+                top: "4px",
+                bottom: "4px",
+                borderRadius: "10px",
+                background: activeTab === "fun"
+                  ? "linear-gradient(135deg, #cc0000, #ff4444)"
+                  : (darkMode ? "rgba(255,255,255,0.15)" : "#ffffff"),
+                boxShadow: activeTab === "fun"
+                  ? "0 2px 12px rgba(200,0,0,0.4)"
+                  : "0 1px 4px rgba(0,0,0,0.15)",
+                left: activeTab === "fun" ? "4px" : "calc(50% + 2px)",
+                width: "calc(50% - 6px)",
+              }}
+            />
             {[
-              { id: "fun", label: "FUN", icon: <Gamepad2 size={12} /> },
-              { id: "boring", label: "BORING", icon: <FileText size={12} /> }
+              { id: "fun", label: "FUN", icon: <Gamepad2 size={14} /> },
+              { id: "boring", label: "BORING", icon: <FileText size={14} /> }
             ].map((t) => (
               <button
                 key={t.id}
                 onClick={() => setActiveTab(t.id as any)}
                 style={{
+                  position: "relative",
+                  zIndex: 1,
                   display: "flex",
                   alignItems: "center",
-                  gap: "6px",
-                  padding: "6px clamp(10px, 2vw, 20px)",
-                  fontSize: "clamp(8px, 0.9vw, 9px)",
+                  gap: "7px",
+                  padding: "9px 22px",
+                  fontSize: "11px",
                   fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  borderRadius: "2px",
+                  letterSpacing: "0.1em",
+                  borderRadius: "10px",
                   cursor: "pointer",
                   border: "none",
-                  transition: "all 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
-                  background: activeTab === t.id ? "#ff0000" : "transparent",
-                  color: activeTab === t.id ? "#fff" : (darkMode ? "#aaa" : P.muted),
+                  background: "transparent",
+                  transition: "color 0.2s",
+                  color: activeTab === t.id
+                    ? "#fff"
+                    : (darkMode ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)"),
+                  flex: 1,
+                  justifyContent: "center",
+                  whiteSpace: "nowrap",
+                  fontFamily: "var(--font-mono)",
                 }}
               >
                 {t.icon} {t.label}
@@ -443,20 +469,25 @@ export default function Home() {
         </main>
 
         {/* AmbientPlayer — lives outside AnimatePresence so audio persists on tab switch */}
-        <div style={{
-          position: "fixed",
-          top: "60px",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          pointerEvents: "none",
-          zIndex: 15,
-          opacity: activeTab === "fun" ? 1 : 0,
-          transition: "opacity 0.4s",
-        }}>
+        <motion.div
+          animate={{
+            opacity: activeTab === "fun" ? 1 : 0,
+            filter: activeTab === "fun" ? "blur(0px)" : "blur(10px)",
+          }}
+          transition={{ duration: 0.4 }}
+          style={{
+            position: "fixed",
+            top: "60px",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+            zIndex: 15,
+          }}
+        >
           <div style={{
             position: "relative",
             width: "min(100vw, calc((100vh - 60px) * 16 / 9))",
@@ -465,7 +496,7 @@ export default function Home() {
           }}>
             <AmbientPlayer />
           </div>
-        </div>
+        </motion.div>
 
 
 
