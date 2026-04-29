@@ -3,7 +3,7 @@ export type ContentBlock =
   | { type: 'image' | 'gif'; src: string; alt?: string; link?: string }
   | { type: 'gallery'; images: { src: string; alt?: string; link?: string }[] }
   | { type: 'audio'; src: string; label: string }
-  | { type: 'link'; url: string; label: string; icon?: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone' };
+  | { type: 'link'; url: string; label?: string; icon?: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone'; fontSize?: string | number };
 
 export interface PathObject {
   path: number;
@@ -400,10 +400,10 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "about",
     content: [
       { type: 'text', text: "Melbourne VIC | Age 24. Engineering problem solver with passion for building things. Defence tech background across cutting-edge R&D to forward deployments. Love a challenge." },
-      { type: 'link', url: "tel:+61403326837", label: "+61 403326837", icon: "phone" },
-      { type: 'link', url: "mailto:alexanderhofmann@outlook.com.au", label: "alexanderhofmann@outlook.com.au", icon: "mail" },
-      { type: 'link', url: "https://www.linkedin.com/in/hofmannalexb", label: "www.linkedin.com/in/hofmannalexb", icon: "linkedin" },
-      { type: 'link', url: "https://github.com/switchhoff", label: "github/switchhoff", icon: "github" }
+      { type: 'link', url: "tel:+61403326837", label: "+61 403 326 837", icon: "phone", fontSize: "12px" },
+      { type: 'link', url: "mailto:alexanderhofmann@outlook.com.au", label: "alexanderhofmann@outlook.com.au", icon: "mail", fontSize: "12px" },
+      { type: 'link', url: "https://www.linkedin.com/in/hofmannalexb", icon: "linkedin" },
+      { type: 'link', url: "https://github.com/switchhoff", icon: "github" }
     ],
   },
   78: {

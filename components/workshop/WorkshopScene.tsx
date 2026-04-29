@@ -883,7 +883,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                 target={block.url.startsWith("tel:") || block.url.startsWith("mailto:") ? undefined : "_blank"}
                                 rel="noopener noreferrer"
                                 style={{
-                                  fontSize: "14px",
+                                  fontSize: block.fontSize || "14px",
                                   color: "#333",
                                   textDecoration: "none",
                                   fontWeight: 600,
@@ -895,7 +895,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                 onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
                                 onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                               >
-                                {icon} {block.label}
+                                {icon} {block.label && <span>{block.label}</span>}
                               </a>
                             );
                           }
