@@ -234,6 +234,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
   const [golfSending, setGolfSending] = useState(false);
   const [golfSent, setGolfSent] = useState(false);
   const [golfError, setGolfError] = useState("");
+  const [showOverland, setShowOverland] = useState(false);
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
   const [audioVolume, setAudioVolume] = useState(0.5);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -1245,7 +1246,16 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                   return (
                                     <div key={idx} style={{ marginBottom: "2px", marginLeft: item.sub ? "10px" : "0" }}>
                                       {item.sub ? "◦" : "•"}{" "}
-                                      {item.href ? (
+                                      {item.action === "show_overland" ? (
+                                        <button
+                                          onClick={() => setShowOverland(true)}
+                                          style={{
+                                            background: "none", border: "none", padding: 0, cursor: "pointer",
+                                            color: "#000", textDecoration: "underline", textUnderlineOffset: "2px",
+                                            fontSize: "12px", fontFamily: "inherit", fontWeight: 400,
+                                          }}
+                                        >{item.label}</button>
+                                      ) : item.href ? (
                                         <a href={item.href} target="_blank" rel="noopener noreferrer"
                                           style={{ color: "#000", textDecoration: "underline", textUnderlineOffset: "2px" }}>
                                           {item.label}
@@ -1424,6 +1434,34 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
           </>
         );
       })()}
+
+      {/* Overland Image Modal */}
+      {showOverland && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0, 0, 0, 0.75)", zIndex: 9999,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "20px"
+        }} onClick={() => setShowOverland(false)}>
+          <div style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh" }} onClick={(e) => e.stopPropagation()}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/overland.jpg" alt="Overland Track" style={{ maxWidth: "100%", maxHeight: "90vh", borderRadius: "8px", display: "block" }} />
+            <button
+              onClick={() => setShowOverland(false)}
+              style={{
+                position: "absolute", top: "-15px", right: "-15px",
+                width: "30px", height: "30px", borderRadius: "50%",
+                background: "#ef4444", color: "#fff", border: "2px solid #fff",
+                fontSize: "16px", fontWeight: "bold", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                boxShadow: "0 4px 6px rgba(0,0,0,0.3)"
+              }}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

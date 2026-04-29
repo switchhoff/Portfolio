@@ -180,6 +180,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Multiboard",
     category: "projects",
     description: "135+ Multiboard grids 3D printed and installed across the workshop — wall-mounting tools, art, monitors, and keeping cables under control.",
+    image: "/multiboard.jpg",
     links: [{ external: "https://multibuild.io/", label: "multibuild.io" }],
   },
   32: {
@@ -317,6 +318,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     company: "Monash Engineering",
     role: "Robot Building Competition Winner",
     description: "Completed challenges requiring robots to line-follow specific colour segments at speed — precision engineering under competitive conditions.",
+    image: "/rbc.JPG",
     tags: ["HACKATHON"],
     links: [],
   },
@@ -369,6 +371,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Monash University",
     category: "education",
     description: "",
+    image: "/grad.jpg",
     entries: [
       { date: "2024", title: "Master of Electrical Engineering" },
       { date: "2020–2023", title: "Bachelor of Robotics and Mechatronics Engineering" },
@@ -389,6 +392,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     company: "Monash High Powered Rocketry",
     role: "Flight Systems Member",
     description: "Conducted research on non-combustible rocket deployment systems. Composite manufacturing of rocket body components.",
+    image: "/HPR.jpg",
     tags: ["ROCKETRY", "MANUFACTURING"],
     links: [],
   },
@@ -400,6 +404,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     company: "Monash Uncrewed Aerial Systems",
     role: "Aerostructures Training Officer",
     description: "Sub-team manager responsible for composite manufacturing. Lead role in design and manufacture of destructive testing system.",
+    image: "/uas.png",
     tags: ["DRONES", "STUDENT TEAMS"],
     links: [],
   },
@@ -512,7 +517,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "interests",
     description: "",
     items: [
-      "Overland Track",
+      { label: "Overland Track", action: "show_overland" },
       { label: "Table Mountain", href: "https://www.strava.com/activities/13270686802" },
       { label: "Mt Kosciuszko", href: "https://www.strava.com/activities/16636317218" }
     ],
@@ -524,7 +529,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "interests",
     description: "",
     items: [
-      "Keysborough District FC",
+      { label: "Keysborough District FC", href: "https://www.facebook.com/p/Keysborough-District-Football-Club-100057866941063/" },
       "Monash University SC",
       "Adelaide City FC"
     ],

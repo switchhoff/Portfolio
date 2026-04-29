@@ -43,11 +43,27 @@ function getInterestItems(path: number): any[] {
     { label: "@alexhofmannn", href: "https://instagram.com/alexhofmannn" },
     { label: "@alexhofmannphotography", href: "https://instagram.com/alexhofmannphotography" }]; // Photography — link-only card
   if (path === 10) return ["Alto", "Baritone"]; // Saxophone — items are audio clips, show instruments
-  if (!d.items) return [];
-  return d.items.filter(i => {
-    if (typeof i === "string") return true;
-    return !("action" in i) && !("audio" in i);
-  });
+  
+  const extractedItems: any[] = [];
+  
+  if (d.items) {
+    extractedItems.push(...d.items.filter(i => {
+      if (typeof i === "string") return true;
+      return !("audio" in i) && (!("action" in i) || i.action === "show_overland");
+    }));
+  }
+  
+  if (d.content) {
+    d.content.forEach(block => {
+      if (block.type === 'text') {
+        extractedItems.push(block.text);
+      } else if (block.type === 'link') {
+        extractedItems.push({ label: block.label || block.url, href: block.url });
+      }
+    });
+  }
+  
+  return extractedItems;
 }
 
 const EDUCATION = [
@@ -80,7 +96,7 @@ function Heading({ title, c1, c2, center, dark }: { title: string; c1: string; c
   );
 }
 
-function InterestCard({ pathId, interest, items, dm, i }: { pathId: number, interest: any, items: any[], dm: boolean, i: number }) {
+function InterestCard({ pathId, interest, items, dm, i, onShowOverland }: { pathId: number, interest: any, items: any[], dm: boolean, i: number, onShowOverland: () => void }) {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <motion.div
@@ -109,10 +125,22 @@ function InterestCard({ pathId, interest, items, dm, i }: { pathId: number, inte
           const isString = typeof item === "string";
           const label = isString ? item : item.label;
           const href = !isString ? item.href : undefined;
+          const action = !isString ? item.action : undefined;
 
           return (
             <div key={idx} style={{ fontSize: "0.875rem", color: dm ? "#d1d5db" : "#3a3d44ff", display: "flex", alignItems: "center" }}>
-              {href ? (
+              {action === "show_overland" ? (
+                <button
+                  onClick={onShowOverland}
+                  style={{
+                    background: "none", border: "none", padding: 0, cursor: "pointer",
+                    color: dm ? "#348efdff" : "#104db1ff", textDecoration: "underline", textUnderlineOffset: "2px",
+                    fontSize: "inherit", fontFamily: "inherit", fontWeight: "inherit"
+                  }}
+                >
+                  {label}
+                </button>
+              ) : href ? (
                 <a href={href} target="_blank" rel="noreferrer" style={{ color: dm ? "#348efdff" : "#104db1ff", textDecoration: "none" }}>
                   {label}
                 </a>
@@ -131,12 +159,69 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
   const dm = darkMode ?? false;
   const [formState, handleSubmit] = useForm("xzdynydr");
   const [activeHackathon, setActiveHackathon] = useState(0);
+  const [showOverland, setShowOverland] = useState(false);
+
+  const navItems = [
+    { id: "boring-about",     label: "About",      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> },
+    { id: "boring-experience",label: "Experience", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> },
+    { id: "boring-education", label: "Education",  icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg> },
+    { id: "boring-projects",  label: "Projects",   icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.6-1.4 4.9-3.5 6.2V17a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-1.8A7 7 0 0 1 5 9a7 7 0 0 1 7-7z"/></svg> },
+    { id: "boring-interests", label: "Interests",  icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg> },
+  ];
 
   return (
-    <div style={{ minHeight: "100vh", width: "100%", background: dm ? "#0f0f0f" : "#fff", color: dm ? "#f9fafb" : "#111827", fontFamily: S.font, fontSize: "16px" }}>
+    <div style={{ minHeight: "100vh", width: "100%", background: dm ? "#0f0f0f" : "#fff", color: dm ? "#f9fafb" : "#111827", fontFamily: S.font, fontSize: "16px", position: "relative" }}>
+
+      {/* ── SIDEBAR TOC ── */}
+      <nav style={{
+        position: "fixed",
+        left: "1.25rem",
+        top: "50%",
+        transform: "translateY(-50%)",
+        zIndex: 80,
+        display: "flex",
+        flexDirection: "column",
+        gap: "0.5rem",
+      }}>
+        {navItems.map(({ id, label, icon }) => (
+          <button
+            key={id}
+            title={label}
+            onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })}
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "10px",
+              border: `1px solid ${dm ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+              background: dm ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)",
+              color: dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backdropFilter: "blur(8px)",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.color = dm ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.85)";
+              (e.currentTarget as HTMLButtonElement).style.background = dm ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,1)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = dm ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.18)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.color = dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)";
+              (e.currentTarget as HTMLButtonElement).style.background = dm ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = dm ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
+            }}
+          >
+            {icon}
+          </button>
+        ))}
+      </nav>
 
       {/* ── ABOUT ── */}
-      <section style={{
+      <section id="boring-about" style={{
         ...S.section,
         position: "relative",
         overflow: "hidden",
@@ -194,7 +279,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── EXPERIENCE ── */}
-      <section style={{ ...S.section, background: dm ? "#0f0f0f" : "#fff" }}>
+      <section id="boring-experience" style={{ ...S.section, background: dm ? "#0f0f0f" : "#fff" }}>
         <div style={S.inner}>
           <Heading title="Experience" c1="#ef4444" c2="#f97316" dark={dm} />
 
@@ -336,7 +421,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── EDUCATION ── */}
-      <section style={{ ...S.section, background: dm ? "linear-gradient(135deg, #111 0%, #1a0a0a 100%)" : "linear-gradient(135deg, #fafafa 0%, #fff5f5 100%)" }}>
+      <section id="boring-education" style={{ ...S.section, background: dm ? "linear-gradient(135deg, #111 0%, #1a0a0a 100%)" : "linear-gradient(135deg, #fafafa 0%, #fff5f5 100%)" }}>
         <div style={S.inner}>
           <Heading title="Education" c1="#f97316" c2="#ef4444" dark={dm} />
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
@@ -374,7 +459,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── PROJECTS ── */}
-      <section style={{ ...S.section, background: dm ? "linear-gradient(135deg, #111 0%, #0a0a1a 100%)" : "linear-gradient(135deg, #fafafa 0%, #f0f9ff 100%)", position: "relative", overflow: "hidden" }}>
+      <section id="boring-projects" style={{ ...S.section, background: dm ? "linear-gradient(135deg, #111 0%, #0a0a1a 100%)" : "linear-gradient(135deg, #fafafa 0%, #f0f9ff 100%)", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 70% 30%, rgba(99,102,241,0.05), transparent 50%), radial-gradient(circle at 30% 70%, rgba(59,130,246,0.05), transparent 50%)", pointerEvents: "none" }} />
         <div style={{ ...S.innerWide, position: "relative" }}>
           <Heading title="Projects" c1="#6366f1" c2="#ec4899" dark={dm} />
@@ -405,7 +490,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── INTERESTS ── */}
-      <section style={{ ...S.section, background: dm ? "#0f0f0f" : "#fff" }}>
+      <section id="boring-interests" style={{ ...S.section, background: dm ? "#0f0f0f" : "#fff" }}>
         <div style={S.inner}>
           <Heading title="Interests" c1="#ef4444" c2="#ec4899" dark={dm} />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.25rem" }}>
@@ -413,7 +498,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
               const interest = PATH_DATA[pathId];
               if (!interest) return null;
               const items = getInterestItems(pathId);
-              return <InterestCard key={pathId} pathId={pathId} interest={interest} items={items} dm={dm} i={i} />;
+              return <InterestCard key={pathId} pathId={pathId} interest={interest} items={items} dm={dm} i={i} onShowOverland={() => setShowOverland(true)} />;
             })}
           </div>
         </div>
@@ -511,6 +596,34 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       <footer style={{ background: dm ? "#000" : "#111827", color: "#6b7280", padding: "2rem", textAlign: "center", fontSize: "0.875rem" }}>
         © 2026 Alex Hofmann · offswitch
       </footer>
+
+      {/* Overland Image Modal */}
+      {showOverland && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0, 0, 0, 0.75)", zIndex: 9999,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "20px"
+        }} onClick={() => setShowOverland(false)}>
+          <div style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh" }} onClick={(e) => e.stopPropagation()}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/overland.jpg" alt="Overland Track" style={{ maxWidth: "100%", maxHeight: "90vh", borderRadius: "8px", display: "block" }} />
+            <button
+              onClick={() => setShowOverland(false)}
+              style={{
+                position: "absolute", top: "-15px", right: "-15px",
+                width: "30px", height: "30px", borderRadius: "50%",
+                background: "#ef4444", color: "#fff", border: "2px solid #fff",
+                fontSize: "16px", fontWeight: "bold", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                boxShadow: "0 4px 6px rgba(0,0,0,0.3)"
+              }}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
