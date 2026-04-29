@@ -446,19 +446,15 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   94: {
     path: 94,
-    name: "Favourites",
+    name: "Video Games",
     category: "interests",
-    description: "Favourite Video Games",
+    description: "Favourites",
     items: [
       { label: "Terraria", href: "https://terraria.wiki.gg/", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVNzn3aErkS59Ym_qhqbZYFd8laElFfxviQ&s" },
       { label: "Civilization V", href: "https://civilization.fandom.com/wiki/Civilization_V", image: "https://images.ctfassets.net/wn7ipiv9ue5v/2ROTJ11e217xt6VmC5F0tq/3f83f5639df2cb3567d69ec49a655c8c/2KGMKT_CIV5_COMPLETE_AG_FOB_NO_RATING_1.jpg" },
       { label: "Fall Guys", href: "https://www.fallguys.com/en-US", image: "https://i.redd.it/oetdev0d40pd1.png" },
     ],
-    links: [
-      { external: "https://terraria.org/", label: "Terraria" },
-      { external: "https://store.steampowered.com/app/8930/Sid_Meiers_Civilization_V/", label: "Civilization V" },
-      { external: "https://www.fallguys.com/", label: "Fall Guys" },
-    ],
+    links: [],
   },
   96: {
     path: 96,
