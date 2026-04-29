@@ -7,6 +7,7 @@ import { type Project } from "@/lib/projects";
 interface BoringViewProps {
   projects: Project[];
   age: number;
+  darkMode?: boolean;
 }
 
 const WORK = [
@@ -93,7 +94,6 @@ const S = {
   section: { padding: "7rem clamp(1.5rem, 6vw, 6rem)" },
   inner: { maxWidth: "1100px", margin: "0 auto" },
   innerWide: { maxWidth: "1280px", margin: "0 auto" },
-  heading: { fontSize: "3rem", fontWeight: 300, color: "#111827", marginBottom: "1rem", lineHeight: 1.15 },
   bar: (color1: string, color2: string) => ({
     height: "6px", width: "96px", borderRadius: "9999px",
     background: `linear-gradient(to right, ${color1}, ${color2})`,
@@ -101,17 +101,18 @@ const S = {
   }),
 };
 
-function Heading({ title, c1, c2, center }: { title: string; c1: string; c2: string; center?: boolean }) {
+function Heading({ title, c1, c2, center, dark }: { title: string; c1: string; c2: string; center?: boolean; dark?: boolean }) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
       style={{ marginBottom: "4rem", textAlign: center ? "center" : "left" }}>
-      <h2 style={S.heading}>{title}</h2>
+      <h2 style={{ fontSize: "3rem", fontWeight: 300, color: dark ? "#f9fafb" : "#111827", marginBottom: "1rem", lineHeight: 1.15 }}>{title}</h2>
       <div style={{ ...S.bar(c1, c2), ...(center ? { margin: "0 auto 4rem" } : {}) }} />
     </motion.div>
   );
 }
 
-export default function BoringView({ projects, age }: BoringViewProps) {
+export default function BoringView({ projects, age, darkMode }: BoringViewProps) {
+  const dm = darkMode ?? false;
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -135,14 +136,16 @@ export default function BoringView({ projects, age }: BoringViewProps) {
   };
 
   return (
-    <div style={{ minHeight: "100vh", width: "100%", background: "#fff", color: "#111827", fontFamily: S.font, fontSize: "16px" }}>
+    <div style={{ minHeight: "100vh", width: "100%", background: dm ? "#0f0f0f" : "#fff", color: dm ? "#f9fafb" : "#111827", fontFamily: S.font, fontSize: "16px" }}>
 
       {/* ── ABOUT ── */}
       <section style={{
         ...S.section,
         position: "relative",
         overflow: "hidden",
-        background: "radial-gradient(circle at 30% 20%, rgba(239,68,68,0.07), transparent 50%), radial-gradient(circle at 70% 80%, rgba(251,146,60,0.07), transparent 50%)",
+        background: dm
+          ? "radial-gradient(circle at 30% 20%, rgba(239,68,68,0.12), transparent 50%), radial-gradient(circle at 70% 80%, rgba(251,146,60,0.10), transparent 50%), #0f0f0f"
+          : "radial-gradient(circle at 30% 20%, rgba(239,68,68,0.07), transparent 50%), radial-gradient(circle at 70% 80%, rgba(251,146,60,0.07), transparent 50%)",
       }}>
         <div style={S.innerWide}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "5rem", alignItems: "center" }}>
@@ -155,7 +158,7 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                   background: "linear-gradient(135deg, #ef4444, #f97316)",
                   borderRadius: "1.5rem", transform: "rotate(3deg)", opacity: 0.15, filter: "blur(20px)",
                 }} />
-                <div style={{ position: "relative", width: "100%", height: "100%", borderRadius: "1.5rem", overflow: "hidden", border: "2px solid #f3f4f6", boxShadow: "0 25px 50px rgba(0,0,0,0.15)" }}>
+                <div style={{ position: "relative", width: "100%", height: "100%", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 25px 50px rgba(0,0,0,0.15)" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/alex.jpeg" alt="Alex Hofmann" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
@@ -164,20 +167,20 @@ export default function BoringView({ projects, age }: BoringViewProps) {
 
             {/* Bio */}
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <div style={{ display: "inline-block", padding: "0.4rem 1rem", background: "#fef2f2", color: "#dc2626", borderRadius: "9999px", fontSize: "0.9rem", marginBottom: "1.5rem", border: "1px solid #fee2e2" }}>
+              <div style={{ display: "inline-block", padding: "0.4rem 1rem", background: dm ? "rgba(239,68,68,0.15)" : "#fef2f2", color: "#dc2626", borderRadius: "9999px", fontSize: "0.9rem", marginBottom: "1.5rem", border: `1px solid ${dm ? "rgba(239,68,68,0.3)" : "#fee2e2"}` }}>
                 Melbourne, VIC · Open to opportunities
               </div>
-              <h1 style={{ fontSize: "3.5rem", fontWeight: 300, color: "#111827", marginBottom: "0.5rem", lineHeight: 1.1 }}>Alex Hofmann</h1>
-              <p style={{ fontSize: "1.35rem", color: "#6b7280", marginBottom: "1.5rem" }}>Electronics & Software Engineer</p>
-              <p style={{ fontSize: "1.05rem", color: "#374151", lineHeight: 1.8, marginBottom: "1rem" }}>
+              <h1 style={{ fontSize: "3.5rem", fontWeight: 300, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem", lineHeight: 1.1 }}>Alex Hofmann</h1>
+              <p style={{ fontSize: "1.35rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "1.5rem" }}>Electronics & Software Engineer</p>
+              <p style={{ fontSize: "1.05rem", color: dm ? "#d1d5db" : "#374151", lineHeight: 1.8, marginBottom: "1rem" }}>
                 Building <span style={{ color: "#dc2626", fontWeight: 500 }}>resilient systems</span> for forward-deployed environments — across hardware, software, and everything in between.
               </p>
-              <p style={{ fontSize: "1rem", color: "#6b7280", lineHeight: 1.8, marginBottom: "2rem" }}>
+              <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "2rem" }}>
                 I work across the full stack of a system: from hardware selection and bring-up, through embedded and application software, to working directly with customers to derive requirements and shape what gets built.
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
                 {SKILLS.map(s => (
-                  <span key={s} style={{ padding: "0.4rem 1rem", background: "#fff", border: "2px solid #e5e7eb", borderRadius: "9999px", fontSize: "0.9rem", color: "#4b5563" }}>{s}</span>
+                  <span key={s} style={{ padding: "0.4rem 1rem", background: dm ? "#1a1a1a" : "#fff", border: `2px solid ${dm ? "#2a2a2a" : "#e5e7eb"}`, borderRadius: "9999px", fontSize: "0.9rem", color: dm ? "#d1d5db" : "#4b5563" }}>{s}</span>
                 ))}
               </div>
             </motion.div>
@@ -186,9 +189,9 @@ export default function BoringView({ projects, age }: BoringViewProps) {
       </section>
 
       {/* ── EXPERIENCE ── */}
-      <section style={{ ...S.section, background: "#fff" }}>
+      <section style={{ ...S.section, background: dm ? "#0f0f0f" : "#fff" }}>
         <div style={S.inner}>
-          <Heading title="Experience" c1="#ef4444" c2="#f97316" />
+          <Heading title="Experience" c1="#ef4444" c2="#f97316" dark={dm} />
           <div style={{ position: "relative" }}>
             {/* Timeline line */}
             <div style={{ position: "absolute", left: "28px", top: 0, bottom: 0, width: "2px", background: "linear-gradient(to bottom, #ef4444, #f97316, #f59e0b)" }} />
@@ -200,9 +203,9 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                   <div style={{
                     position: "absolute", left: "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%",
                     background: `linear-gradient(135deg, ${w.color}, ${w.color2})`,
-                    border: "3px solid #fff", boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                    border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
                   }} />
-                  <div style={{ background: "#fff", borderRadius: "1.5rem", overflow: "hidden", border: "2px solid #f3f4f6", boxShadow: "0 4px 24px rgba(0,0,0,0.07)", transition: "box-shadow 0.3s" }}>
+                  <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", transition: "box-shadow 0.3s" }}>
                     {/* Image / colour banner */}
                     <div style={{ height: "120px", background: `linear-gradient(135deg, ${w.color}, ${w.color2})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3.5rem", opacity: 0.9 }}>
                       {w.emoji}
@@ -210,15 +213,15 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                     <div style={{ padding: "1.75rem 2rem 2rem" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
                         <div>
-                          <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: "#111827", marginBottom: "0.3rem" }}>{w.title}</h3>
+                          <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem" }}>{w.title}</h3>
                           <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${w.color}, ${w.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
                         </div>
-                        <span style={{ padding: "0.4rem 1rem", background: "#f9fafb", color: "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: "1px solid #e5e7eb" }}>{w.period}</span>
+                        <span style={{ padding: "0.4rem 1rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{w.period}</span>
                       </div>
-                      <p style={{ fontSize: "1rem", color: "#6b7280", lineHeight: 1.75, marginBottom: "1.25rem" }}>{w.note}</p>
+                      <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.75, marginBottom: "1.25rem" }}>{w.note}</p>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
                         {w.tags.map(t => (
-                          <span key={t} style={{ padding: "0.35rem 0.75rem", background: "#f9fafb", color: "#374151", borderRadius: "0.5rem", fontSize: "0.875rem", border: "1px solid #e5e7eb" }}>{t}</span>
+                          <span key={t} style={{ padding: "0.35rem 0.75rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#374151", borderRadius: "0.5rem", fontSize: "0.875rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{t}</span>
                         ))}
                       </div>
                     </div>
@@ -231,30 +234,30 @@ export default function BoringView({ projects, age }: BoringViewProps) {
       </section>
 
       {/* ── EDUCATION ── */}
-      <section style={{ ...S.section, background: "linear-gradient(135deg, #fafafa 0%, #fff5f5 100%)" }}>
+      <section style={{ ...S.section, background: dm ? "linear-gradient(135deg, #111 0%, #1a0a0a 100%)" : "linear-gradient(135deg, #fafafa 0%, #fff5f5 100%)" }}>
         <div style={S.inner}>
-          <Heading title="Education" c1="#f97316" c2="#ef4444" />
+          <Heading title="Education" c1="#f97316" c2="#ef4444" dark={dm} />
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             {EDUCATION.map((edu, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                style={{ background: "#fff", borderRadius: "1.5rem", overflow: "hidden", border: "2px solid #f3f4f6", boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
+                style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
                 <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
                 <div style={{ padding: "2.5rem" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
                     <div style={{ flex: 1 }}>
-                      <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: "#111827", marginBottom: "0.4rem" }}>{edu.degree}</h3>
+                      <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>{edu.degree}</h3>
                       <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${edu.color}, ${edu.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{edu.school}</p>
                     </div>
-                    <span style={{ padding: "0.4rem 1.2rem", background: "#f9fafb", color: "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: "1px solid #e5e7eb" }}>{edu.period}</span>
+                    <span style={{ padding: "0.4rem 1.2rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{edu.period}</span>
                   </div>
                   <p style={{ fontSize: "1rem", color: "#9ca3af", marginBottom: "1.5rem" }}>{edu.description}</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
                     {edu.achievements.map((a, ai) => (
-                      <div key={ai} style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1.1rem", background: "#f9fafb", borderRadius: "0.75rem", border: "1px solid #e5e7eb" }}>
+                      <div key={ai} style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1.1rem", background: dm ? "#111" : "#f9fafb", borderRadius: "0.75rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>
                         <svg style={{ width: "18px", height: "18px", color: "#ef4444", flexShrink: 0 }} fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                         </svg>
-                        <span style={{ fontSize: "0.95rem", color: "#374151" }}>{a}</span>
+                        <span style={{ fontSize: "0.95rem", color: dm ? "#d1d5db" : "#374151" }}>{a}</span>
                       </div>
                     ))}
                   </div>
@@ -266,14 +269,14 @@ export default function BoringView({ projects, age }: BoringViewProps) {
       </section>
 
       {/* ── PROJECTS ── */}
-      <section style={{ ...S.section, background: "linear-gradient(135deg, #fafafa 0%, #f0f9ff 100%)", position: "relative", overflow: "hidden" }}>
+      <section style={{ ...S.section, background: dm ? "linear-gradient(135deg, #111 0%, #0a0a1a 100%)" : "linear-gradient(135deg, #fafafa 0%, #f0f9ff 100%)", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 70% 30%, rgba(99,102,241,0.05), transparent 50%), radial-gradient(circle at 30% 70%, rgba(59,130,246,0.05), transparent 50%)", pointerEvents: "none" }} />
         <div style={{ ...S.innerWide, position: "relative" }}>
-          <Heading title="Projects" c1="#6366f1" c2="#ec4899" />
+          <Heading title="Projects" c1="#6366f1" c2="#ec4899" dark={dm} />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.75rem" }}>
             {projects.map((proj, i) => (
               <motion.div key={proj.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-                style={{ background: "#fff", borderRadius: "1.5rem", overflow: "hidden", border: "2px solid #f3f4f6", transition: "transform 0.25s, box-shadow 0.25s", cursor: "default" }}
+                style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, transition: "transform 0.25s, box-shadow 0.25s", cursor: "default" }}
                 whileHover={{ y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}>
                 {/* Colour banner */}
                 <div style={{ height: "140px", background: `linear-gradient(135deg, ${proj.color}cc, ${proj.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4rem", position: "relative" }}>
@@ -282,11 +285,11 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                   </span>
                 </div>
                 <div style={{ padding: "1.25rem 1.5rem 1.5rem" }}>
-                  <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "#111827", marginBottom: "0.5rem" }}>{proj.name}</h3>
-                  <p style={{ fontSize: "0.9rem", color: "#6b7280", lineHeight: 1.6, marginBottom: "1rem", minHeight: "2.8rem" }}>{proj.tagline}</p>
+                  <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem" }}>{proj.name}</h3>
+                  <p style={{ fontSize: "0.9rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.6, marginBottom: "1rem", minHeight: "2.8rem" }}>{proj.tagline}</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
                     {proj.tags.map(t => (
-                      <span key={t} style={{ padding: "0.25rem 0.65rem", background: "#f9fafb", color: "#4b5563", borderRadius: "0.4rem", fontSize: "0.8rem", border: "1px solid #e5e7eb" }}>{t}</span>
+                      <span key={t} style={{ padding: "0.25rem 0.65rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#4b5563", borderRadius: "0.4rem", fontSize: "0.8rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{t}</span>
                     ))}
                   </div>
                 </div>
@@ -297,15 +300,15 @@ export default function BoringView({ projects, age }: BoringViewProps) {
       </section>
 
       {/* ── INTERESTS ── */}
-      <section style={{ ...S.section, background: "#fff" }}>
+      <section style={{ ...S.section, background: dm ? "#0f0f0f" : "#fff" }}>
         <div style={S.inner}>
-          <Heading title="Interests" c1="#ef4444" c2="#ec4899" />
+          <Heading title="Interests" c1="#ef4444" c2="#ec4899" dark={dm} />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.25rem" }}>
             {INTERESTS.map((interest, i) => (
               <motion.div key={interest.title} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-                style={{ background: "#fff", borderRadius: "1rem", padding: "1.5rem", border: "2px solid #f3f4f6", transition: "border-color 0.2s, box-shadow 0.2s" }}
+                style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1rem", padding: "1.5rem", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, transition: "border-color 0.2s, box-shadow 0.2s" }}
                 whileHover={{ borderColor: "#fecaca", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }}>
-                <div style={{ fontSize: "1rem", fontWeight: 600, color: "#111827", marginBottom: "0.4rem" }}>{interest.title}</div>
+                <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>{interest.title}</div>
                 <div style={{ fontSize: "0.875rem", color: "#9ca3af", lineHeight: 1.6 }}>{interest.subtitle}</div>
               </motion.div>
             ))}
@@ -352,17 +355,17 @@ export default function BoringView({ projects, age }: BoringViewProps) {
             </div>
 
             {/* Form */}
-            <div style={{ background: "#fff", borderRadius: "1.5rem", padding: "2.5rem", boxShadow: "0 25px 50px rgba(0,0,0,0.25)" }}>
+            <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", padding: "2.5rem", boxShadow: "0 25px 50px rgba(0,0,0,0.25)", border: dm ? "1px solid #2a2a2a" : "none" }}>
               {sent ? (
                 <div style={{ textAlign: "center", padding: "3rem 0" }}>
                   <Send style={{ margin: "0 auto 1rem", color: "#ef4444", width: 32, height: 32 }} />
-                  <h3 style={{ fontSize: "1.3rem", fontWeight: 600, color: "#111827", marginBottom: "0.5rem" }}>Message sent!</h3>
+                  <h3 style={{ fontSize: "1.3rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem" }}>Message sent!</h3>
                   <p style={{ fontSize: "0.95rem", color: "#9ca3af" }}>I'll get back to you shortly.</p>
                   <button onClick={() => setSent(false)} style={{ marginTop: "2rem", fontSize: "0.8rem", fontWeight: 700, borderBottom: "2px solid #ef4444", color: "#ef4444", textTransform: "uppercase", background: "none", padding: "0 0 2px" }}>Send another</button>
                 </div>
               ) : (
                 <>
-                  <h3 style={{ fontSize: "1.4rem", fontWeight: 500, color: "#111827", marginBottom: "1.75rem" }}>Send a Message</h3>
+                  <h3 style={{ fontSize: "1.4rem", fontWeight: 500, color: dm ? "#f9fafb" : "#111827", marginBottom: "1.75rem" }}>Send a Message</h3>
                   <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                       {[
@@ -372,25 +375,25 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                         <div key={f.key}>
                           <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>{f.label}</label>
                           <input type={f.type} required placeholder={f.placeholder} value={(form as any)[f.key]} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-                            style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: "2px solid #e5e7eb", background: "#f9fafb", fontSize: "1rem", outline: "none", transition: "border-color 0.2s" }}
+                            style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: `2px solid ${dm ? "#2a2a2a" : "#e5e7eb"}`, background: dm ? "#111" : "#f9fafb", color: dm ? "#f9fafb" : "#111827", fontSize: "1rem", outline: "none", transition: "border-color 0.2s" }}
                             onFocus={e => (e.target.style.borderColor = "#f87171")}
-                            onBlur={e => (e.target.style.borderColor = "#e5e7eb")} />
+                            onBlur={e => (e.target.style.borderColor = dm ? "#2a2a2a" : "#e5e7eb")} />
                         </div>
                       ))}
                     </div>
                     <div>
                       <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Subject</label>
                       <input type="text" required placeholder="..." value={form.subject} onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
-                        style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: "2px solid #e5e7eb", background: "#f9fafb", fontSize: "1rem", outline: "none" }}
+                        style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: `2px solid ${dm ? "#2a2a2a" : "#e5e7eb"}`, background: dm ? "#111" : "#f9fafb", color: dm ? "#f9fafb" : "#111827", fontSize: "1rem", outline: "none" }}
                         onFocus={e => (e.target.style.borderColor = "#f87171")}
-                        onBlur={e => (e.target.style.borderColor = "#e5e7eb")} />
+                        onBlur={e => (e.target.style.borderColor = dm ? "#2a2a2a" : "#e5e7eb")} />
                     </div>
                     <div>
                       <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Message</label>
                       <textarea rows={5} required placeholder="..." value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                        style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: "2px solid #e5e7eb", background: "#f9fafb", fontSize: "1rem", outline: "none", resize: "none" }}
+                        style={{ width: "100%", padding: "0.85rem 1rem", borderRadius: "0.75rem", border: `2px solid ${dm ? "#2a2a2a" : "#e5e7eb"}`, background: dm ? "#111" : "#f9fafb", color: dm ? "#f9fafb" : "#111827", fontSize: "1rem", outline: "none", resize: "none" }}
                         onFocus={e => (e.target.style.borderColor = "#f87171")}
-                        onBlur={e => (e.target.style.borderColor = "#e5e7eb")} />
+                        onBlur={e => (e.target.style.borderColor = dm ? "#2a2a2a" : "#e5e7eb")} />
                     </div>
                     {formError && <p style={{ color: "#ef4444", fontSize: "0.9rem" }}>{formError}</p>}
                     <button type="submit" disabled={sending}
@@ -405,7 +408,7 @@ export default function BoringView({ projects, age }: BoringViewProps) {
         </div>
       </section>
 
-      <footer style={{ background: "#111827", color: "#6b7280", padding: "2rem", textAlign: "center", fontSize: "0.875rem" }}>
+      <footer style={{ background: dm ? "#000" : "#111827", color: "#6b7280", padding: "2rem", textAlign: "center", fontSize: "0.875rem" }}>
         © 2026 Alex Hofmann · hoffswitch
       </footer>
     </div>
