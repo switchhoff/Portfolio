@@ -813,10 +813,16 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         textAlign: "right",
                         flex: 1,
                         marginLeft: "8px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
                       }}>
                         {(pathData.category === "experience" || pathData.category === "education") && pathData.company
                           ? pathData.company
                           : pathData.name}
+                        <span style={{ fontSize: "10px", fontWeight: 700, color: categoryColor, opacity: 0.7, background: `${categoryColor}18`, borderRadius: "4px", padding: "1px 5px", fontFamily: "monospace", flexShrink: 0 }}>
+                          #{pathData.path}
+                        </span>
                       </span>
                     </div>
 

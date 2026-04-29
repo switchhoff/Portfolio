@@ -50,8 +50,8 @@ function getInterestItems(path: number): string[] {
 
 const EDUCATION = [
   // Sourced from pathData path 70 (Monash University entries)
-  { degree: "Master of Electrical Engineering", school: "Monash University", period: "2024", description: "Specialization: Artificial Intelligence", achievements: ["Academic Medal Winner 2024"], color: "#ef4444", color2: "#f43f5e" },
-  { degree: "Bachelor of Robotics and Mechatronics Engineering", school: "Monash University", period: "2020 – 2023", description: "Minor: Software Engineering", achievements: ["Dean's Honour List 2020–2023"], color: "#f97316", color2: "#ef4444" },
+  { path: 70, degree: "Master of Electrical Engineering", school: "Monash University", period: "2024", description: "Specialization: Artificial Intelligence", achievements: ["Academic Medal Winner 2024"], color: "#ef4444", color2: "#f43f5e" },
+  { path: 70, degree: "Bachelor of Robotics and Mechatronics Engineering", school: "Monash University", period: "2020 – 2023", description: "Minor: Software Engineering", achievements: ["Dean's Honour List 2020–2023"], color: "#f97316", color2: "#ef4444" },
 ];
 
 const GithubIcon = ({ size = 20 }: { size?: number }) => (
@@ -147,7 +147,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
               <div style={{ display: "inline-block", padding: "0.4rem 1rem", background: dm ? "rgba(239,68,68,0.15)" : "#fef2f2", color: "#dc2626", borderRadius: "9999px", fontSize: "0.9rem", marginBottom: "1.5rem", border: `1px solid ${dm ? "rgba(239,68,68,0.3)" : "#fee2e2"}` }}>
                 Melbourne, VIC
               </div>
-              <h1 style={{ fontSize: "3.5rem", fontWeight: 300, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem", lineHeight: 1.1 }}>Alex Hofmann</h1>
+              <h1 style={{ fontSize: "3.5rem", fontWeight: 300, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem", lineHeight: 1.1, display: "flex", alignItems: "baseline", gap: "12px" }}>
+                Alex Hofmann
+                <span style={{ fontSize: "12px", fontWeight: 700, color: "#dc2626", background: "rgba(220,38,38,0.1)", borderRadius: "5px", padding: "2px 7px", fontFamily: "monospace" }}>#76</span>
+              </h1>
               <p style={{ fontSize: "1.35rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "1.5rem" }}>Engineer</p>
               <p style={{ fontSize: "1.05rem", color: dm ? "#d1d5db" : "#374151", lineHeight: 1.8, marginBottom: "1rem" }}>
                 Building, making, creating <span style={{ color: "#dc2626", fontWeight: 500 }}>cool things</span>.
@@ -201,7 +204,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                       <div style={{ padding: "1.75rem 2rem 2rem", flex: 1 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
                           <div>
-                            <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem" }}>{w.role ?? w.name}</h3>
+                            <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem", display: "flex", alignItems: "center", gap: "8px" }}>
+                            {w.role ?? w.name}
+                            <span style={{ fontSize: "10px", fontWeight: 700, color: v.color, background: `${v.color}18`, borderRadius: "4px", padding: "2px 6px", fontFamily: "monospace" }}>#{pathId}</span>
+                          </h3>
                             <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${v.color}, ${v.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
                           </div>
                           <span style={{ padding: "0.4rem 1rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{w.date}</span>
@@ -238,7 +244,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                     <div style={{ height: "5px", background: `linear-gradient(to right, ${v.color}, ${v.color2})` }} />
                     <div style={{ padding: "1.5rem" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.6rem" }}>
-                        <h4 style={{ fontSize: "1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", lineHeight: 1.3 }}>{h.role ?? h.name}</h4>
+                        <h4 style={{ fontSize: "1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", lineHeight: 1.3, display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                          {h.role ?? h.name}
+                          <span style={{ fontSize: "10px", fontWeight: 700, color: v.color, background: `${v.color}18`, borderRadius: "4px", padding: "1px 5px", fontFamily: "monospace", flexShrink: 0 }}>#{pathId}</span>
+                        </h4>
                         <span style={{ padding: "0.25rem 0.7rem", background: `${v.color}20`, color: v.color, borderRadius: "9999px", fontSize: "0.78rem", whiteSpace: "nowrap", fontWeight: 600, flexShrink: 0 }}>{h.date}</span>
                       </div>
                       <p style={{ fontSize: "0.85rem", fontWeight: 500, color: dm ? "#9ca3af" : "#6b7280", marginBottom: "0.75rem" }}>{h.company}</p>
@@ -265,7 +274,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 <div style={{ padding: "2.5rem" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
                     <div style={{ flex: 1 }}>
-                      <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>{edu.degree}</h3>
+                      <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "8px" }}>
+                        {edu.degree}
+                        <span style={{ fontSize: "10px", fontWeight: 700, color: edu.color, background: `${edu.color}18`, borderRadius: "4px", padding: "2px 6px", fontFamily: "monospace", flexShrink: 0 }}>#{edu.path}</span>
+                      </h3>
                       <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${edu.color}, ${edu.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{edu.school}</p>
                     </div>
                     <span style={{ padding: "0.4rem 1.2rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{edu.period}</span>
@@ -332,7 +344,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 <motion.div key={pathId} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
                   style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1rem", padding: "1.5rem", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, transition: "border-color 0.2s, box-shadow 0.2s" }}
                   whileHover={{ borderColor: "#fecaca", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }}>
-                  <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem" }}>{interest.name}</div>
+                  <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "6px" }}>
+                    {interest.name}
+                    <span style={{ fontSize: "9px", fontWeight: 700, color: "#9ca3af", background: dm ? "#2a2a2a" : "#f3f4f6", borderRadius: "4px", padding: "1px 5px", fontFamily: "monospace" }}>#{pathId}</span>
+                  </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
                     {items.map((item, idx) => (
                       <div key={idx} style={{ fontSize: "0.875rem", color: "#9ca3af", display: "flex", alignItems: "center", gap: "0.4rem" }}>
