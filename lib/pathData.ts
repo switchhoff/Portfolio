@@ -1,4 +1,4 @@
-export type ContentBlock = 
+export type ContentBlock =
   | { type: 'text'; text: string }
   | { type: 'image' | 'gif'; src: string; alt?: string; link?: string }
   | { type: 'gallery'; images: { src: string; alt?: string; link?: string; label?: string }[] }
@@ -228,13 +228,15 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "projects",
     content: [
       { type: 'text', text: "A custom world travel map built as a woodworking project — continents cut, stained, and assembled by hand on a backing board, tracking every country visited." },
-      { type: 'gallery', images: [
-        { src: "/thailand.jpg", label: "Thailand" },
-        { src: "/singapore.jpg", label: "Singapore" },
-        { src: "/india.jpg", label: "India" },
-        { src: "/placeholder-sa.jpg", label: "South Africa" },
-        { src: "/placeholder-germany.jpg", label: "Germany" }
-      ]}
+      {
+        type: 'gallery', images: [
+          { src: "/thailand.jpg", label: "Thailand" },
+          { src: "/singapore.jpg", label: "Singapore" },
+          { src: "/india.jpg", label: "India" },
+          { src: "/placeholder-sa.jpg", label: "South Africa" },
+          { src: "/placeholder-germany.jpg", label: "Germany" }
+        ]
+      }
     ],
     tags: ["WOODWORKING", "TRAVEL"],
     links: [],
@@ -414,8 +416,8 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "about",
     content: [
       { type: 'text', text: "Melbourne VIC | Age 24. Engineering problem solver with passion for building things. Defence tech background across cutting-edge R&D to forward deployments. Love a challenge." },
-      { 
-        type: 'link_dock', 
+      {
+        type: 'link_dock',
         links: [
           { url: "tel:+61403326837", label: "+61 403 326 837", icon: "phone" },
           { url: "mailto:alexanderhofmann@outlook.com.au", label: "alexanderhofmann@outlook.com.au", icon: "mail" },
@@ -485,7 +487,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 92,
     name: "Gemini",
     category: "generic",
-    description: "Coded with Gemini",
+    description: "Image from Gemini",
     links: [],
   },
   94: {

@@ -149,7 +149,7 @@ export default function OffswitchLogo({ onComplete, onPowerOn }: OffswitchLogoPr
             animate={{ fill: getPathColor(2, "#ffffff") }} 
           />
           
-          <motion.g animate={step >= 4 ? { y: 20 } : { y: 0 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
+          <motion.g initial={{ y: -70 }} animate={step >= 4 ? { y: 20 } : { y: -70 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
             {/* The Switch Handle */}
             {[124, 11, 12].map(id => {
               const p = getOriginalPath(id);

@@ -479,6 +479,33 @@ export default function Home() {
                   </div>
                   {/* AmbientPlayer lives inside the 16:9 canvas — position:absolute at z=15, above scene */}
                   <AmbientPlayer darkMode={darkMode} />
+                  {/* Point & Click hint — mirrored position/angle from AmbientPlayer */}
+                  <div style={{
+                    position: "absolute",
+                    right: "8%",
+                    top: "18%",
+                    transform: "rotate(25deg)",
+                    transformOrigin: "right center",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    zIndex: 15,
+                    pointerEvents: "none",
+                    whiteSpace: "nowrap",
+                  }}>
+                    <div style={{
+                      fontSize: "9px",
+                      fontFamily: "'JetBrains Mono', monospace",
+                      color: darkMode ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.38)",
+                      letterSpacing: "0.08em",
+                      fontWeight: 600,
+                    }}>
+                      Point &amp; Click
+                    </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={darkMode ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.38)"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 4.5v11l3-3 3 3V4.5"/><path d="M6 20h12"/>
+                    </svg>
+                  </div>
                 </div>
               </motion.section>
             ) : (

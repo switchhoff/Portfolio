@@ -134,7 +134,7 @@ function InterestCard({ pathId, interest, items, dm, i, onShowOverland }: { path
                   onClick={onShowOverland}
                   style={{
                     background: "none", border: "none", padding: 0, cursor: "pointer",
-                    color: dm ? "#348efdff" : "#104db1ff", textDecoration: "underline", textUnderlineOffset: "2px",
+                    color: dm ? "#348efdff" : "#104db1ff", textDecoration: "none",
                     fontSize: "inherit", fontFamily: "inherit", fontWeight: "inherit"
                   }}
                 >
@@ -162,11 +162,12 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
   const [showOverland, setShowOverland] = useState(false);
 
   const navItems = [
-    { id: "boring-about",     label: "About",      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> },
-    { id: "boring-experience",label: "Experience", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> },
-    { id: "boring-education", label: "Education",  icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg> },
-    { id: "boring-projects",  label: "Projects",   icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.6-1.4 4.9-3.5 6.2V17a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-1.8A7 7 0 0 1 5 9a7 7 0 0 1 7-7z"/></svg> },
-    { id: "boring-interests", label: "Interests",  icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg> },
+    { id: "boring-about",      label: "About",      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> },
+    { id: "boring-experience", label: "Experience", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> },
+    { id: "boring-hackathons", label: "Hackathons", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.6-1.4 4.9-3.5 6.2V17a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-1.8A7 7 0 0 1 5 9a7 7 0 0 1 7-7z"/></svg> },
+    { id: "boring-education",  label: "Education",  icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg> },
+    { id: "boring-projects",   label: "Projects",   icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3-3a1 1 0 0 0-1.4-1.4l-3 3"/><path d="M13 8L8 3 4 7l5 5"/><path d="m2 22 5.5-1.5L19 9l-4-4L3.5 16.5z"/></svg> },
+    { id: "boring-interests",  label: "Interests",  icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg> },
   ];
 
   return (
@@ -340,10 +341,14 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
             </div>
           </div>
 
-          {/* ── Hackathons ── */}
-          <div style={{ marginBottom: "0", position: "relative" }}>
-            <h3 style={{ fontSize: "1.5rem", fontWeight: 300, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.75rem", textAlign: "center" }}>Hackathons &amp; Competitions</h3>
-            <div style={{ height: "3px", width: "60px", borderRadius: "9999px", background: "linear-gradient(to right, #10b981, #6366f1)", margin: "0 auto 2.5rem" }} />
+        </div>
+      </section>
+
+      {/* ── HACKATHONS ── */}
+      <section id="boring-hackathons" style={{ ...S.section, background: dm ? "linear-gradient(135deg, #0a0f0a 0%, #0a0a1a 100%)" : "linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%)" }}>
+        <div style={S.inner}>
+          <Heading title="Hackathons" c1="#10b981" c2="#6366f1" dark={dm} />
+          <div style={{ position: "relative" }}>
 
             <div style={{ position: "relative", height: "480px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
 
@@ -416,7 +421,6 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
