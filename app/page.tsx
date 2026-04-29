@@ -432,9 +432,9 @@ export default function Home() {
             {activeTab === "fun" ? (
               <motion.section
                 key="fun"
-                initial={{ opacity: 0, filter: "blur(10px)" }}
-                animate={{ opacity: 1, filter: "blur(0px)" }}
-                exit={{ opacity: 0, filter: "blur(10px)" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
                 style={{ position: "relative", width: "100vw", height: "calc(100vh - 60px)", overflow: "hidden", background: darkMode ? "#111111" : "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}
               >
@@ -495,10 +495,7 @@ export default function Home() {
 
         {/* AmbientPlayer — lives outside AnimatePresence so audio persists on tab switch */}
         <motion.div
-          animate={{
-            opacity: activeTab === "fun" ? 1 : 0,
-            filter: activeTab === "fun" ? "blur(0px)" : "blur(10px)",
-          }}
+          animate={{ opacity: activeTab === "fun" ? 1 : 0 }}
           transition={{ duration: 0.4 }}
           style={{
             position: "fixed",
