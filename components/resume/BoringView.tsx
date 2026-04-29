@@ -211,20 +211,20 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                     style={{ position: "relative", paddingLeft: "5rem" }}>
                     <div style={{ position: "absolute", left: "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}, ${v.color2})`, border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }} />
                     <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", display: "flex" }}>
-                      {/* Photo placeholder */}
-                      <div style={{ width: "160px", flexShrink: 0, background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, borderRight: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.5rem", padding: "1.5rem 0.75rem" }}>
+                      {/* Photo / placeholder */}
+                      <div style={{ width: "200px", flexShrink: 0, position: "relative", borderRight: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)` }}>
                         {v.photo ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={v.photo} alt={w.company} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                          <img src={v.photo} alt={w.company} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
                         ) : (
-                          <>
+                          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
                             <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}44, ${v.color2}44)`, border: `2px dashed ${v.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={v.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                 <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
                               </svg>
                             </div>
-                            <span style={{ fontSize: "0.7rem", color: dm ? "#4b5563" : "#9ca3af", textAlign: "center" }}>Photo</span>
-                          </>
+                            <span style={{ fontSize: "0.7rem", color: dm ? "#4b5563" : "#9ca3af" }}>Photo</span>
+                          </div>
                         )}
                       </div>
                       {/* Content — text from pathData */}

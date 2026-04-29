@@ -1,7 +1,7 @@
 export type ContentBlock = 
   | { type: 'text'; text: string }
   | { type: 'image' | 'gif'; src: string; alt?: string; link?: string }
-  | { type: 'gallery'; images: { src: string; alt?: string; link?: string }[] }
+  | { type: 'gallery'; images: { src: string; alt?: string; link?: string; label?: string }[] }
   | { type: 'audio'; src: string; label: string }
   | { type: 'link'; url: string; label?: string; icon?: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone'; fontSize?: string | number }
   | { type: 'link_dock'; links: { url: string; label: string; icon: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone' }[] }
@@ -228,9 +228,11 @@ export const PATH_DATA: Record<number, PathObject> = {
     content: [
       { type: 'text', text: "A custom world travel map built as a woodworking project — continents cut, stained, and assembled by hand on a backing board, tracking every country visited." },
       { type: 'gallery', images: [
-        { src: "/thailand.jpg" },
-        { src: "/singapore.jpg" },
-        { src: "/india.jpg" }
+        { src: "/thailand.jpg", label: "Thailand" },
+        { src: "/singapore.jpg", label: "Singapore" },
+        { src: "/india.jpg", label: "India" },
+        { src: "/placeholder-sa.jpg", label: "South Africa" },
+        { src: "/placeholder-germany.jpg", label: "Germany" }
       ]}
     ],
     tags: ["WOODWORKING", "TRAVEL"],

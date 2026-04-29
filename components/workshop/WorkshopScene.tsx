@@ -142,6 +142,8 @@ function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?
           display: "flex", 
           alignItems: "center",
           justifyContent: "center",
+          overflow: "hidden",
+          borderRadius: "8px"
         }}
       >
         {images.map((img, i) => {
