@@ -15,6 +15,98 @@ interface Props {
   onHoverChange?: (hotspot: Hotspot | null) => void;
 }
 
+const LinkDock = ({ links, categoryColor }: { links: any[], categoryColor: string }) => {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+
+  useEffect(() => {
+    const handleWindowClick = () => setActiveIdx(null);
+    window.addEventListener("click", handleWindowClick);
+    return () => window.removeEventListener("click", handleWindowClick);
+  }, []);
+
+  return (
+    <div style={{ display: "flex", gap: "20px", justifyContent: "center", alignItems: "center", margin: "16px 0 8px 0" }}>
+      {links.map((link, idx) => {
+        let icon = <ExternalLinkIcon size={24} />;
+        if (link.icon === 'instagram') icon = <InstagramIcon size={24} />;
+        else if (link.icon === 'printables') icon = <PrinterIcon size={24} />;
+        else if (link.icon === 'linkedin') icon = <LinkedinIcon size={24} />;
+        else if (link.icon === 'mail') icon = <MailIcon size={24} />;
+        else if (link.icon === 'phone') icon = <PhoneIcon size={24} />;
+        else if (link.icon === 'github') icon = <GithubIcon size={24} />;
+
+        return (
+          <div key={idx} style={{ position: "relative", display: "flex", justifyContent: "center" }}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (activeIdx === idx) {
+                  // Act as link
+                  if (link.url.startsWith("tel:") || link.url.startsWith("mailto:")) {
+                    window.location.href = link.url;
+                  } else {
+                    window.open(link.url, "_blank");
+                  }
+                  setActiveIdx(null);
+                } else {
+                  setActiveIdx(idx);
+                }
+              }}
+              style={{
+                background: "none",
+                border: "none",
+                padding: "4px",
+                cursor: "pointer",
+                color: "#333",
+                transition: "transform 0.2s, color 0.2s",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transform: activeIdx === idx ? "scale(1.15)" : "scale(1)",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = categoryColor; setActiveIdx(idx); }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "#333"; setActiveIdx(null); }}
+            >
+              {icon}
+            </button>
+            
+            <div style={{
+              position: "absolute",
+              bottom: "calc(100% + 8px)",
+              background: "#333",
+              color: "#fff",
+              padding: "6px 10px",
+              borderRadius: "6px",
+              fontSize: "12px",
+              whiteSpace: "nowrap",
+              fontWeight: 600,
+              pointerEvents: "none",
+              opacity: activeIdx === idx ? 1 : 0,
+              transform: activeIdx === idx ? "translateY(0)" : "translateY(4px)",
+              transition: "opacity 0.2s, transform 0.2s",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              zIndex: 20
+            }}>
+              {link.label}
+              <div style={{
+                position: "absolute",
+                bottom: "-4px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: 0,
+                height: 0,
+                borderLeft: "5px solid transparent",
+                borderRight: "5px solid transparent",
+                borderTop: "5px solid #333",
+              }} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const IMG_W = 2180;
 const IMG_H = 1952;
 
@@ -898,6 +990,9 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                 {icon} {block.label && <span>{block.label}</span>}
                               </a>
                             );
+                          }
+                          if (block.type === 'link_dock') {
+                            return <LinkDock key={idx} links={block.links} categoryColor={categoryColor} />;
                           }
                           return null;
                         })}
