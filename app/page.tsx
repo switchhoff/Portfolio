@@ -460,7 +460,7 @@ export default function Home() {
                     }}
                     draggable={false}
                   />
-                  <div ref={sceneContainerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10 }}>
+                  <div ref={sceneContainerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: active ? 100 : 10 }}>
                     <WorkshopScene
                       onHotspotClick={(h, origin) => {
                         if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
@@ -477,6 +477,8 @@ export default function Home() {
                       onClose={() => { setActive(null); setClickOrigin(null); }}
                     />
                   </div>
+                  {/* AmbientPlayer lives inside the 16:9 canvas — position:absolute at z=15, above scene */}
+                  <AmbientPlayer darkMode={darkMode} />
                 </div>
               </motion.section>
             ) : (
@@ -493,32 +495,6 @@ export default function Home() {
           </AnimatePresence>
         </main>
 
-        {/* AmbientPlayer — lives outside AnimatePresence so audio persists on tab switch */}
-        <motion.div
-          animate={{ opacity: activeTab === "fun" ? 1 : 0 }}
-          transition={{ duration: 0.4 }}
-          style={{
-            position: "fixed",
-            top: "60px",
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            pointerEvents: "none",
-            zIndex: 8,
-          }}
-        >
-          <div style={{
-            position: "relative",
-            width: "min(100vw, calc((100vh - 60px) * 16 / 9))",
-            height: "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
-            pointerEvents: "none",
-          }}>
-            <AmbientPlayer darkMode={darkMode} />
-          </div>
-        </motion.div>
 
 
 

@@ -3,8 +3,19 @@ import { useEffect, useRef, useState } from "react";
 
 const SRC = "/audio/gns.mp3";
 const FADE_MS = 800;
-const DUCK_VOLUME = 0.08; // volume during other audio
+const DUCK_VOLUME = 0.08;
 const FULL_VOLUME = 0.35;
+
+// Module-level singleton — survives component unmount/remount across tab switches
+let _audio: HTMLAudioElement | null = null;
+function getAudio(): HTMLAudioElement {
+  if (!_audio) {
+    _audio = new Audio(SRC);
+    _audio.loop = true;
+    _audio.volume = FULL_VOLUME;
+  }
+  return _audio;
+}
 
 function fadeTo(audio: HTMLAudioElement, target: number, ms: number) {
   const start = audio.volume;
@@ -19,42 +30,37 @@ function fadeTo(audio: HTMLAudioElement, target: number, ms: number) {
 }
 
 export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [mounted, setMounted] = useState(false);
   const playingRef = useRef(false);
 
   useEffect(() => {
     setMounted(true);
-    const audio = new Audio(SRC);
-    audio.loop = true;
-    audio.volume = FULL_VOLUME;
-    audioRef.current = audio;
+    const audio = getAudio();
+    // Sync UI state with actual audio state on mount (e.g. after tab switch)
+    const isPlaying = !audio.paused;
+    setPlaying(isPlaying);
+    playingRef.current = isPlaying;
 
     const onSaxStart = () => {
-      if (audioRef.current && !audioRef.current.paused) {
-        fadeTo(audioRef.current, DUCK_VOLUME, FADE_MS);
-      }
+      if (!audio.paused) fadeTo(audio, DUCK_VOLUME, FADE_MS);
     };
     const onSaxEnd = () => {
-      if (audioRef.current && !audioRef.current.paused && playingRef.current) {
-        fadeTo(audioRef.current, FULL_VOLUME, FADE_MS);
-      }
+      if (!audio.paused && playingRef.current) fadeTo(audio, FULL_VOLUME, FADE_MS);
     };
 
     window.addEventListener("sax-audio-start", onSaxStart);
     window.addEventListener("sax-audio-end", onSaxEnd);
 
     return () => {
-      audio.pause();
+      // Do NOT pause audio on unmount — singleton persists across tab switches
       window.removeEventListener("sax-audio-start", onSaxStart);
       window.removeEventListener("sax-audio-end", onSaxEnd);
     };
   }, []);
 
   function toggle() {
-    const audio = audioRef.current;
-    if (!audio) return;
+    const audio = getAudio();
     if (playing) {
       fadeTo(audio, 0, FADE_MS);
       setTimeout(() => audio.pause(), FADE_MS);
@@ -81,7 +87,7 @@ export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      zIndex: 6,
+      zIndex: 15,
       pointerEvents: "auto",
       whiteSpace: "nowrap",
     }}>

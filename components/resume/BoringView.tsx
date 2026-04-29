@@ -95,6 +95,53 @@ function Heading({ title, c1, c2, center, dark }: { title: string; c1: string; c
   );
 }
 
+function InterestCard({ pathId, interest, items, dm, i }: { pathId: number, interest: any, items: any[], dm: boolean, i: number }) {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: i * 0.05 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        background: dm ? "#1a1a1a" : "#fff",
+        borderRadius: "1rem",
+        padding: "1.5rem",
+        border: "2px solid",
+        borderColor: isHovered ? (dm ? "#ffffff" : "#111827") : (dm ? "#2a2a2a" : "#f3f4f6"),
+        boxShadow: isHovered ? (dm ? "0 4px 16px rgba(255,255,255,0.1)" : "0 4px 16px rgba(0,0,0,0.08)") : "none",
+        transition: "border-color 0.2s, box-shadow 0.2s"
+      }}
+    >
+      <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#ff0000ff" : "#fb0000ff", marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "6px" }}>
+        {interest.name}
+        <span style={{ fontSize: "9px", fontWeight: 700, color: "#ff0303ff", background: dm ? "#2a2a2a" : "#f3f4f6", borderRadius: "4px", padding: "1px 5px", fontFamily: "monospace" }}>#{pathId}</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+        {items.map((item, idx) => {
+          const isString = typeof item === "string";
+          const label = isString ? item : item.label;
+          const href = !isString ? item.href : undefined;
+
+          return (
+            <div key={idx} style={{ fontSize: "0.875rem", color: dm ? "#d1d5db" : "#3a3d44ff", display: "flex", alignItems: "center" }}>
+              {href ? (
+                <a href={href} target="_blank" rel="noreferrer" style={{ color: dm ? "#348efdff" : "#104db1ff", textDecoration: "none" }}>
+                  {label}
+                </a>
+              ) : (
+                label
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+}
+
 export default function BoringView({ projects, age, darkMode }: BoringViewProps) {
   const dm = darkMode ?? false;
   const [formState, handleSubmit] = useForm("xzdynydr");
@@ -147,13 +194,13 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 I'm moving with the times — building AI and building with AI to achieve faster outcomes than ever before.
               </p>
               <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "1rem" }}>
-                I'm adaptable, working from hardware electronics through to full-stack software - whatever the tool is I learn it quickly.
+                I'm adaptable, working from hardware electronics through to full-stack software - whatever the tool needed, I identify it quickly and I learn it quickly.
               </p>
               <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "1rem" }}>
-                I've taught final year university students the fundamentals of AI in the morning and watched on as my unmanned vehicle vision system autonomously drives down a road in the afternoon.
+                I've taught final year university students the fundamentals of AI in the morning and watched on as my unmanned vehicle vision system autonomously drives down a road in the afternoon. I enjoy a challenge, things like debugging, building and pushing the latest apk over the air to devices in Singapore while on a walk around the block.
               </p>
               <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "2rem" }}>
-                I've been: R&D / Forward Deployed / Team Lead in complex mechatronics environments across project lifecycles, predominantly within the defense industry.
+                I've been an R&D Engineer / Forward Deployed Engineer / Full Stack Developer /  Team Lead in complex mechatronics environments across project lifecycles, predominantly within the defense industry.
 
               </p>
             </motion.div>
@@ -381,35 +428,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
               const interest = PATH_DATA[pathId];
               if (!interest) return null;
               const items = getInterestItems(pathId);
-              return (
-                <motion.div key={pathId} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-                  style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1rem", padding: "1.5rem", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` }}
-                  whileHover={{ borderColor: dm ? "#ffffff" : "#111827", boxShadow: dm ? "0 4px 16px rgba(255,255,255,0.1)" : "0 4px 16px rgba(0,0,0,0.08)" }}>
-                  <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#ff0000ff" : "#fb0000ff", marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "6px" }}>
-                    {interest.name}
-                    <span style={{ fontSize: "9px", fontWeight: 700, color: "#ff0303ff", background: dm ? "#2a2a2a" : "#f3f4f6", borderRadius: "4px", padding: "1px 5px", fontFamily: "monospace" }}>#{pathId}</span>
-                  </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-                    {items.map((item, idx) => {
-                      const isString = typeof item === "string";
-                      const label = isString ? item : item.label;
-                      const href = !isString ? item.href : undefined;
-
-                      return (
-                        <div key={idx} style={{ fontSize: "0.875rem", color: dm ? "#d1d5db" : "#3a3d44ff", display: "flex", alignItems: "center" }}>
-                          {href ? (
-                            <a href={href} target="_blank" rel="noreferrer" style={{ color: dm ? "#348efdff" : "#104db1ff", textDecoration: "none" }}>
-                              {label}
-                            </a>
-                          ) : (
-                            label
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              );
+              return <InterestCard key={pathId} pathId={pathId} interest={interest} items={items} dm={dm} i={i} />;
             })}
           </div>
         </div>

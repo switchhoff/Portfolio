@@ -1,8 +1,16 @@
+export type ContentBlock = 
+  | { type: 'text'; text: string }
+  | { type: 'image' | 'gif'; src: string; alt?: string; link?: string }
+  | { type: 'gallery'; images: { src: string; alt?: string; link?: string }[] }
+  | { type: 'audio'; src: string; label: string }
+  | { type: 'link'; url: string; label: string; icon?: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone' };
+
 export interface PathObject {
   path: number;
   name: string;
   category: "projects" | "experience" | "education" | "about" | "interests" | "generic";
-  description: string;
+  description?: string;
+  content?: ContentBlock[];
   date?: string;
   company?: string;
   role?: string;
@@ -27,11 +35,13 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 2,
     name: "Monsoon",
     category: "projects",
-    description: "I am in the process of creating a thematic reskin of Dune: Imperium, based on the book Monsoon by Wilbur Smith — following the Courtney Family's adventures on the high seas of East Africa. I'm working to map all elements into consistent, aesthetic equivalents and redesign the base to suit my vision. Sneak peek at some concept art below.",
-    image: "/General Pieces.png",
     wip: true,
     tags: ["GAME DESIGN", "ART"],
-    links: [],
+    content: [
+      { type: 'text', text: "I am in the process of creating a thematic reskin of Dune: Imperium, based on the book Monsoon by Wilbur Smith — following the Courtney Family's adventures on the high seas of East Africa." },
+      { type: 'text', text: "I'm working to map all elements into consistent, aesthetic equivalents and redesign the base to suit my vision. Sneak peek at some concept art below." },
+      { type: 'image', src: "/General Pieces.png" }
+    ],
   },
   4: {
     path: 4,
@@ -223,27 +233,33 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 44,
     name: "3D Printing",
     category: "projects",
-    description: "CAD and 3D printing useful objects around the house — from a necklace shelf and iPad case to medication boxes, a soldering stand, and infinitely more.",
     tags: ["3D PRINTING", "DESIGN"],
-    links: [{ printables: "https://www.printables.com/@AlexHofmann_3702877", label: "Printables" }],
+    content: [
+      { type: 'text', text: "CAD and 3D printing useful objects around the house — from a necklace shelf and iPad case to medication boxes, a soldering stand, and infinitely more." },
+      { type: 'link', url: "https://www.printables.com/@AlexHofmann_3702877", label: "Printables", icon: "printables" }
+    ],
   },
   46: {
     path: 46,
     name: "SixClicks",
     category: "projects",
-    description: "I made this basic LinkedIn scraper Chrome extension to build out a node map of my professional connections.",
     wip: true,
     tags: ["VISUALIZATION", "NETWORK", "CHROME"],
-    links: [{ github: "https://github.com/switchhoff/SixClicks", label: "GitHub" }],
+    content: [
+      { type: 'text', text: "I made this basic LinkedIn scraper Chrome extension to build out a node map of my professional connections." },
+      { type: 'link', url: "https://github.com/switchhoff/SixClicks", label: "GitHub", icon: "github" }
+    ]
   },
   48: {
     path: 48,
     name: "Portfolio Website",
     category: "projects",
-    description: "Inspired by the point-and-click adventure games I grew up playing — every object in the workshop is a clickable hotspot telling a piece of my story.",
-    image: "/transistorswitch.gif",
     tags: ["SOFTWARE", "PORTFOLIO"],
-    links: [{ github: "https://github.com/switchhoff/Portfolio", label: "GitHub" }],
+    content: [
+      { type: 'text', text: "Inspired by the point-and-click adventure games I grew up playing — every object in the workshop is a clickable hotspot telling a piece of my story." },
+      { type: 'gif', src: "/transistorswitch.gif" },
+      { type: 'link', url: "https://github.com/switchhoff/Portfolio", label: "GitHub", icon: "github" }
+    ]
   },
   50: {
     path: 50,
@@ -382,11 +398,12 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 76,
     name: "Alex Hofmann",
     category: "about",
-    description: "Melbourne VIC | Age 24. Engineering problem solver with passion for building things. Defence tech background across cutting-edge R&D to forward deployments. Love a challenge.",
-    links: [
-      { external: "tel:+61403326837", label: "+61 403326837" },
-      { external: "mailto:alexanderhofmann@outlook.com.au", label: "alexanderhofmann@outlook.com.au" },
-      { external: "https://www.linkedin.com/in/hofmannalexb", label: "www.linkedin.com/in/hofmannalexb" },
+    content: [
+      { type: 'text', text: "Melbourne VIC | Age 24. Engineering problem solver with passion for building things. Defence tech background across cutting-edge R&D to forward deployments. Love a challenge." },
+      { type: 'link', url: "tel:+61403326837", label: "+61 403326837", icon: "phone" },
+      { type: 'link', url: "mailto:alexanderhofmann@outlook.com.au", label: "alexanderhofmann@outlook.com.au", icon: "mail" },
+      { type: 'link', url: "https://www.linkedin.com/in/hofmannalexb", label: "www.linkedin.com/in/hofmannalexb", icon: "linkedin" },
+      { type: 'link', url: "https://github.com/switchhoff", label: "github/switchhoff", icon: "github" }
     ],
   },
   78: {

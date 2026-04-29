@@ -29,6 +29,63 @@ const GROUP_PATHS = new Map<number, number[]>([
   [78, [78, 80]],
 ]);
 
+function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?: string, link?: string}[], categoryColor: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (dir: "left" | "right") => {
+    if (containerRef.current) {
+      const scrollAmount = containerRef.current.clientWidth;
+      containerRef.current.scrollBy({ left: dir === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
+    }
+  };
+
+  return (
+    <div style={{ position: "relative", marginBottom: "8px", borderRadius: "4px", overflow: "hidden" }}>
+      <div 
+        ref={containerRef}
+        style={{ 
+          display: "flex", 
+          overflowX: "auto", 
+          scrollSnapType: "x mandatory", 
+          scrollbarWidth: "none", 
+          msOverflowStyle: "none" 
+        }}
+      >
+        {images.map((img, i) => (
+          <div key={i} style={{ flex: "0 0 100%", scrollSnapAlign: "start", position: "relative" }}>
+            {img.link ? (
+              <a href={img.link} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={img.src} alt={img.alt || ""} style={{ width: "100%", display: "block", objectFit: "cover" }} />
+              </a>
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img src={img.src} alt={img.alt || ""} style={{ width: "100%", display: "block", objectFit: "cover" }} />
+            )}
+          </div>
+        ))}
+      </div>
+      
+      {images.length > 1 && (
+        <>
+          <button 
+            onClick={(e) => { e.stopPropagation(); scroll("left"); }}
+            style={{ position: "absolute", left: "4px", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.5)", color: "#fff", border: "none", borderRadius: "50%", width: "24px", height: "24px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", zIndex: 10 }}
+          >
+            {"<"}
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); scroll("right"); }}
+            style={{ position: "absolute", right: "4px", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.5)", color: "#fff", border: "none", borderRadius: "50%", width: "24px", height: "24px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", zIndex: 10 }}
+          >
+            {">"}
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function WorkshopScene({ onHotspotClick, activeId, highlightCategory, onHoverChange }: Props) {
   const [hoverId, setHoverId]   = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -838,8 +895,99 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                       marginBottom: "6px",
                     }} />
 
-                    {/* Description or prominent links */}
-                    {(pathData.description || pathData.entries || pathData.items?.length) ? (
+                    {/* Content Block Renderer (NEW) or Legacy Description */}
+                    {pathData.content && pathData.content.length > 0 ? (
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "8px" }}>
+                        {pathData.content.map((block, idx) => {
+                          if (block.type === 'text') {
+                            return <div key={idx} style={{ fontSize: "13px", color: "#333", lineHeight: "1.5" }}>{block.text}</div>;
+                          }
+                          if (block.type === 'image' || block.type === 'gif') {
+                            return (
+                              <div key={idx} style={{ borderRadius: "4px", overflow: "hidden" }}>
+                                {block.link ? (
+                                  <a href={block.link} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img src={block.src} alt={block.alt || ""} style={{ width: "100%", display: "block", objectFit: "cover" }} />
+                                  </a>
+                                ) : (
+                                  /* eslint-disable-next-line @next/next/no-img-element */
+                                  <img src={block.src} alt={block.alt || ""} style={{ width: "100%", display: "block", objectFit: "cover" }} />
+                                )}
+                              </div>
+                            );
+                          }
+                          if (block.type === 'gallery') {
+                            return <GalleryCarousel key={idx} images={block.images} categoryColor={categoryColor} />;
+                          }
+                          if (block.type === 'audio') {
+                            return (
+                              <div key={idx} style={{ marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+                                <button
+                                  onClick={() => {
+                                    if (playingAudio === block.src) {
+                                      audioRef.current?.pause();
+                                      setPlayingAudio(null);
+                                      window.dispatchEvent(new Event("sax-audio-end"));
+                                    } else {
+                                      if (audioRef.current) audioRef.current.pause();
+                                      const a = new Audio(block.src);
+                                      a.volume = audioVolume;
+                                      audioRef.current = a;
+                                      a.play();
+                                      window.dispatchEvent(new Event("sax-audio-start"));
+                                      setPlayingAudio(block.src);
+                                      a.onended = () => {
+                                        setPlayingAudio(null);
+                                        window.dispatchEvent(new Event("sax-audio-end"));
+                                      };
+                                    }
+                                  }}
+                                  style={{
+                                    width: 26, height: 26, borderRadius: "50%",
+                                    border: `1.5px solid ${categoryColor}`,
+                                    background: playingAudio === block.src ? categoryColor : "transparent",
+                                    color: playingAudio === block.src ? "#fff" : categoryColor,
+                                    cursor: "pointer", fontSize: "9px",
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                    flexShrink: 0, fontFamily: "inherit",
+                                  }}
+                                >{playingAudio === block.src ? "■" : "▶"}</button>
+                                <span style={{ fontSize: "12px", color: "#333" }}>{block.label}</span>
+                              </div>
+                            );
+                          }
+                          if (block.type === 'link') {
+                            let icon = "🔗";
+                            if (block.icon === 'instagram') icon = "📷";
+                            else if (block.icon === 'printables') icon = "🖨️";
+                            else if (block.icon === 'linkedin') icon = "💼";
+                            else if (block.icon === 'mail') icon = "✉️";
+                            else if (block.icon === 'phone') icon = "📱";
+                            return (
+                              <a
+                                key={idx}
+                                href={block.url}
+                                target={block.url.startsWith("tel:") || block.url.startsWith("mailto:") ? undefined : "_blank"}
+                                rel="noopener noreferrer"
+                                style={{
+                                  fontSize: "14px",
+                                  color: "#333",
+                                  textDecoration: "none",
+                                  fontWeight: 600,
+                                  transition: "opacity 0.2s",
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
+                                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                              >
+                                {icon} {block.label}
+                              </a>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    ) : (pathData.description || pathData.entries || pathData.items?.length) ? (
                       pathData.entries ? (
                         /* Multi-entry layout (e.g. multiple degrees) */
                         <div style={{ marginBottom: "8px" }}>
@@ -872,9 +1020,9 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                           {pathData.subtext && (
                             <div style={{
                               marginTop: "6px",
-                              fontSize: "12px",
-                              color: "#000",
-                              lineHeight: "1.6",
+                              fontSize: "13px",
+                              color: "#333",
+                              lineHeight: "1.5",
                               whiteSpace: "pre-line",
                             }}>
                               {pathData.subtext}
@@ -913,9 +1061,9 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                           {/* Items + description span full width */}
                           <div style={{
                             gridColumn: "1 / -1",
-                            color: "#000",
+                            color: "#333",
                             lineHeight: "1.5",
-                            fontSize: "12px",
+                            fontSize: "13px",
                           }}>
                             {pathData.items && pathData.items.map((item, idx) => (
                               <div key={idx} style={{ marginBottom: "2px" }}>
@@ -1064,20 +1212,12 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                             <div>
                               <div style={{
                                 fontSize: "13px",
-                                color: "#000",
-                                lineHeight: "1.4",
-                                marginBottom: pathData.image ? "10px" : "8px",
+                                color: "#333",
+                                lineHeight: "1.5",
+                                marginBottom: "8px",
                               }}>
                                 {pathData.description}
                               </div>
-                              {pathData.image && (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                  src={pathData.image}
-                                  alt={pathData.name}
-                                  style={{ width: "100%", borderRadius: "4px", display: "block", marginBottom: "8px" }}
-                                />
-                              )}
                             </div>
                           )}
                         </div>
