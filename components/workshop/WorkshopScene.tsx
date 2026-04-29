@@ -6,6 +6,7 @@ import { getPathData } from "@/lib/pathData";
 import { WeatherWindow } from "./WeatherWindow";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { GithubIcon, LinkedinIcon, InstagramIcon, PhoneIcon, MailIcon, PrinterIcon, ExternalLinkIcon } from "@/components/icons";
 
 interface Props {
   onHotspotClick: (hotspot: Hotspot, clickOrigin: { x: number; y: number }) => void;
@@ -195,21 +196,6 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                     }
                   });
 
-                  // Re-apply visited grey — expand group roots to all member paths
-                  visitedPathsRef.current.forEach(visitedIdx => {
-                    const memberPaths = GROUP_PATHS.get(visitedIdx) ?? [visitedIdx];
-                    memberPaths.forEach(gIdx => {
-                      if (!pathsInGroup.includes(gIdx)) {
-                        const vp = allPaths[gIdx] as SVGPathElement | undefined;
-                        if (vp) {
-                          vp.setAttribute("fill-opacity", "0.01");
-                          vp.setAttribute("stroke", "#aaaaaa");
-                          vp.setAttribute("stroke-width", "1");
-                        }
-                      }
-                    });
-                  });
-
                   setClickedPath({
                     index: groupedIndex,
                     x: evt.clientX,
@@ -246,21 +232,6 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                     }
                   });
 
-                  // Re-apply visited grey — expand group roots to all member paths
-                  visitedPathsRef.current.forEach(visitedIdx => {
-                    const memberPaths = GROUP_PATHS.get(visitedIdx) ?? [visitedIdx];
-                    memberPaths.forEach(gIdx => {
-                      if (!pathsInGroup.includes(gIdx)) {
-                        const vp = allPaths[gIdx] as SVGPathElement | undefined;
-                        if (vp) {
-                          vp.setAttribute("fill-opacity", "0.01");
-                          vp.setAttribute("stroke", "#aaaaaa");
-                          vp.setAttribute("stroke-width", "1");
-                        }
-                      }
-                    });
-                  });
-
                   setClickedPath({
                     index: groupedIndex,
                     x: evt.clientX,
@@ -279,28 +250,13 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
     loadBlockSVG();
   }, []);
 
-  // Turning cheat mode on/off has no visual effect on its own —
-  // filter group toggles drive highlighting; turning cheats off clears filterPaths (handled in onClick).
-  // When cheats turn off, ensure all strokes/fills reset (filter effect handles it via filterPaths null).
   useEffect(() => {
     if (!cheatMode) {
-      // Clear any filter highlights — restore to visited-grey-only state
       const allPaths = blockSvgRef.current?.querySelectorAll("path") ?? [];
-      allPaths.forEach((p, idx) => {
+      allPaths.forEach((p) => {
         const path = p as SVGPathElement;
-        let isVisited = visitedPathsRef.current.has(idx);
-        if (!isVisited) {
-          const groupRoot = PATH_GROUPS.get(idx);
-          isVisited = groupRoot !== undefined && visitedPathsRef.current.has(groupRoot);
-        }
-        if (isVisited) {
-          path.setAttribute("fill-opacity", "0.01");
-          path.setAttribute("stroke", "#aaaaaa");
-          path.setAttribute("stroke-width", "1");
-        } else {
-          path.setAttribute("fill-opacity", "0.01");
-          path.setAttribute("stroke", "none");
-        }
+        path.setAttribute("fill-opacity", "0.01");
+        path.setAttribute("stroke", "none");
       });
     }
   }, [cheatMode]);
@@ -310,39 +266,15 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
     const allPaths = blockSvgRef.current?.querySelectorAll("path") ?? [];
     allPaths.forEach((p, idx) => {
       const path = p as SVGPathElement;
-
-      // Check if path is visited
-      let isVisited = visitedPaths.has(idx);
-      if (!isVisited) {
-        const groupRoot = PATH_GROUPS.get(idx);
-        isVisited = groupRoot !== undefined && visitedPaths.has(groupRoot);
-      }
-
       if (filterPaths && filterPaths.has(idx)) {
-        // Cheat colour outline — overrides visited grey
+        // Cheat colour outline
         const color = path.getAttribute("data-color") || "#45B7D1";
         path.setAttribute("fill-opacity", "0.01");
         path.setAttribute("stroke", color);
         path.setAttribute("stroke-width", "1.5");
-      } else if (filterPaths && isVisited) {
-        // Visited but not in filtered group — grey outline
-        path.setAttribute("fill-opacity", "0.01");
-        path.setAttribute("stroke", "#aaaaaa");
-        path.setAttribute("stroke-width", "1");
-      } else if (filterPaths) {
-        // Non-filtered, non-visited — hidden
+      } else {
         path.setAttribute("fill-opacity", "0.01");
         path.setAttribute("stroke", "none");
-      } else {
-        // No filter active
-        if (isVisited) {
-          path.setAttribute("fill-opacity", "0.01");
-          path.setAttribute("stroke", "#aaaaaa");
-          path.setAttribute("stroke-width", "1");
-        } else {
-          path.setAttribute("fill-opacity", "0.01");
-          path.setAttribute("stroke", "none");
-        }
       }
     });
   }, [activeFilters, visitedPaths]);
@@ -350,28 +282,6 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
   // Keep ref in sync so addEventListener callbacks can access current visited set
   useEffect(() => { visitedPathsRef.current = visitedPaths; }, [visitedPaths]);
 
-  // Apply grey fill to visited paths (including grouped pairs)
-  useEffect(() => {
-    if (activeFilters.size > 0) return; // Skip when filter active
-
-    const allPaths = blockSvgRef.current?.querySelectorAll("path") ?? [];
-    allPaths.forEach((p, idx) => {
-      // Check if this path or its group root is visited
-      let isVisited = visitedPaths.has(idx);
-      if (!isVisited) {
-        const groupRoot = PATH_GROUPS.get(idx);
-        isVisited = groupRoot !== undefined && visitedPaths.has(groupRoot);
-      }
-
-      if (isVisited) {
-        const path = p as SVGPathElement;
-        if (path.getAttribute("fill") && path.getAttribute("fill") !== "none") {
-          path.setAttribute("fill", "#999999");
-          path.setAttribute("fill-opacity", "0.5");
-        }
-      }
-    });
-  }, [visitedPaths, filterPaths]);
 
 
   const hotspots = getMappedHotspots();
@@ -765,7 +675,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                 const allPaths = blockSvgRef.current?.querySelectorAll("path") ?? [];
                 allPaths.forEach((p) => (p as SVGPathElement).setAttribute("stroke", "none"));
                 if (clickedPath) {
-                  setVisitedPaths(prev => new Set([...prev, clickedPath.index]));
+
                 }
                 setClickedPath(null);
               }}
@@ -797,7 +707,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                   const allPaths = blockSvgRef.current?.querySelectorAll("path") ?? [];
                   allPaths.forEach((p) => (p as SVGPathElement).setAttribute("stroke", "none"));
                   if (clickedPath) {
-                    setVisitedPaths(prev => new Set([...prev, clickedPath.index]));
+
                   }
                   setClickedPath(null);
                 }}
@@ -958,12 +868,14 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                             );
                           }
                           if (block.type === 'link') {
-                            let icon = "🔗";
-                            if (block.icon === 'instagram') icon = "📷";
-                            else if (block.icon === 'printables') icon = "🖨️";
-                            else if (block.icon === 'linkedin') icon = "💼";
-                            else if (block.icon === 'mail') icon = "✉️";
-                            else if (block.icon === 'phone') icon = "📱";
+                            let icon = <ExternalLinkIcon size={14} />;
+                            if (block.icon === 'instagram') icon = <InstagramIcon size={14} />;
+                            else if (block.icon === 'printables') icon = <PrinterIcon size={14} />;
+                            else if (block.icon === 'linkedin') icon = <LinkedinIcon size={14} />;
+                            else if (block.icon === 'mail') icon = <MailIcon size={14} />;
+                            else if (block.icon === 'phone') icon = <PhoneIcon size={14} />;
+                            else if (block.icon === 'github') icon = <GithubIcon size={14} />;
+                            
                             return (
                               <a
                                 key={idx}
@@ -976,6 +888,9 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                   textDecoration: "none",
                                   fontWeight: 600,
                                   transition: "opacity 0.2s",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "6px",
                                 }}
                                 onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
                                 onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
@@ -1233,18 +1148,14 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         {pathData.links.map((link, idx) => {
                           const url = link.github || link.instagram || link.printables || link.external;
                           if (!url) return null;
-                          let icon = "🔗";
-                          let showIcon = true;
-                          if (link.instagram) icon = "📷";
-                          else if (link.github) icon = "🔗";
-                          else if (link.printables) icon = "🖨️";
+                          let icon = <ExternalLinkIcon size={14} />;
+                          if (link.instagram) icon = <InstagramIcon size={14} />;
+                          else if (link.github) icon = <GithubIcon size={14} />;
+                          else if (link.printables) icon = <PrinterIcon size={14} />;
                           else if (link.external) {
-                            if (url.startsWith("tel:")) icon = "📱";
-                            else if (url.startsWith("mailto:")) icon = "✉️";
-                            else if (url.includes("linkedin")) icon = "💼";
-                            else showIcon = true;
-                            // Don't show icons for external links (contact info)
-                            if (pathData.category === "about") showIcon = false;
+                            if (url.startsWith("tel:")) icon = <PhoneIcon size={14} />;
+                            else if (url.startsWith("mailto:")) icon = <MailIcon size={14} />;
+                            else if (url.includes("linkedin")) icon = <LinkedinIcon size={14} />;
                           }
                           return (
                             <a
@@ -1254,15 +1165,18 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                               rel="noopener noreferrer"
                               style={{
                                 fontSize: "14px",
-                                color: "#000",
+                                color: "#333",
                                 textDecoration: "none",
                                 fontWeight: 600,
                                 transition: "opacity 0.2s",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "6px",
                               }}
                               onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
                               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                             >
-                              🔗 {link.label || "Link"}
+                              {icon} {link.label || "Link"}
                             </a>
                           );
                         })}
