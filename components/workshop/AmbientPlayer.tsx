@@ -81,7 +81,7 @@ export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      zIndex: 18,
+      zIndex: 6,
       pointerEvents: "auto",
       whiteSpace: "nowrap",
     }}>

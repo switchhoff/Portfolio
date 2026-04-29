@@ -510,7 +510,7 @@ export default function Home() {
             alignItems: "center",
             justifyContent: "center",
             pointerEvents: "none",
-            zIndex: 15,
+            zIndex: 8,
           }}
         >
           <div style={{
