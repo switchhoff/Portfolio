@@ -23,7 +23,6 @@ interface Props {
 export default function HotspotModal({ hotspot, clickOrigin, containerRect, onClose }: Props) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<{ left: number; top: number; arrowSide: "left" | "right" }>({ left: 0, top: 0, arrowSide: "left" });
-
   const computePosition = useCallback(() => {
     if (!containerRect || !modalRef.current) return;
     const modal = modalRef.current.getBoundingClientRect();
@@ -32,11 +31,11 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
     // If no click origin (e.g. cheat guide), center in container
     const origin = clickOrigin ?? { x: containerRect.width / 2, y: containerRect.height / 2 };
 
-    // Center popup exactly on cursor
+    // Center popup exactly on cursor (container-relative coords → viewport coords for position:fixed)
     let left = origin.x - mw / 2;
     let arrowSide: "left" | "right" = "left";
 
-    // Clamp horizontally
+    // Clamp horizontally within container
     left = Math.max(8, Math.min(left, containerRect.width - mw - 8));
 
     // Center vertically on cursor, clamp to container

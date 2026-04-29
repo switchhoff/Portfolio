@@ -1,6 +1,5 @@
 export const BLOCK_MAPPINGS = {
   about: [
-    { fillPath: 34, strokePath: 35 },
     { fillPath: 76, strokePath: 77 },
   ],
   interests: [
@@ -30,6 +29,7 @@ export const BLOCK_MAPPINGS = {
     { fillPath: 44, strokePath: 45 },
     { fillPath: 46, strokePath: 47 },
     { fillPath: 48, strokePath: 49 },
+    { fillPath: 34, strokePath: 35 },
     { fillPath: 84, strokePath: 85 },
     { fillPath: 86, strokePath: 87 },
   ],

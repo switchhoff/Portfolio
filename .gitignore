@@ -30,7 +30,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 *.log
-.firebase/logs/
+# firebase
+.firebase/
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -41,4 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.firebase/logs/vsce-debug.log
+
+# ai tools
+.claude/

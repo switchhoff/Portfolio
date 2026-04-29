@@ -5,7 +5,7 @@
   "targets": {
     "hoff-switch": {
       "hosting": {
-        "hoffswitch": ["hoffswitch"]
+        "offswitch": ["offswitch"]
       }
     }
   }

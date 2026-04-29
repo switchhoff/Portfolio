@@ -1,17 +1,28 @@
+export type ContentBlock =
+  | { type: 'text'; text: string }
+  | { type: 'image' | 'gif'; src: string; alt?: string; link?: string }
+  | { type: 'gallery'; images: { src: string; alt?: string; link?: string; label?: string }[] }
+  | { type: 'audio'; src: string; label: string }
+  | { type: 'link'; url: string; label?: string; icon?: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone'; fontSize?: string | number }
+  | { type: 'link_dock'; links: { url: string; label: string; icon: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone' }[] }
+  | { type: 'button'; label: string; action: 'golf_form' };
+
 export interface PathObject {
   path: number;
   name: string;
   category: "projects" | "experience" | "education" | "about" | "interests" | "generic";
-  description: string;
+  description?: string;
+  content?: ContentBlock[];
   date?: string;
   company?: string;
   role?: string;
-  items?: (string | { label: string; href?: string; sub?: boolean; image?: string })[];
+  items?: (string | { label: string; href?: string; sub?: boolean; image?: string; audio?: string; action?: string })[];
   entries?: { date: string; title: string }[];
   subtext?: string;
   image?: string;
   imageLink?: string;
   tags?: string[];
+  wip?: boolean;
   links?: {
     github?: string;
     instagram?: string;
@@ -26,10 +37,13 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 2,
     name: "Monsoon",
     category: "projects",
-    description: "A thematic reskin of Dune: Imperium set in the world of Wilbur Smith's Monsoon — following the Courtney Family's adventures on the high seas along the coast of East Africa. Same engine, entirely new world.",
-    image: "/General Pieces.png",
-    tags: ["DESIGN", "GAMES"],
-    links: [],
+    wip: true,
+    tags: ["GAME DESIGN", "ART"],
+    content: [
+      { type: 'text', text: "I am in the process of creating a thematic reskin of Dune: Imperium, based on the book Monsoon by Wilbur Smith — following the Courtney Family's adventures on the high seas of East Africa." },
+      { type: 'text', text: "I'm working to map all elements into consistent, aesthetic equivalents and redesign the base to suit my vision. Sneak peek at some concept art below." },
+      { type: 'image', src: "/General Pieces.png" }
+    ],
   },
   4: {
     path: 4,
@@ -37,7 +51,6 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "interests",
     description: "Favourite Artists:",
     items: [
-      { label: "Bateleur Eagle by Matthew Bell", href: "https://matthewbellart.co.za/" },
       "Hans Heysen",
       "Albert Namatjira",
       "Matthew Bell",
@@ -49,6 +62,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Threadquarters",
     category: "projects",
     description: "Jacket",
+    wip: true,
     tags: ["SOFTWARE", "CLOTHING"],
     links: [{ github: "https://github.com/switchhoff/Threadquarters", label: "GitHub" }],
   },
@@ -56,53 +70,62 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 8,
     name: "Golf",
     category: "interests",
-    description: "",
-    items: ["HCP = 38", "Member at Berwick Montuna Golf Club"],
-    links: [],
+    content: [
+      { type: 'text', text: "HCP = 38 😬" },
+      { type: 'link', url: "https://www.berwickmontuna.com.au/", label: "Berwick Montuna Golf Club", icon: "external" },
+      { type: 'gif', src: "/golf.gif" },
+      { type: 'button', label: "Hit me up to connect for a round", action: "golf_form" }
+    ],
   },
   10: {
     path: 10,
     name: "Saxophone",
     category: "interests",
-    description: "",
+    description: "Favourites",
+    items: [
+      { label: "Daisy Bell", audio: "/audio/Daisy.m4a" },
+      { label: "The Entertainer", audio: "/audio/Entertainer.m4a" },
+      { label: "Stitches", audio: "/audio/Stitches.m4a" },
+    ],
     links: [],
   },
   12: {
     path: 12,
     name: "Votemotm",
     category: "projects",
-    description: "",
-    items: [
-      "PWAs for Team Man of the Match Voting and Fan Engagement for Victorian State League Soccer Club",
-      "30+ Users across Players, Coaches, Administration and Fans",
-    ],
+    description: "I've built a set of progressive web apps for my football team as a platform for man of the match voting, fan engagement and stat tracking — reducing unnecessary messages, confusion about game locations, and directly connecting fans to players. Currently 30+ users across Players, Coaches, Admin and Fans, with plans to deploy to the wider community.",
+    image: "/kdfcmotm.png",
+    tags: ["DATA ANALYTICS", "SPORT"],
     links: [{ github: "https://github.com/switchhoff/Votemotm", label: "GitHub" }],
   },
   14: {
     path: 14,
     name: "BeNFL",
     category: "projects",
-    description: "NFL Ball",
+    description: "I've built a web-scraping platform for a custom use case: avoiding sport spoilers before watching the game. It collects stats from every NFL game and runs them through a custom algorithm designed by my brother to calculate Watchability — without revealing the score. The user can then identify the best game of the week to watch on replay.",
+    image: "/benfl.png",
+    tags: ["DATA ANALYTICS", "SPORT"],
     links: [{ github: "https://github.com/switchhoff/BeNFL", label: "GitHub" }],
   },
   16: {
     path: 16,
     name: "PawsButton",
     category: "projects",
-    description: "",
-    items: [
-      "Shared household pet care tracker — logs feeding, walks, and care tasks across all household members",
-      "Prevents double-feeding and missed meals with real-time household sync",
-      "Push notifications alert the household when pets are overdue for food or a walk",
-    ],
+    description: "I've built a household pet care tracking app that logs feeding, walks and more. Every member of the household has an account and is notified when the pets have or have not been fed — preventing double feeding, missed meals, or worst of all, no evening walk around the block.",
+    image: "/pawsbutton.png",
+    tags: ["SOFTWARE", "PETS"],
     links: [{ github: "https://github.com/switchhoff/PawsButton", label: "GitHub" }],
   },
   18: {
     path: 18,
     name: "Reading",
     category: "interests",
-    description: "Favourite Books",
-    items: ["Brotherband Series", "Wolf of the Plains", "Courtney Series"],
+    description: "Favourites",
+    items: [
+      { label: "Brotherband Chronicles", href: "https://flanagan.fandom.com/wiki/The_Brotherband_Chronicles", image: "https://static.wikia.nocookie.net/rangersapprentice/images/0/0d/The_Outcasts_%28Eng_1%29.jpg/revision/latest/scale-to-width-down/1000?cb=20190506222054" },
+      { label: "Conqueror Series", href: "https://en.wikipedia.org/wiki/Wolf_of_the_Plains", image: "https://upload.wikimedia.org/wikipedia/en/thumb/d/db/ConnIggulden_WolfOfThePlains.jpg/250px-ConnIggulden_WolfOfThePlains.jpg" },
+      { label: "Courtney Novels", href: "https://en.wikipedia.org/wiki/The_Courtney_Novels", image: "https://upload.wikimedia.org/wikipedia/en/thumb/7/74/Monsoon_-_bookcover.jpg/250px-Monsoon_-_bookcover.jpg" },
+    ],
     links: [],
   },
   20: {
@@ -116,11 +139,13 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 22,
     name: "Cave Disto",
     category: "projects",
-    description: "",
+    description: "I'm prototyping a laser measuring device running on a Raspberry Pi Pico for my brother to take caving. The purpose is to fuse gyroscope and compass data with IR laser TOF measurements to map out previously undiscovered caves.",
+    image: "/cavedisto.png",
     items: [
-      "Waterproof, rugged laser distance measuring device built for caving — helping map unknown cave systems",
-      "Fuses gyroscope, compass, and laser distance measurements into a compact, form-factor case",
-      "Designed for my brother with long battery life and the durability to handle the underground environment",
+      "Waterproof and ruggedized for wet, damp, dark conditions",
+      "Redundant gyroscopes, laser sensor, and battery management system",
+      "LCD screen with a simple, intuitive button interface",
+      "Standalone low-power design for extended underground use",
     ],
     tags: ["HARDWARE", "MICROCONTROLLER"],
     links: [{ github: "https://github.com/switchhoff/CaveDisto", label: "GitHub" }],
@@ -129,7 +154,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 24,
     name: "Craft",
     category: "interests",
-    description: "",
+    description: "I enjoy a chill evening creating useful little items out of fabric — putting logos onto beanies, making pouches for camping items, or crocheting a glasses case.",
     items: ["Sewing", "Embroidery", "Crochet"],
     links: [],
   },
@@ -140,7 +165,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     description: "",
     image: "/instagram.png",
     imageLink: "https://www.instagram.com/p/BkkMocYHvOt/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-    links: [{ instagram: "https://www.instagram.com/alexhofmannphotography/", label: "@alexhofmannphotography" }],
+    items: [{ label: "@alexhofmannphotography", href: "https://www.instagram.com/alexhofmannphotography/" }],
   },
   28: {
     path: 28,
@@ -155,6 +180,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Multiboard",
     category: "projects",
     description: "135+ Multiboard grids 3D printed and installed across the workshop — wall-mounting tools, art, monitors, and keeping cables under control.",
+    image: "/multiboard.jpg",
     links: [{ external: "https://multibuild.io/", label: "multibuild.io" }],
   },
   32: {
@@ -167,14 +193,10 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   34: {
     path: 34,
-    name: "Contact",
-    category: "about",
-    description: "",
-    links: [
-      { external: "tel:+61403326837", label: "+61 403326837" },
-      { external: "mailto:alexanderhofmann@outlook.com.au", label: "alexanderhofmann@outlook.com.au" },
-      { external: "https://www.linkedin.com/in/hofmannalexb", label: "www.linkedin.com/in/hofmannalexb" },
-    ],
+    name: "",
+    category: "projects",
+    description: "Tech blog space where I write about what I'm working on, interesting things I come across, the latest developments in tech. At this stage private for keeping on track of things personally - but might publicise/route through LinkedIn if people ever want to follow what I do.",
+    links: []
   },
   36: {
     path: 36,
@@ -196,6 +218,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Habitat",
     category: "projects",
     description: "A habit tracker that rewards consistency by growing virtual plants and trees — build streaks, unlock new species, and watch your garden flourish.",
+    wip: true,
     tags: ["SOFTWARE", "PERSONAL"],
     links: [{ github: "https://github.com/switchhoff/Habitat", label: "GitHub" }],
   },
@@ -203,8 +226,18 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 42,
     name: "World Map",
     category: "projects",
-    description: "A custom world travel map built as a woodworking project — continents cut, stained, and assembled by hand on a backing board, tracking every country visited.",
-    items: ["Germany", "India", "Singapore", "South Africa", "Thailand"],
+    content: [
+      { type: 'text', text: "A custom world travel map built as a woodworking project — continents cut, stained, and assembled by hand on a backing board, tracking every country visited." },
+      {
+        type: 'gallery', images: [
+          { src: "/thailand.jpg", label: "Thailand" },
+          { src: "/singapore.jpg", label: "Singapore" },
+          { src: "/india.jpg", label: "India" },
+          { src: "/placeholder-sa.jpg", label: "South Africa" },
+          { src: "/placeholder-germany.jpg", label: "Germany" }
+        ]
+      }
+    ],
     tags: ["WOODWORKING", "TRAVEL"],
     links: [],
   },
@@ -212,24 +245,33 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 44,
     name: "3D Printing",
     category: "projects",
-    description: "CAD and 3D printing useful objects around the house — from a necklace shelf and iPad case to medication boxes, a soldering stand, and infinitely more.",
     tags: ["3D PRINTING", "DESIGN"],
-    links: [{ printables: "https://www.printables.com/@AlexHofmann_3702877", label: "Printables" }],
+    content: [
+      { type: 'text', text: "CAD and 3D printing useful objects around the house — from a necklace shelf and iPad case to medication boxes, a soldering stand, and infinitely more." },
+      { type: 'link', url: "https://www.printables.com/@AlexHofmann_3702877", label: "Printables", icon: "printables" }
+    ],
   },
   46: {
     path: 46,
     name: "SixClicks",
     category: "projects",
-    description: "Briefcase App",
-    links: [{ github: "https://github.com/switchhoff/SixClicks", label: "GitHub" }],
+    wip: true,
+    tags: ["VISUALIZATION", "NETWORK", "CHROME"],
+    content: [
+      { type: 'text', text: "I made this basic LinkedIn scraper Chrome extension to build out a node map of my professional connections." },
+      { type: 'link', url: "https://github.com/switchhoff/SixClicks", label: "GitHub", icon: "github" }
+    ]
   },
   48: {
     path: 48,
     name: "Portfolio Website",
     category: "projects",
-    description: "Inspired by the point-and-click adventure games I grew up playing — every object in the workshop is a clickable hotspot telling a piece of my story.",
     tags: ["SOFTWARE", "PORTFOLIO"],
-    links: [{ github: "https://github.com/switchhoff/Portfolio", label: "GitHub" }],
+    content: [
+      { type: 'text', text: "Inspired by the point-and-click adventure games I grew up playing — every object in the workshop is a clickable hotspot telling a piece of my story." },
+      { type: 'gif', src: "/transistorswitch.gif" },
+      { type: 'link', url: "https://github.com/switchhoff/Portfolio", label: "GitHub", icon: "github" }
+    ]
   },
   50: {
     path: 50,
@@ -261,33 +303,34 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   58: {
     path: 58,
-    name: "Ron Johnston Medal Winner",
+    name: "Humanitarian Innovation Hackathon PowerPots",
     category: "experience",
     date: "2023",
     company: "Humanitarian Innovation Hackathon",
-    role: "PowerPots",
+    role: "Ron Johnston Medal Winner",
     description: "Sand filter solution for water filtration in Vanuatu through community education and innovative product prototyping.",
     tags: ["HACKATHON"],
     links: [],
   },
   60: {
     path: 60,
-    name: "Winner",
+    name: "Robot Building Competition",
     category: "experience",
     date: "2021 & 2022",
-    company: "Robot Building Competition",
-    role: "Winner",
+    company: "Monash Engineering",
+    role: "Robot Building Competition Winner",
     description: "Completed challenges requiring robots to line-follow specific colour segments at speed — precision engineering under competitive conditions.",
+    image: "/rbc.JPG",
     tags: ["HACKATHON"],
     links: [],
   },
   62: {
     path: 62,
-    name: "Winner",
+    name: "HardHack",
     category: "experience",
     date: "2022",
-    company: "Monash HardHack",
-    role: "Winner",
+    company: "Monash Engineering",
+    role: "HardHack Winner",
     description: "Designed, built, and tested small unmanned aquatic vehicle with underwater sonar topology mapping.",
     tags: ["HACKATHON"],
     links: [],
@@ -299,27 +342,30 @@ export const PATH_DATA: Record<number, PathObject> = {
     date: "2025 — NOW",
     company: "Fortifyedge",
     role: "Chief Engineer",
-    description: "Project Lead integrating thermal sights with Team Awareness Kit (TAK) for situational awareness systems.",
+    description: "I work on architecturing and implementing robust software solutions implementing tactical AI models for edge deployment supporting human machine interface teaming for frontline workers and defense applications. Leading a team of interns, I deploy full-stack dashboards linked to my wearable apps to translate complex signals into actionable insights for end-users. I work directly with end-users including military, police and firefighter operators to derive requirements, implement features and create useful data insights.",
+    tags: ["EDGE COMPUTING", "WEARABLES", "FDE"],
     links: [],
   },
   66: {
     path: 66,
-    name: "Engineer",
+    name: "Electronics & Software Engineer",
     category: "experience",
     date: "2022 — 2024",
     company: "DefendTex",
-    role: "Engineer",
-    description: "Electronics/Software Engineer developing autonomy subsystem for unmanned ground vehicle. Thermal object detection, GStreamer pipelines, ArduPilot implementation.",
+    role: "Electronics & Software Engineer",
+    description: "I developed the autonomy subsystem for an unmanned ground vehicle - computer vision GStreamer pipelines and ArduPilot integration. I also worked across the mechanical frame and electrical subsystems of the vehicle.",
+    tags: ["AUTONOMY", "COMPUTER VISION ", "UGV"],
     links: [],
   },
   68: {
     path: 68,
     name: "Software Systems Engineer",
     category: "experience",
-    date: "2025",
+    date: "2024 — 2025",
     company: "Tonbo Systems",
     role: "Software Systems Engineer",
-    description: "Project Lead working to integrate thermal sights with Team Awareness Kit (TAK) and deliver network-connected future soldier system kit.",
+    description: "I led the work on delivering network-connected future soldier system kits. Hardware integration, software architecture, and translating operational requirements into engineering specifications within a start-up environment. I worked on Augmented Reality headset integration with tactical military thermal sensors and ATAK plugin development.",
+    tags: ["ATAK", "SYSTEMS", "AR"],
     links: [],
   },
   70: {
@@ -327,6 +373,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Monash University",
     category: "education",
     description: "",
+    image: "/grad.jpg",
     entries: [
       { date: "2024", title: "Master of Electrical Engineering" },
       { date: "2020–2023", title: "Bachelor of Robotics and Mechatronics Engineering" },
@@ -347,6 +394,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     company: "Monash High Powered Rocketry",
     role: "Flight Systems Member",
     description: "Conducted research on non-combustible rocket deployment systems. Composite manufacturing of rocket body components.",
+    image: "/HPR.jpg",
     tags: ["ROCKETRY", "MANUFACTURING"],
     links: [],
   },
@@ -358,6 +406,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     company: "Monash Uncrewed Aerial Systems",
     role: "Aerostructures Training Officer",
     description: "Sub-team manager responsible for composite manufacturing. Lead role in design and manufacture of destructive testing system.",
+    image: "/uas.png",
     tags: ["DRONES", "STUDENT TEAMS"],
     links: [],
   },
@@ -365,8 +414,18 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 76,
     name: "Alex Hofmann",
     category: "about",
-    description: "Melbourne VIC | Age 24. Engineering problem solver with passion for building things. Defence tech background across cutting-edge R&D to forward deployments. Love a challenge.",
-    links: [],
+    content: [
+      { type: 'text', text: "Melbourne VIC | Age 24. Engineering problem solver with passion for building things. Defence tech background across cutting-edge R&D to forward deployments. Love a challenge." },
+      {
+        type: 'link_dock',
+        links: [
+          { url: "tel:+61403326837", label: "+61 403 326 837", icon: "phone" },
+          { url: "mailto:alexanderhofmann@outlook.com.au", label: "alexanderhofmann@outlook.com.au", icon: "mail" },
+          { url: "https://www.linkedin.com/in/hofmannalexb", label: "linkedin.com/in/hofmannalexb", icon: "linkedin" },
+          { url: "https://github.com/switchhoff", label: "github/switchhoff", icon: "github" }
+        ]
+      }
+    ],
   },
   78: {
     path: 78,
@@ -379,12 +438,13 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 82,
     name: "Board Games",
     category: "interests",
-    description: "Favourite Games",
+    description: "Favourites",
     items: [
       { label: "Dune Imperium", href: "https://boardgamegeek.com/boardgame/316554/dune-imperium", image: "https://cf.geekdo-images.com/PhjygpWSo-0labGrPBMyyg__itemrep@2x/img/Jo0nBF30UyHL5WSuh1xWppwt1cY=/fit-in/492x600/filters:strip_icc()/pic5666597.jpg" },
       { label: "Wingspan", href: "https://boardgamegeek.com/boardgame/266192/wingspan", image: "https://cf.geekdo-images.com/yLZJCVLlIx4c7eJEWUNJ7w__itemrep@2x/img/veohwKEtFpERbDq7xGMggHqLKX8=/fit-in/492x600/filters:strip_icc()/pic4458123.jpg" },
       { label: "Ark Nova", href: "https://boardgamegeek.com/boardgame/342942/ark-nova", image: "https://cf.geekdo-images.com/SoU8p28Sk1s8MSvoM4N8pQ__itemrep@2x/img/Pr8zSaMINlALYjR0agud0_EFESs=/fit-in/492x600/filters:strip_icc()/pic6293412.jpg" },
     ],
+    subtext: "I'm pretty competitive and enjoy playing any number of board games with friends and foes, often in the evening and into the early hours of the morning.",
     links: [],
   },
   84: {
@@ -392,23 +452,28 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "LoverLamp",
     category: "projects",
     description: "Smart Lamp",
+    wip: true,
     links: [],
   },
   86: {
     path: 86,
     name: "BinThereStoreThat",
     category: "projects",
-    description: "Storage Solution",
+    description: "I've created a method for labelling, organising and finding items at home using QR code stickers and a tracking interface. I log the contents of large storage boxes across the garage, shed and workshop — then find any item by searching the database, or identify a box's contents without needing to unstack and open it.",
+    image: "/binthere.png",
+    tags: ["SOFTWARE", "STORAGE"],
     links: [{ github: "https://github.com/switchhoff/BinThereStoreThat", label: "GitHub" }],
   },
   88: {
     path: 88,
-    name: "Monash University",
+    name: "Teaching Associate",
     category: "experience",
     role: "Teaching Associate",
+    company: "Monash University",
     date: "2025",
-    description: "Teaching final-year students the fundamentals of AI and its application in the physical world of robotics.",
+    description: "I've taught students the fundamentals of AI development, and how to apply the concepts of cutting-edge robotic control to achieve their project outcomes. This included covering fundamentals of SLAM, path planning and object avoidance, as well as training custom AI models. ",
     items: ["ECE4179 Neural Networks", "ECE4078 Intelligent Robotics"],
+    tags: ["TEACHING", "AI", "ROBOTICS"],
     links: [],
   },
   90: {
@@ -422,14 +487,14 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 92,
     name: "Gemini",
     category: "generic",
-    description: "Coded with Gemini",
+    description: "Image from Gemini",
     links: [],
   },
   94: {
     path: 94,
     name: "Video Games",
     category: "interests",
-    description: "Favourite Video Games",
+    description: "Favourites",
     items: [
       { label: "Terraria", href: "https://terraria.wiki.gg/", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVNzn3aErkS59Ym_qhqbZYFd8laElFfxviQ&s" },
       { label: "Civilization V", href: "https://civilization.fandom.com/wiki/Civilization_V", image: "https://images.ctfassets.net/wn7ipiv9ue5v/2ROTJ11e217xt6VmC5F0tq/3f83f5639df2cb3567d69ec49a655c8c/2KGMKT_CIV5_COMPLETE_AG_FOB_NO_RATING_1.jpg" },
@@ -448,6 +513,41 @@ export const PATH_DATA: Record<number, PathObject> = {
     tags: ["HACKATHON"],
     links: [],
   },
+  98: {
+    path: 98,
+    name: "Hiking",
+    category: "interests",
+    description: "",
+    items: [
+      { label: "Overland Track", action: "show_overland" },
+      { label: "Table Mountain", href: "https://www.strava.com/activities/13270686802" },
+      { label: "Mt Kosciuszko", href: "https://www.strava.com/activities/16636317218" }
+    ],
+    links: [],
+  },
+  100: {
+    path: 100,
+    name: "Soccer",
+    category: "interests",
+    description: "",
+    items: [
+      { label: "Keysborough District FC", href: "https://www.facebook.com/p/Keysborough-District-Football-Club-100057866941063/" },
+      "Monash University SC",
+      "Adelaide City FC"
+    ],
+    links: [],
+  },
+  102: {
+    path: 102,
+    name: "Running",
+    category: "interests",
+    description: "",
+    items: [
+      { label: "Elephant Strava Art", href: "https://www.strava.com/activities/3486637449/flyover", sub: false },
+      { label: "Turtle Strava Art", href: "https://www.strava.com/activities/5795277420", sub: false }
+    ],
+    links: [],
+  }
 };
 
 export function getPathData(path: number): PathObject | null {
