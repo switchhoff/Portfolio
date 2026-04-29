@@ -18,7 +18,7 @@ function fadeTo(audio: HTMLAudioElement, target: number, ms: number) {
   requestAnimationFrame(step);
 }
 
-export default function AmbientPlayer() {
+export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -92,7 +92,7 @@ export default function AmbientPlayer() {
           width: 20, height: 20,
           border: "none",
           background: "transparent",
-          color: "rgba(0,0,0,0.55)",
+          color: darkMode ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.55)",
           cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center",
           flexShrink: 0,
@@ -102,12 +102,12 @@ export default function AmbientPlayer() {
       >
         {playing ? (
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2" y="2" width="4" height="12" rx="1" fill="rgba(0,0,0,0.6)"/>
-            <rect x="10" y="2" width="4" height="12" rx="1" fill="rgba(0,0,0,0.6)"/>
+            <rect x="2" y="2" width="4" height="12" rx="1" fill={darkMode ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)"}/>
+            <rect x="10" y="2" width="4" height="12" rx="1" fill={darkMode ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)"}/>
           </svg>
         ) : (
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 2.5C4 2.04 4.5 1.77 4.87 2.04L13.37 7.54C13.71 7.78 13.71 8.22 13.37 8.46L4.87 13.96C4.5 14.23 4 13.96 4 13.5V2.5Z" fill="rgba(0,0,0,0.6)"/>
+            <path d="M4 2.5C4 2.04 4.5 1.77 4.87 2.04L13.37 7.54C13.71 7.78 13.71 8.22 13.37 8.46L4.87 13.96C4.5 14.23 4 13.96 4 13.5V2.5Z" fill={darkMode ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)"}/>
           </svg>
         )}
       </button>
@@ -119,7 +119,7 @@ export default function AmbientPlayer() {
         <div style={{
           fontSize: "9px",
           fontFamily: "'JetBrains Mono', monospace",
-          color: "rgba(0,0,0,0.55)",
+          color: darkMode ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.55)",
           letterSpacing: "0.06em",
           fontWeight: 600,
         }}>
@@ -128,7 +128,7 @@ export default function AmbientPlayer() {
         <div style={{
           fontSize: "8px",
           fontFamily: "'JetBrains Mono', monospace",
-          color: "rgba(0,0,0,0.4)",
+          color: darkMode ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
           letterSpacing: "0.06em",
           fontStyle: "italic",
         }}>

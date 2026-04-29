@@ -3,6 +3,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Send } from "lucide-react";
 import { type Project } from "@/lib/projects";
+// Single source of truth — shared with Fun View SVG popup cards
+import { PATH_DATA } from "@/lib/pathData";
 
 interface BoringViewProps {
   projects: Project[];
@@ -10,75 +12,47 @@ interface BoringViewProps {
   darkMode?: boolean;
 }
 
-const WORK = [
-  {
-    title: "Chief Engineer",
-    company: "Fortifyedge",
-    period: "2025 — NOW",
-    note: "I work on architecturing and implementing robust software solutions implementing tactical AI models for edge deployment supporting human machine interface teaming for frontline workers and defense applications. Leading a team of interns, I deploy full-stack dashboards linked to my wearable apps to translate complex signals into actionable insights for end-users.",
-    tags: ["Hardware", "Embedded", "TAK", "Firmware"],
-    color: "#ef4444",
-    color2: "#f97316",
-    emoji: "🎯",
-    photo: null,
-  },
-  {
-    title: "Software Systems Engineer",
-    company: "Tonbo Systems",
-    period: "2024 — 2025",
-    note: "Delivering network-connected future soldier system kits. Work spans hardware integration, software architecture, and translating operational requirements into engineering specifications.",
-    tags: ["Systems", "Software", "Hardware Integration"],
-    color: "#f97316",
-    color2: "#f59e0b",
-    emoji: "🔧",
-    photo: null,
-  },
-  {
-    title: "Electronics & Software Engineer",
-    company: "DefendTex",
-    period: "2022 — 2024",
-    note: "Developed the autonomy subsystem for an unmanned ground vehicle — from hardware bring-up and thermal object detection through to GStreamer pipelines and ArduPilot integration.",
-    tags: ["Autonomy", "Computer Vision", "ArduPilot", "GStreamer"],
-    color: "#f59e0b",
-    color2: "#eab308",
-    emoji: "🤖",
-    photo: null,
-  },
-];
+// Visual-only metadata — all text sourced from pathData.ts
+const WORK_VISUAL: Record<number, { color: string; color2: string; photo: string | null }> = {
+  64: { color: "#ef4444", color2: "#f97316", photo: null }, // Fortifyedge  (path 64)
+  68: { color: "#f97316", color2: "#f59e0b", photo: null }, // Tonbo        (path 68)
+  66: { color: "#f59e0b", color2: "#eab308", photo: null }, // DefendTex    (path 66)
+  88: { color: "#6366f1", color2: "#8b5cf6", photo: null }, // Monash TA    (path 88)
+};
+const WORK_PATHS = [64, 68, 66, 88];
+
+// Hackathon entries — paths 58, 60, 62, 96 in pathData.ts
+const HACKATHON_VISUAL: Record<number, { color: string; color2: string }> = {
+  58: { color: "#10b981", color2: "#059669" }, // Humanitarian Innovation — PowerPots
+  96: { color: "#14b8a6", color2: "#0d9488" }, // Humanitarian Innovation — Fiji
+  60: { color: "#6366f1", color2: "#8b5cf6" }, // Robot Building Competition
+  62: { color: "#ec4899", color2: "#db2777" }, // Monash HardHack
+};
+const HACKATHON_PATHS = [58, 96, 60, 62];
+
+// Interests — path numbers matching Fun View SVG cards
+const INTEREST_PATHS = [8, 26, 82, 18, 4, 24, 10, 28, 94];
+
+// Extract display labels from pathData items (skip action/audio items)
+function getInterestItems(path: number): string[] {
+  const d = PATH_DATA[path];
+  if (!d) return [];
+  if (path === 26) return ["@alexhofmannphotography"]; // Photography — link-only card
+  if (path === 10) return ["Alto", "Baritone"]; // Saxophone — items are audio clips, show instruments
+  if (!d.items) return [];
+  return d.items
+    .filter(i => {
+      if (typeof i === "string") return true;
+      return !("action" in i) && !("audio" in i);
+    })
+    .map(i => (typeof i === "string" ? i : i.label));
+}
 
 const EDUCATION = [
-  {
-    degree: "Master of Electrical Engineering",
-    school: "Monash University",
-    period: "2024",
-    description: "Specialization: Artificial Intelligence",
-    achievements: ["Academic Medal Winner 2024"],
-    color: "#ef4444",
-    color2: "#f43f5e",
-  },
-  {
-    degree: "Bachelor of Robotics and Mechatronics Engineering",
-    school: "Monash University",
-    period: "2020 – 2023",
-    description: "Minor: Software Engineering",
-    achievements: ["Dean's Honour List 2020–2023"],
-    color: "#f97316",
-    color2: "#ef4444",
-  },
+  // Sourced from pathData path 70 (Monash University entries)
+  { degree: "Master of Electrical Engineering", school: "Monash University", period: "2024", description: "Specialization: Artificial Intelligence", achievements: ["Academic Medal Winner 2024"], color: "#ef4444", color2: "#f43f5e" },
+  { degree: "Bachelor of Robotics and Mechatronics Engineering", school: "Monash University", period: "2020 – 2023", description: "Minor: Software Engineering", achievements: ["Dean's Honour List 2020–2023"], color: "#f97316", color2: "#ef4444" },
 ];
-
-const INTERESTS = [
-  { title: "Golf", subtitle: "HCP 38 · Berwick Montuna Golf Club" },
-  { title: "Photography", subtitle: "@alexhofmannphotography" },
-  { title: "Board Games", subtitle: "Dune Imperium · Wingspan · Ark Nova" },
-  { title: "Reading", subtitle: "Brotherband Series · Wolf of the Plains · Courtney Series" },
-  { title: "Art", subtitle: "Hans Heysen · Albert Namatjira · Matthew Bell" },
-  { title: "Craft", subtitle: "Sewing · Embroidery · Crochet" },
-  { title: "Saxophone", subtitle: "Alto · Baritone" },
-  { title: "Movies", subtitle: "Ocean's Eleven · Lord of the Rings · Pirates of the Caribbean" },
-];
-
-const SKILLS = ["Embedded Systems", "Computer Vision", "ArduPilot", "TAK", "Python", "C/C++", "React", "Next.js"];
 
 const GithubIcon = ({ size = 20 }: { size?: number }) => (
   <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width={size} height={size}>
@@ -193,57 +167,89 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       <section style={{ ...S.section, background: dm ? "#0f0f0f" : "#fff" }}>
         <div style={S.inner}>
           <Heading title="Experience" c1="#ef4444" c2="#f97316" dark={dm} />
-          <div style={{ position: "relative" }}>
-            {/* Timeline line */}
+
+          {/* ── Work ── */}
+          <div style={{ position: "relative", marginBottom: "5rem" }}>
             <div style={{ position: "absolute", left: "28px", top: 0, bottom: 0, width: "2px", background: "linear-gradient(to bottom, #ef4444, #f97316, #f59e0b)" }} />
             <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
-              {WORK.map((w, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                  style={{ position: "relative", paddingLeft: "5rem" }}>
-                  {/* Dot */}
-                  <div style={{
-                    position: "absolute", left: "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%",
-                    background: `linear-gradient(135deg, ${w.color}, ${w.color2})`,
-                    border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                  }} />
-                  <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", transition: "box-shadow 0.3s", display: "flex", gap: 0 }}>
-                    {/* Photo placeholder */}
-                    <div style={{ width: "160px", flexShrink: 0, background: `linear-gradient(135deg, ${w.color}22, ${w.color2}11)`, borderRight: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.5rem", padding: "1.5rem 0.75rem" }}>
-                      {w.photo ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={w.photo} alt={w.company} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                      ) : (
-                        <>
-                          <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `linear-gradient(135deg, ${w.color}44, ${w.color2}44)`, border: `2px dashed ${w.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={w.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                              <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
-                            </svg>
+              {WORK_PATHS.map((pathId, i) => {
+                const w = PATH_DATA[pathId];
+                const v = WORK_VISUAL[pathId];
+                if (!w || !v) return null;
+                return (
+                  <motion.div key={pathId} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                    style={{ position: "relative", paddingLeft: "5rem" }}>
+                    <div style={{ position: "absolute", left: "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}, ${v.color2})`, border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }} />
+                    <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", display: "flex" }}>
+                      {/* Photo placeholder */}
+                      <div style={{ width: "160px", flexShrink: 0, background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, borderRight: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.5rem", padding: "1.5rem 0.75rem" }}>
+                        {v.photo ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={v.photo} alt={w.company} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        ) : (
+                          <>
+                            <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}44, ${v.color2}44)`, border: `2px dashed ${v.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={v.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+                              </svg>
+                            </div>
+                            <span style={{ fontSize: "0.7rem", color: dm ? "#4b5563" : "#9ca3af", textAlign: "center" }}>Photo</span>
+                          </>
+                        )}
+                      </div>
+                      {/* Content — text from pathData */}
+                      <div style={{ padding: "1.75rem 2rem 2rem", flex: 1 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
+                          <div>
+                            <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem" }}>{w.role ?? w.name}</h3>
+                            <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${v.color}, ${v.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
                           </div>
-                          <span style={{ fontSize: "0.7rem", color: dm ? "#4b5563" : "#9ca3af", textAlign: "center", lineHeight: 1.4 }}>Photo</span>
-                        </>
-                      )}
-                    </div>
-                    {/* Content */}
-                    <div style={{ padding: "1.75rem 2rem 2rem", flex: 1 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
-                        <div>
-                          <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem" }}>{w.title}</h3>
-                          <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${w.color}, ${w.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
+                          <span style={{ padding: "0.4rem 1rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{w.date}</span>
                         </div>
-                        <span style={{ padding: "0.4rem 1rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{w.period}</span>
-                      </div>
-                      <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.75, marginBottom: "1.25rem" }}>{w.note}</p>
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                        {w.tags.map(t => (
-                          <span key={t} style={{ padding: "0.35rem 0.75rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#374151", borderRadius: "0.5rem", fontSize: "0.875rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{t}</span>
-                        ))}
+                        <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.75, marginBottom: w.tags?.length ? "1.25rem" : 0 }}>{w.description}</p>
+                        {w.tags && (
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                            {w.tags.map(t => (
+                              <span key={t} style={{ padding: "0.35rem 0.75rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#374151", borderRadius: "0.5rem", fontSize: "0.875rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{t}</span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
+
+          {/* ── Hackathons ── */}
+          <div style={{ marginBottom: "0" }}>
+            <h3 style={{ fontSize: "1.5rem", fontWeight: 300, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.75rem" }}>Hackathons &amp; Competitions</h3>
+            <div style={{ height: "3px", width: "60px", borderRadius: "9999px", background: "linear-gradient(to right, #10b981, #6366f1)", marginBottom: "2.5rem" }} />
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.25rem" }}>
+              {HACKATHON_PATHS.map((pathId, i) => {
+                const h = PATH_DATA[pathId];
+                const v = HACKATHON_VISUAL[pathId];
+                if (!h || !v) return null;
+                return (
+                  <motion.div key={pathId} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                    style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.25rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 16px rgba(0,0,0,0.06)" }}
+                    whileHover={{ y: -4, boxShadow: "0 12px 32px rgba(0,0,0,0.12)" }}>
+                    <div style={{ height: "5px", background: `linear-gradient(to right, ${v.color}, ${v.color2})` }} />
+                    <div style={{ padding: "1.5rem" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.6rem" }}>
+                        <h4 style={{ fontSize: "1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", lineHeight: 1.3 }}>{h.role ?? h.name}</h4>
+                        <span style={{ padding: "0.25rem 0.7rem", background: `${v.color}20`, color: v.color, borderRadius: "9999px", fontSize: "0.78rem", whiteSpace: "nowrap", fontWeight: 600, flexShrink: 0 }}>{h.date}</span>
+                      </div>
+                      <p style={{ fontSize: "0.85rem", fontWeight: 500, color: dm ? "#9ca3af" : "#6b7280", marginBottom: "0.75rem" }}>{h.company}</p>
+                      <p style={{ fontSize: "0.9rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.65 }}>{h.description}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -318,21 +324,26 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
         <div style={S.inner}>
           <Heading title="Interests" c1="#ef4444" c2="#ec4899" dark={dm} />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.25rem" }}>
-            {INTERESTS.map((interest, i) => (
-              <motion.div key={interest.title} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-                style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1rem", padding: "1.5rem", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, transition: "border-color 0.2s, box-shadow 0.2s" }}
-                whileHover={{ borderColor: "#fecaca", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }}>
-                <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem" }}>{interest.title}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-                  {interest.subtitle.split(" · ").map((item, idx) => (
-                    <div key={idx} style={{ fontSize: "0.875rem", color: "#9ca3af", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                      <span style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#9ca3af", flexShrink: 0 }} />
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+            {INTEREST_PATHS.map((pathId, i) => {
+              const interest = PATH_DATA[pathId];
+              if (!interest) return null;
+              const items = getInterestItems(pathId);
+              return (
+                <motion.div key={pathId} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+                  style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1rem", padding: "1.5rem", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, transition: "border-color 0.2s, box-shadow 0.2s" }}
+                  whileHover={{ borderColor: "#fecaca", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }}>
+                  <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem" }}>{interest.name}</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                    {items.map((item, idx) => (
+                      <div key={idx} style={{ fontSize: "0.875rem", color: "#9ca3af", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                        <span style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#9ca3af", flexShrink: 0 }} />
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

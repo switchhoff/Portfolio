@@ -104,11 +104,13 @@ export default function Home() {
   const [isLit, setIsLit] = useState(false);
   const [logoPhase, setLogoPhase] = useState("initial");
   const [darkMode, setDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Persist dark mode across sessions
+  // Persist dark mode across sessions; set mounted after first paint
   useEffect(() => {
     const stored = localStorage.getItem("darkMode");
     if (stored === "true") setDarkMode(true);
+    setMounted(true);
   }, []);
   const sceneContainerRef = useRef<HTMLDivElement>(null);
 
@@ -321,30 +323,39 @@ export default function Home() {
           <div style={{ width: "clamp(140px, 20vw, 300px)" }} />
 
           {/* Tab Switcher in Header */}
-          <div style={{
+          <div suppressHydrationWarning style={{
             position: "relative",
             display: "flex",
-            background: darkMode ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)",
+            background: mounted ? (darkMode ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)") : "rgba(0,0,0,0.06)",
             borderRadius: "14px",
             padding: "4px",
-            border: `1px solid ${darkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}`,
+            border: `1px solid ${mounted ? (darkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)") : "rgba(0,0,0,0.1)"}`,
             boxShadow: "inset 0 1px 3px rgba(0,0,0,0.15)",
           }}>
-            {/* Sliding pill indicator */}
-            <motion.div
-              layout
-              transition={{ type: "spring", stiffness: 500, damping: 40 }}
-              style={{
-                position: "absolute",
-                top: "4px",
-                bottom: "4px",
-                borderRadius: "10px",
+            {/* Sliding pill indicator — only animate after mount to avoid SSR mismatch */}
+            {mounted ? (
+              <motion.div
+                layout
+                transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                style={{
+                  position: "absolute",
+                  top: "4px",
+                  bottom: "4px",
+                  borderRadius: "10px",
+                  background: "linear-gradient(135deg, #cc0000, #ff4444)",
+                  boxShadow: "0 2px 12px rgba(200,0,0,0.4)",
+                  left: activeTab === "fun" ? "4px" : "calc(50% + 2px)",
+                  width: "calc(50% - 6px)",
+                }}
+              />
+            ) : (
+              <div style={{
+                position: "absolute", top: "4px", bottom: "4px", borderRadius: "10px",
                 background: "linear-gradient(135deg, #cc0000, #ff4444)",
                 boxShadow: "0 2px 12px rgba(200,0,0,0.4)",
-                left: activeTab === "fun" ? "4px" : "calc(50% + 2px)",
-                width: "calc(50% - 6px)",
-              }}
-            />
+                left: "4px", width: "calc(50% - 6px)",
+              }} />
+            )}
             {[
               { id: "fun", label: "FUN", icon: <Gamepad2 size={14} /> },
               { id: "boring", label: "BORING", icon: <FileText size={14} /> }
@@ -369,7 +380,7 @@ export default function Home() {
                   transition: "color 0.2s",
                   color: activeTab === t.id
                     ? "#fff"
-                    : (darkMode ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)"),
+                    : (mounted && darkMode ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)"),
                   flex: 1,
                   justifyContent: "center",
                   whiteSpace: "nowrap",
@@ -425,7 +436,7 @@ export default function Home() {
                 animate={{ opacity: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, filter: "blur(10px)" }}
                 transition={{ duration: 0.4 }}
-                style={{ position: "relative", width: "100vw", height: "calc(100vh - 60px)", overflow: "hidden", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}
+                style={{ position: "relative", width: "100vw", height: "calc(100vh - 60px)", overflow: "hidden", background: darkMode ? "#111111" : "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}
               >
                 {/* Shared container — fills viewport at 16:9 */}
                 <div style={{
@@ -476,7 +487,7 @@ export default function Home() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.4 }}
               >
-                <BoringView projects={PROJECTS} age={age} />
+                <BoringView projects={PROJECTS} age={age} darkMode={darkMode} />
               </motion.section>
             )}
           </AnimatePresence>
@@ -508,7 +519,7 @@ export default function Home() {
             height: "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
             pointerEvents: "none",
           }}>
-            <AmbientPlayer />
+            <AmbientPlayer darkMode={darkMode} />
           </div>
         </motion.div>
 
