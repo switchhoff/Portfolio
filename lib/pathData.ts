@@ -37,7 +37,6 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "interests",
     description: "Favourite Artists:",
     items: [
-      { label: "Bateleur Eagle by Matthew Bell", href: "https://matthewbellart.co.za/" },
       "Hans Heysen",
       "Albert Namatjira",
       "Matthew Bell",
@@ -179,14 +178,10 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   34: {
     path: 34,
-    name: "Contact",
+    name: "",
     category: "projects",
-    description: "",
-    links: [
-      { external: "tel:+61403326837", label: "+61 403326837" },
-      { external: "mailto:alexanderhofmann@outlook.com.au", label: "alexanderhofmann@outlook.com.au" },
-      { external: "https://www.linkedin.com/in/hofmannalexb", label: "www.linkedin.com/in/hofmannalexb" },
-    ],
+    description: "Tech blog space where I write about what I'm working on, interesting things I come across, the latest developments in tech. At this stage private for keeping on track of things personally - but might publicise/route through LinkedIn if people ever want to follow what I do.",
+    links: []
   },
   36: {
     path: 36,
@@ -232,7 +227,8 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 46,
     name: "SixClicks",
     category: "projects",
-    description: "Briefcase App",
+    description: "I made this basic LinkedIn scraper Chrome extension to build out a node map of my professional connections.",
+    tags: ["VISUALIZATION", "NETWORK", "CHROME"],
     links: [{ github: "https://github.com/switchhoff/SixClicks", label: "GitHub" }],
   },
   48: {
@@ -240,6 +236,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Portfolio Website",
     category: "projects",
     description: "Inspired by the point-and-click adventure games I grew up playing — every object in the workshop is a clickable hotspot telling a piece of my story.",
+    image: "/transistorswitch.gif",
     tags: ["SOFTWARE", "PORTFOLIO"],
     links: [{ github: "https://github.com/switchhoff/Portfolio", label: "GitHub" }],
   },
@@ -312,7 +309,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     company: "Fortifyedge",
     role: "Chief Engineer",
     description: "I work on architecturing and implementing robust software solutions implementing tactical AI models for edge deployment supporting human machine interface teaming for frontline workers and defense applications. Leading a team of interns, I deploy full-stack dashboards linked to my wearable apps to translate complex signals into actionable insights for end-users.",
-    tags: ["Hardware", "Embedded", "TAK", "Firmware"],
+    tags: ["Edge", "Wearables", "Software", "Lead"],
     links: [],
   },
   66: {
@@ -333,8 +330,8 @@ export const PATH_DATA: Record<number, PathObject> = {
     date: "2024 — 2025",
     company: "Tonbo Systems",
     role: "Software Systems Engineer",
-    description: "Delivering network-connected future soldier system kits. Work spans hardware integration, software architecture, and translating operational requirements into engineering specifications.",
-    tags: ["Systems", "Software", "Hardware Integration"],
+    description: "I led the work on delivering network-connected future soldier system kits. Hardware integration, software architecture, and translating operational requirements into engineering specifications within a start-up environment.",
+    tags: ["ATAK", "Software", "Hardware Integration"],
     links: [],
   },
   70: {

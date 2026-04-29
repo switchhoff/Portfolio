@@ -1046,13 +1046,23 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                             </div>
                           ) : (
                             /* Regular description */
-                            <div style={{
-                              fontSize: "13px",
-                              color: "#000",
-                              lineHeight: "1.4",
-                              marginBottom: "8px",
-                            }}>
-                              {pathData.description}
+                            <div>
+                              <div style={{
+                                fontSize: "13px",
+                                color: "#000",
+                                lineHeight: "1.4",
+                                marginBottom: pathData.image ? "10px" : "8px",
+                              }}>
+                                {pathData.description}
+                              </div>
+                              {pathData.image && (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                  src={pathData.image}
+                                  alt={pathData.name}
+                                  style={{ width: "100%", borderRadius: "4px", display: "block", marginBottom: "8px" }}
+                                />
+                              )}
                             </div>
                           )}
                         </div>
