@@ -144,9 +144,10 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                     memberPaths.forEach(gIdx => {
                       if (!pathsInGroup.includes(gIdx)) {
                         const vp = allPaths[gIdx] as SVGPathElement | undefined;
-                        if (vp && vp.getAttribute("fill") && vp.getAttribute("fill") !== "none") {
-                          vp.setAttribute("fill", "#999999");
-                          vp.setAttribute("fill-opacity", "0.5");
+                        if (vp) {
+                          vp.setAttribute("fill-opacity", "0.01");
+                          vp.setAttribute("stroke", "#aaaaaa");
+                          vp.setAttribute("stroke-width", "1");
                         }
                       }
                     });
@@ -194,9 +195,10 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                     memberPaths.forEach(gIdx => {
                       if (!pathsInGroup.includes(gIdx)) {
                         const vp = allPaths[gIdx] as SVGPathElement | undefined;
-                        if (vp && vp.getAttribute("fill") && vp.getAttribute("fill") !== "none") {
-                          vp.setAttribute("fill", "#999999");
-                          vp.setAttribute("fill-opacity", "0.5");
+                        if (vp) {
+                          vp.setAttribute("fill-opacity", "0.01");
+                          vp.setAttribute("stroke", "#aaaaaa");
+                          vp.setAttribute("stroke-width", "1");
                         }
                       }
                     });
@@ -235,11 +237,9 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
           isVisited = groupRoot !== undefined && visitedPathsRef.current.has(groupRoot);
         }
         if (isVisited) {
-          if (path.getAttribute("fill") && path.getAttribute("fill") !== "none") {
-            path.setAttribute("fill", "#999999");
-            path.setAttribute("fill-opacity", "0.5");
-          }
-          path.setAttribute("stroke", "none");
+          path.setAttribute("fill-opacity", "0.01");
+          path.setAttribute("stroke", "#aaaaaa");
+          path.setAttribute("stroke-width", "1");
         } else {
           path.setAttribute("fill-opacity", "0.01");
           path.setAttribute("stroke", "none");
@@ -262,42 +262,30 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       }
 
       if (filterPaths && filterPaths.has(idx)) {
-        // Show outline only — no fill colour change
+        // Cheat colour outline — overrides visited grey
         const color = path.getAttribute("data-color") || "#45B7D1";
-        if (isVisited) {
-          // Keep grey fill for visited, add coloured outline
-          if (path.getAttribute("fill") && path.getAttribute("fill") !== "none") {
-            path.setAttribute("fill", "#999999");
-            path.setAttribute("fill-opacity", "0.5");
-          }
-        } else {
-          // Not visited — keep fill invisible
-          path.setAttribute("fill-opacity", "0.01");
-        }
+        path.setAttribute("fill-opacity", "0.01");
         path.setAttribute("stroke", color);
         path.setAttribute("stroke-width", "1.5");
       } else if (filterPaths && isVisited) {
-        // Visited but not in filtered group — keep grey, no outline
-        if (path.getAttribute("fill") && path.getAttribute("fill") !== "none") {
-          path.setAttribute("fill", "#999999");
-          path.setAttribute("fill-opacity", "0.5");
-        }
-        path.setAttribute("stroke", "none");
+        // Visited but not in filtered group — grey outline
+        path.setAttribute("fill-opacity", "0.01");
+        path.setAttribute("stroke", "#aaaaaa");
+        path.setAttribute("stroke-width", "1");
       } else if (filterPaths) {
         // Non-filtered, non-visited — hidden
         path.setAttribute("fill-opacity", "0.01");
         path.setAttribute("stroke", "none");
       } else {
-        // No filter active — restore visited grey, clear strokes
+        // No filter active
         if (isVisited) {
-          if (path.getAttribute("fill") && path.getAttribute("fill") !== "none") {
-            path.setAttribute("fill", "#999999");
-            path.setAttribute("fill-opacity", "0.5");
-          }
+          path.setAttribute("fill-opacity", "0.01");
+          path.setAttribute("stroke", "#aaaaaa");
+          path.setAttribute("stroke-width", "1");
         } else {
           path.setAttribute("fill-opacity", "0.01");
+          path.setAttribute("stroke", "none");
         }
-        path.setAttribute("stroke", "none");
       }
     });
   }, [activeFilters, visitedPaths]);
