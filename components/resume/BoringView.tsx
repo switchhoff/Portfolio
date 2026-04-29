@@ -322,8 +322,15 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
               <motion.div key={interest.title} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
                 style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1rem", padding: "1.5rem", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, transition: "border-color 0.2s, box-shadow 0.2s" }}
                 whileHover={{ borderColor: "#fecaca", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }}>
-                <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>{interest.title}</div>
-                <div style={{ fontSize: "0.875rem", color: "#9ca3af", lineHeight: 1.6 }}>{interest.subtitle}</div>
+                <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem" }}>{interest.title}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                  {interest.subtitle.split(" · ").map((item, idx) => (
+                    <div key={idx} style={{ fontSize: "0.875rem", color: "#9ca3af", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                      <span style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#9ca3af", flexShrink: 0 }} />
+                      {item}
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             ))}
           </div>
