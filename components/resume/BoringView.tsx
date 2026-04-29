@@ -465,8 +465,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       {/* ── PROJECTS ── */}
       <section id="boring-projects" style={{ ...S.section, background: dm ? "linear-gradient(135deg, #111 0%, #0a0a1a 100%)" : "linear-gradient(135deg, #fafafa 0%, #f0f9ff 100%)", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 70% 30%, rgba(99,102,241,0.05), transparent 50%), radial-gradient(circle at 30% 70%, rgba(59,130,246,0.05), transparent 50%)", pointerEvents: "none" }} />
-        <div style={{ ...S.innerWide, position: "relative" }}>
+        <div style={S.inner}>
           <Heading title="Projects" c1="#6366f1" c2="#ec4899" dark={dm} />
+        </div>
+        <div style={{ ...S.innerWide, position: "relative" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.75rem" }}>
             {projects.map((proj, i) => (
               <motion.div key={proj.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
