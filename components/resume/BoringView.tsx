@@ -18,6 +18,7 @@ const WORK = [
     tags: ["Hardware", "Embedded", "TAK", "Firmware"],
     color: "#ef4444",
     color2: "#f97316",
+    emoji: "🎯",
   },
   {
     title: "Software Systems Engineer",
@@ -27,6 +28,7 @@ const WORK = [
     tags: ["Systems", "Software", "Hardware Integration"],
     color: "#f97316",
     color2: "#f59e0b",
+    emoji: "🔧",
   },
   {
     title: "Electronics & Software Engineer",
@@ -36,6 +38,7 @@ const WORK = [
     tags: ["Autonomy", "Computer Vision", "ArduPilot", "GStreamer"],
     color: "#f59e0b",
     color2: "#eab308",
+    emoji: "🤖",
   },
 ];
 
@@ -44,7 +47,7 @@ const EDUCATION = [
     degree: "Master of Electrical Engineering",
     school: "Monash University",
     period: "2024",
-    description: "",
+    description: "Specialization: Artificial Intelligence",
     achievements: ["Academic Medal Winner 2024"],
     color: "#ef4444",
     color2: "#f43f5e",
@@ -54,7 +57,7 @@ const EDUCATION = [
     school: "Monash University",
     period: "2020 – 2023",
     description: "Minor: Software Engineering",
-    achievements: ["Specialization: Artificial Intelligence", "Dean's Honour List 2020–2023"],
+    achievements: ["Dean's Honour List 2020–2023"],
     color: "#f97316",
     color2: "#ef4444",
   },
@@ -199,19 +202,25 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                     background: `linear-gradient(135deg, ${w.color}, ${w.color2})`,
                     border: "3px solid #fff", boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
                   }} />
-                  <div style={{ background: "#fff", borderRadius: "1.5rem", padding: "2rem", border: "2px solid #f3f4f6", boxShadow: "0 4px 24px rgba(0,0,0,0.07)", transition: "box-shadow 0.3s" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
-                      <div>
-                        <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: "#111827", marginBottom: "0.3rem" }}>{w.title}</h3>
-                        <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${w.color}, ${w.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
-                      </div>
-                      <span style={{ padding: "0.4rem 1rem", background: "#f9fafb", color: "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: "1px solid #e5e7eb" }}>{w.period}</span>
+                  <div style={{ background: "#fff", borderRadius: "1.5rem", overflow: "hidden", border: "2px solid #f3f4f6", boxShadow: "0 4px 24px rgba(0,0,0,0.07)", transition: "box-shadow 0.3s" }}>
+                    {/* Image / colour banner */}
+                    <div style={{ height: "120px", background: `linear-gradient(135deg, ${w.color}, ${w.color2})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3.5rem", opacity: 0.9 }}>
+                      {w.emoji}
                     </div>
-                    <p style={{ fontSize: "1rem", color: "#6b7280", lineHeight: 1.75, marginBottom: "1.25rem" }}>{w.note}</p>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                      {w.tags.map(t => (
-                        <span key={t} style={{ padding: "0.35rem 0.75rem", background: "#f9fafb", color: "#374151", borderRadius: "0.5rem", fontSize: "0.875rem", border: "1px solid #e5e7eb" }}>{t}</span>
-                      ))}
+                    <div style={{ padding: "1.75rem 2rem 2rem" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
+                        <div>
+                          <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: "#111827", marginBottom: "0.3rem" }}>{w.title}</h3>
+                          <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${w.color}, ${w.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
+                        </div>
+                        <span style={{ padding: "0.4rem 1rem", background: "#f9fafb", color: "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: "1px solid #e5e7eb" }}>{w.period}</span>
+                      </div>
+                      <p style={{ fontSize: "1rem", color: "#6b7280", lineHeight: 1.75, marginBottom: "1.25rem" }}>{w.note}</p>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                        {w.tags.map(t => (
+                          <span key={t} style={{ padding: "0.35rem 0.75rem", background: "#f9fafb", color: "#374151", borderRadius: "0.5rem", fontSize: "0.875rem", border: "1px solid #e5e7eb" }}>{t}</span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -247,6 +256,37 @@ export default function BoringView({ projects, age }: BoringViewProps) {
                         </svg>
                         <span style={{ fontSize: "0.95rem", color: "#374151" }}>{a}</span>
                       </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PROJECTS ── */}
+      <section style={{ ...S.section, background: "linear-gradient(135deg, #fafafa 0%, #f0f9ff 100%)", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 70% 30%, rgba(99,102,241,0.05), transparent 50%), radial-gradient(circle at 30% 70%, rgba(59,130,246,0.05), transparent 50%)", pointerEvents: "none" }} />
+        <div style={{ ...S.innerWide, position: "relative" }}>
+          <Heading title="Projects" c1="#6366f1" c2="#ec4899" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.75rem" }}>
+            {projects.map((proj, i) => (
+              <motion.div key={proj.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+                style={{ background: "#fff", borderRadius: "1.5rem", overflow: "hidden", border: "2px solid #f3f4f6", transition: "transform 0.25s, box-shadow 0.25s", cursor: "default" }}
+                whileHover={{ y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}>
+                {/* Colour banner */}
+                <div style={{ height: "140px", background: `linear-gradient(135deg, ${proj.color}cc, ${proj.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4rem", position: "relative" }}>
+                  <span style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.2))" }}>
+                    {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : "💡"}
+                  </span>
+                </div>
+                <div style={{ padding: "1.25rem 1.5rem 1.5rem" }}>
+                  <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "#111827", marginBottom: "0.5rem" }}>{proj.name}</h3>
+                  <p style={{ fontSize: "0.9rem", color: "#6b7280", lineHeight: 1.6, marginBottom: "1rem", minHeight: "2.8rem" }}>{proj.tagline}</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                    {proj.tags.map(t => (
+                      <span key={t} style={{ padding: "0.25rem 0.65rem", background: "#f9fafb", color: "#4b5563", borderRadius: "0.4rem", fontSize: "0.8rem", border: "1px solid #e5e7eb" }}>{t}</span>
                     ))}
                   </div>
                 </div>
