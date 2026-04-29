@@ -22,9 +22,24 @@ interface Props {
 
 export default function HotspotModal({ hotspot, clickOrigin, containerRect, onClose }: Props) {
   const modalRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ left: number; top: number; arrowSide: "left" | "right" }>({ left: 0, top: 0, arrowSide: "left" });
+  const [isMobile, setIsMobile] = useState(false);
+  const [pos, setPos] = useState<{ left: number | string; top: number | string; arrowSide: "left" | "right" }>({ left: 0, top: 0, arrowSide: "left" });
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const computePosition = useCallback(() => {
     if (!containerRect || !modalRef.current) return;
+
+    if (isMobile) {
+      setPos({ left: "50%", top: "50%", arrowSide: "left" });
+      return;
+    }
+
     const modal = modalRef.current.getBoundingClientRect();
     const mw = modal.width || 380;
     const mh = modal.height || 300;
@@ -97,18 +112,21 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
             transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             style={{
               position: "absolute",
-              left: pos.left,
-              top: pos.top,
+              left: isMobile ? "50%" : pos.left,
+              top: isMobile ? "50%" : pos.top,
+              transform: isMobile ? "translate(-50%, -50%)" : "none",
               zIndex: 25,
-              width: 380,
-              maxHeight: "70vh",
+              width: "min(380px, calc(100vw - 32px))",
+              maxHeight: "85vh",
               overflowY: "auto",
               background: "#ffffff",
               border: `1px solid ${catColor}30`,
-              borderLeft: pos.arrowSide === "left" ? `3px solid ${catColor}` : `1px solid ${catColor}30`,
-              borderRight: pos.arrowSide === "right" ? `3px solid ${catColor}` : `1px solid ${catColor}30`,
+              borderLeft: !isMobile && pos.arrowSide === "left" ? `3px solid ${catColor}` : `1px solid ${catColor}30`,
+              borderRight: !isMobile && pos.arrowSide === "right" ? `3px solid ${catColor}` : `1px solid ${catColor}30`,
+              borderTop: isMobile ? `3px solid ${catColor}` : `1px solid ${catColor}30`,
               boxShadow: "0 12px 40px rgba(0,0,0,0.12)",
               fontFamily: "'JetBrains Mono', monospace",
+              borderRadius: isMobile ? "8px" : "0",
             }}
           >
             {/* Header */}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Send, ChevronLeft, ChevronRight } from "lucide-react";
 import { useForm, ValidationError } from "@formspree/react";
@@ -76,9 +76,9 @@ const EDUCATION = [
 
 const S = {
   font: "var(--font-inter), system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif",
-  section: { padding: "7rem clamp(1.5rem, 6vw, 6rem)" },
-  inner: { maxWidth: "1100px", margin: "0 auto" },
-  innerWide: { maxWidth: "1280px", margin: "0 auto" },
+  section: (isMobile: boolean) => ({ padding: isMobile ? "4rem 1rem" : "7rem clamp(1.5rem, 6vw, 6rem)" }),
+  inner: { maxWidth: "1100px", margin: "0 auto", width: "100%" },
+  innerWide: { maxWidth: "1280px", margin: "0 auto", width: "100%" },
   bar: (color1: string, color2: string) => ({
     height: "6px", width: "96px", borderRadius: "9999px",
     background: `linear-gradient(to right, ${color1}, ${color2})`,
@@ -160,6 +160,14 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
   const [formState, handleSubmit] = useForm("xzdynydr");
   const [activeHackathon, setActiveHackathon] = useState(0);
   const [showOverland, setShowOverland] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const navItems = [
     { id: "boring-about",      label: "About",      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> },
@@ -174,64 +182,54 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
     <div style={{ minHeight: "100vh", width: "100%", background: dm ? "#0f0f0f" : "#fff", color: dm ? "#f9fafb" : "#111827", fontFamily: S.font, fontSize: "16px", position: "relative" }}>
 
       {/* ── SIDEBAR TOC ── */}
-      <nav style={{
-        position: "fixed",
-        left: "1.25rem",
-        top: "50%",
-        transform: "translateY(-50%)",
-        zIndex: 80,
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.5rem",
-      }}>
-        {navItems.map(({ id, label, icon }) => (
-          <button
-            key={id}
-            title={label}
-            onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "10px",
-              border: `1px solid ${dm ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-              background: dm ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)",
-              color: dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backdropFilter: "blur(8px)",
-              transition: "all 0.2s",
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.color = dm ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.85)";
-              (e.currentTarget as HTMLButtonElement).style.background = dm ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,1)";
-              (e.currentTarget as HTMLButtonElement).style.borderColor = dm ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.18)";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.color = dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)";
-              (e.currentTarget as HTMLButtonElement).style.background = dm ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)";
-              (e.currentTarget as HTMLButtonElement).style.borderColor = dm ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
-            }}
-          >
-            {icon}
-          </button>
-        ))}
-      </nav>
+      {!isMobile && (
+        <nav style={{
+          position: "fixed",
+          left: "1.25rem",
+          top: "50%",
+          transform: "translateY(-50%)",
+          zIndex: 80,
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.5rem",
+        }}>
+          {navItems.map(({ id, label, icon }) => (
+            <button
+              key={id}
+              title={label}
+              onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })}
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "10px",
+                border: `1px solid ${dm ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+                background: dm ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)",
+                color: dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = dm ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,1)";
+                e.currentTarget.style.color = dm ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.9)";
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = dm ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)";
+                e.currentTarget.style.color = dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)";
+              }}
+            >
+              {icon}
+            </button>
+          ))}
+        </nav>
+      )}
 
-      {/* ── ABOUT ── */}
-      <section id="boring-about" style={{
-        ...S.section,
-        position: "relative",
-        overflow: "hidden",
-        background: dm
-          ? "radial-gradient(circle at 30% 20%, rgba(239,68,68,0.12), transparent 50%), radial-gradient(circle at 70% 80%, rgba(251,146,60,0.10), transparent 50%), #0f0f0f"
-          : "radial-gradient(circle at 30% 20%, rgba(239,68,68,0.07), transparent 50%), radial-gradient(circle at 70% 80%, rgba(251,146,60,0.07), transparent 50%)",
-      }}>
-        <div style={S.innerWide}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "5rem", alignItems: "center" }}>
+      {/* ── ABOUT / BIO ── */}
+      <section id="boring-about" style={{ ...S.section(isMobile), paddingTop: isMobile ? "2rem" : "8rem", borderBottom: `1px solid ${dm ? "#1a1a1a" : "#f3f4f6"}` }}>
+        <div style={S.inner}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr", gap: isMobile ? "3rem" : "5rem", alignItems: "start" }}>
             {/* Photo */}
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
               style={{ display: "flex", justifyContent: "center" }}>
@@ -280,7 +278,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── EXPERIENCE ── */}
-      <section id="boring-experience" style={{ ...S.section, background: dm ? "#0f0f0f" : "#fff" }}>
+      <section id="boring-experience" style={{ ...S.section(isMobile), background: dm ? "#0f0f0f" : "#fff" }}>
         <div style={S.inner}>
           <Heading title="Experience" c1="#ef4444" c2="#f97316" dark={dm} />
 
@@ -294,11 +292,11 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 if (!w || !v) return null;
                 return (
                   <motion.div key={pathId} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                    style={{ position: "relative", paddingLeft: "5rem" }}>
-                    <div style={{ position: "absolute", left: "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}, ${v.color2})`, border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }} />
-                    <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", display: "flex" }}>
+                    style={{ position: "relative", paddingLeft: isMobile ? "3.5rem" : "5rem" }}>
+                    <div style={{ position: "absolute", left: isMobile ? "14px" : "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}, ${v.color2})`, border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }} />
+                    <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", display: "flex", flexDirection: isMobile ? "column" : "row" }}>
                       {/* Photo / placeholder */}
-                      <div style={{ width: "200px", flexShrink: 0, position: "relative", borderRight: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)` }}>
+                      <div style={{ width: isMobile ? "100%" : "200px", height: isMobile ? "160px" : "auto", flexShrink: 0, position: "relative", borderRight: !isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", borderBottom: isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)` }}>
                         {v.photo ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={v.photo} alt={w.company} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
@@ -345,25 +343,25 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── HACKATHONS ── */}
-      <section id="boring-hackathons" style={{ ...S.section, background: dm ? "linear-gradient(135deg, #0a0f0a 0%, #0a0a1a 100%)" : "linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%)" }}>
+      <section id="boring-hackathons" style={{ ...S.section(isMobile), background: dm ? "linear-gradient(135deg, #0a0f0a 0%, #0a0a1a 100%)" : "linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%)" }}>
         <div style={S.inner}>
           <Heading title="Hackathons" c1="#10b981" c2="#6366f1" dark={dm} />
           <div style={{ position: "relative" }}>
 
-            <div style={{ position: "relative", height: "480px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+            <div style={{ position: "relative", height: isMobile ? "540px" : "480px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
 
               <button
                 onClick={() => setActiveHackathon((prev) => (prev - 1 + HACKATHON_PATHS.length) % HACKATHON_PATHS.length)}
-                style={{ position: "absolute", left: "1rem", zIndex: 50, background: dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)", border: "none", borderRadius: "50%", width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", color: dm ? "#fff" : "#000", cursor: "pointer", transition: "all 0.2s" }}
+                style={{ position: "absolute", left: isMobile ? "0" : "1rem", zIndex: 50, background: dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)", border: "none", borderRadius: "50%", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", color: dm ? "#fff" : "#000", cursor: "pointer", transition: "all 0.2s" }}
               >
-                <ChevronLeft size={28} />
+                <ChevronLeft size={24} />
               </button>
 
               <button
                 onClick={() => setActiveHackathon((prev) => (prev + 1) % HACKATHON_PATHS.length)}
-                style={{ position: "absolute", right: "1rem", zIndex: 50, background: dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)", border: "none", borderRadius: "50%", width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", color: dm ? "#fff" : "#000", cursor: "pointer", transition: "all 0.2s" }}
+                style={{ position: "absolute", right: isMobile ? "0" : "1rem", zIndex: 50, background: dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)", border: "none", borderRadius: "50%", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", color: dm ? "#fff" : "#000", cursor: "pointer", transition: "all 0.2s" }}
               >
-                <ChevronRight size={28} />
+                <ChevronRight size={24} />
               </button>
 
               <div style={{ position: "relative", width: "100%", maxWidth: "340px", height: "100%" }}>
@@ -425,7 +423,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── EDUCATION ── */}
-      <section id="boring-education" style={{ ...S.section, background: dm ? "linear-gradient(135deg, #111 0%, #1a0a0a 100%)" : "linear-gradient(135deg, #fafafa 0%, #fff5f5 100%)" }}>
+      <section id="boring-education" style={{ ...S.section(isMobile), background: dm ? "linear-gradient(135deg, #111 0%, #1a0a0a 100%)" : "linear-gradient(135deg, #fafafa 0%, #fff5f5 100%)" }}>
         <div style={S.inner}>
           <Heading title="Education" c1="#f97316" c2="#ef4444" dark={dm} />
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
@@ -433,7 +431,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
                 <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
-                <div style={{ padding: "2.5rem" }}>
+                <div style={{ padding: isMobile ? "1.5rem" : "2.5rem" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
                     <div style={{ flex: 1 }}>
                       <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "8px" }}>
@@ -463,7 +461,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── PROJECTS ── */}
-      <section id="boring-projects" style={{ ...S.section, background: dm ? "linear-gradient(135deg, #111 0%, #0a0a1a 100%)" : "linear-gradient(135deg, #fafafa 0%, #f0f9ff 100%)", position: "relative", overflow: "hidden" }}>
+      <section id="boring-projects" style={{ ...S.section(isMobile), background: dm ? "linear-gradient(135deg, #111 0%, #0a0a1a 100%)" : "linear-gradient(135deg, #fafafa 0%, #f0f9ff 100%)", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 70% 30%, rgba(99,102,241,0.05), transparent 50%), radial-gradient(circle at 30% 70%, rgba(59,130,246,0.05), transparent 50%)", pointerEvents: "none" }} />
         <div style={S.inner}>
           <Heading title="Projects" c1="#6366f1" c2="#ec4899" dark={dm} />
@@ -496,7 +494,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── INTERESTS ── */}
-      <section id="boring-interests" style={{ ...S.section, background: dm ? "#0f0f0f" : "#fff" }}>
+      <section id="boring-interests" style={{ ...S.section(isMobile), background: dm ? "#0f0f0f" : "#fff" }}>
         <div style={S.inner}>
           <Heading title="Interests" c1="#ef4444" c2="#ec4899" dark={dm} />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.25rem" }}>
@@ -511,12 +509,12 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── CONTACT ── */}
-      <section style={{ ...S.section, position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #111827 0%, #1e1b4b 50%, #312e81 100%)" }}>
+      <section style={{ ...S.section(isMobile), position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #111827 0%, #1e1b4b 50%, #312e81 100%)" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 50%, rgba(239,68,68,0.08), transparent 60%)", pointerEvents: "none" }} />
         <div style={{ ...S.inner, position: "relative" }}>
           <Heading title="Let's Connect" c1="#ef4444" c2="#f97316" center dark />
 
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "2rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "2fr 3fr", gap: "2rem" }}>
             {/* Links panel */}
             <div style={{ background: "rgba(255,255,255,0.05)", backdropFilter: "blur(12px)", borderRadius: "1.5rem", padding: "2rem", border: "1px solid rgba(255,255,255,0.1)" }}>
               <h3 style={{ fontSize: "1.3rem", color: "#fff", fontWeight: 300, marginBottom: "2rem" }}>Find me at</h3>
@@ -553,7 +551,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 <>
                   <h3 style={{ fontSize: "1.4rem", fontWeight: 500, color: dm ? "#f9fafb" : "#111827", marginBottom: "1.75rem" }}>Send a Message</h3>
                   <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "1rem" }}>
                       <div>
                         <label style={{ display: "block", fontSize: "0.75rem", color: "#9ca3af", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Name</label>
                         <input type="text" name="name" required placeholder="..."

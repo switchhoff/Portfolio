@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import WorkshopScene from "@/components/workshop/WorkshopScene";
 import HotspotModal from "@/components/modals/HotspotModal";
-import CheatGuide from "@/components/CheatGuide";
 import { type Hotspot } from "@/lib/hotspots-config";
 import { GkLogo } from "@/components/GkLogo";
 import { getProjects } from "@/lib/projects";
@@ -105,25 +104,37 @@ export default function Home() {
   const [logoPhase, setLogoPhase] = useState("initial");
   const [darkMode, setDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
-
-  // Persist dark mode across sessions; set mounted after first paint
-  useEffect(() => {
-    const stored = localStorage.getItem("darkMode");
-    if (stored === "true") setDarkMode(true);
-    setMounted(true);
-  }, []);
   const sceneContainerRef = useRef<HTMLDivElement>(null);
 
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
+
   useEffect(() => {
-    document.documentElement.style.cursor = "none";
-    document.body.style.cursor = "none";
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkTouch = () => setIsTouch(window.matchMedia("(pointer: coarse)").matches);
+    
+    checkMobile();
+    checkTouch();
+    
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (!isTouch) {
+      document.documentElement.style.cursor = "none";
+      document.body.style.cursor = "none";
+    } else {
+      document.documentElement.style.cursor = "auto";
+      document.body.style.cursor = "auto";
+    }
     document.body.style.pointerEvents = "auto";
     setReady(true);
     return () => {
       document.documentElement.style.cursor = "";
       document.body.style.cursor = "";
     };
-  }, [activeTab]);
+  }, [activeTab, isTouch]);
 
   const handleDarkModeToggle = () => {
     const next = !darkMode;
@@ -137,9 +148,10 @@ export default function Home() {
       minHeight: "100vh",
       fontFamily: "var(--font-mono)",
       color: darkMode ? "#ffffff" : P.text,
-      transition: "background 0.5s, color 0.5s"
+      transition: "background 0.5s, color 0.5s",
+      overflowX: "hidden"
     }}>
-      {ready && <CustomCursor activeTab={activeTab} />}
+      {ready && !isTouch && <CustomCursor activeTab={activeTab} />}
 
       {/* ── SPLASH BACKDROP ── */}
       <div style={{
@@ -438,47 +450,52 @@ export default function Home() {
                 transition={{ duration: 0.4 }}
                 style={{ position: "relative", width: "100vw", height: "calc(100vh - 60px)", overflow: "hidden", background: darkMode ? "#111111" : "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}
               >
-                {/* Shared container — fills viewport at 16:9 */}
+                {/* Shared container — fills viewport at 16:9 on desktop, larger on mobile */}
                 <div style={{
                   position: "relative",
-                  width: "min(100vw, calc((100vh - 60px) * 16 / 9))",
-                  height: "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
-                  aspectRatio: "16 / 9",
+                  width: isMobile ? "100%" : "min(100vw, calc((100vh - 60px) * 16 / 9))",
+                  height: isMobile ? "auto" : "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
+                  aspectRatio: isMobile ? "auto" : "16 / 9",
+                  minHeight: isMobile ? "280px" : "0",
+                  display: "flex",
+                  flexDirection: "column"
                 }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/OffswitchBKGHIGH.png"
-                    alt="Background"
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "contain",
-                      objectPosition: "center",
-                      pointerEvents: "none",
-                    }}
-                    draggable={false}
-                  />
-                  <div ref={sceneContainerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: active ? 100 : 10 }}>
-                    <WorkshopScene
-                      onHotspotClick={(h, origin) => {
-                        if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
-                        else { setActive(h); setClickOrigin(origin); }
+                  <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", overflow: "hidden" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/OffswitchBKGHIGH.png"
+                      alt="Background"
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                        objectPosition: "center",
+                        pointerEvents: "none",
                       }}
-                      activeId={active?.id ?? null}
-                      highlightCategory={highlightCategory}
-                      onHoverChange={setHoverSpot}
+                      draggable={false}
                     />
-                    <HotspotModal
-                      hotspot={active}
-                      clickOrigin={clickOrigin}
-                      containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
-                      onClose={() => { setActive(null); setClickOrigin(null); }}
-                    />
+                    <div ref={sceneContainerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: active ? 100 : 10 }}>
+                      <WorkshopScene
+                        onHotspotClick={(h, origin) => {
+                          if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
+                          else { setActive(h); setClickOrigin(origin); }
+                        }}
+                        activeId={active?.id ?? null}
+                        highlightCategory={highlightCategory}
+                        onHoverChange={setHoverSpot}
+                      />
+                      <HotspotModal
+                        hotspot={active}
+                        clickOrigin={clickOrigin}
+                        containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
+                        onClose={() => { setActive(null); setClickOrigin(null); }}
+                      />
+                    </div>
+                    {/* AmbientPlayer lives inside the 16:9 canvas — position:absolute at z=15, above scene */}
+                    <AmbientPlayer darkMode={darkMode} />
                   </div>
-                  {/* AmbientPlayer lives inside the 16:9 canvas — position:absolute at z=15, above scene */}
-                  <AmbientPlayer darkMode={darkMode} />
                 </div>
               </motion.section>
             ) : (

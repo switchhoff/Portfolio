@@ -9,10 +9,16 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { GithubIcon, LinkedinIcon, InstagramIcon, PhoneIcon, MailIcon, PrinterIcon, ExternalLinkIcon } from "@/components/icons";
 
 interface Props {
+  /** Callback for when a hotspot is clicked */
   onHotspotClick: (hotspot: Hotspot, clickOrigin: { x: number; y: number }) => void;
+  /** Current active hotspot ID for highlighting */
   activeId: string | null;
+  /** Category to highlight (e.g., from external filters) */
   highlightCategory: string | null;
+  /** Callback for when hovering changes */
   onHoverChange?: (hotspot: Hotspot | null) => void;
+  /** Enable/disable dark mode styling */
+  darkMode?: boolean;
 }
 
 const LinkDock = ({ links, categoryColor }: { links: any[], categoryColor: string }) => {
@@ -221,7 +227,9 @@ function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?
   );
 }
 
-export default function WorkshopScene({ onHotspotClick, activeId, highlightCategory, onHoverChange }: Props) {
+export default function WorkshopScene({ onHotspotClick, activeId, highlightCategory, onHoverChange, darkMode }: Props) {
+  const dm = darkMode ?? false;
+  const [isMobile, setIsMobile] = useState(false);
   const [hoverId, setHoverId]   = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [blockPaths, setBlockPaths] = useState<SVGPathElement[]>([]);
@@ -239,7 +247,15 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
   const [audioVolume, setAudioVolume] = useState(0.5);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const FILTER_ORDER = ["about", "interests", "projects", "education", "experience"];
+  // -- RESPONSIVENESS --
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // -- HOTSPOT CONFIG --
   const FILTER_GROUPS: Record<string, number[]> = Object.fromEntries(
     FILTER_ORDER
       .filter(k => BLOCK_MAPPINGS[k as keyof typeof BLOCK_MAPPINGS])
@@ -440,22 +456,27 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       onMouseMove={handleMouseMove}
       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", userSelect: "none", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 20 }}
     >
-      {/* Menu Bar */}
+      {/* ── CHEATS MENU BAR ── */}
       <div style={{
         position: "absolute",
-        top: "185px",
-        right: "75px",
+        // Position relative to the interactive background elements
+        top: isMobile ? "auto" : "185px",
+        bottom: isMobile ? "20px" : "auto",
+        right: isMobile ? "20px" : "75px",
         display: "flex",
         flexDirection: "column",
         gap: 0,
         zIndex: 55,
-        background: "rgba(10,15,10,0.82)",
-        backdropFilter: "blur(8px)",
-        border: "1px solid rgba(255,215,0,0.25)",
-        borderRadius: "8px",
+        // Adapt to dark mode
+        background: dm ? "rgba(10, 15, 10, 0.82)" : "rgba(255, 255, 255, 0.85)",
+        backdropFilter: "blur(10px)",
+        border: dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)",
+        borderRadius: "12px",
         overflow: "hidden",
-        minWidth: "180px",
+        minWidth: isMobile ? "160px" : "180px",
         fontFamily: "'JetBrains Mono', monospace",
+        boxShadow: dm ? "0 8px 32px rgba(0,0,0,0.4)" : "0 8px 32px rgba(0,0,0,0.1)",
+        transition: "all 0.3s ease",
       }}>
         {/* Cheats master toggle row */}
         <div
