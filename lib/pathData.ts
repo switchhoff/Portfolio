@@ -1,3 +1,11 @@
+/**
+ * PATH_DATA Configuration
+ * 
+ * This file serves as the Single Source of Truth (SSOT) for all content in the portfolio.
+ * It maps SVG path IDs (from the WorkshopScene) to rich metadata, descriptions, and 
+ * interactive content used in both the "Fun" (Workshop) and "Boring" (Resume) views.
+ */
+
 export type ContentBlock =
   | { type: 'text'; text: string }
   | { type: 'image' | 'gif'; src: string; alt?: string; link?: string }

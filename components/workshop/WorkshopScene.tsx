@@ -227,6 +227,19 @@ function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?
   );
 }
 
+/**
+ * WorkshopScene Component
+ * 
+ * This is the core interactive layer of the "Fun" view. It renders an SVG-based 
+ * representation of a workshop scene with clickable "blocks" (paths) and hotspots.
+ * 
+ * Key Features:
+ * 1. Interactive Blocks: SVG paths that change color on hover/click based on category.
+ * 2. Hotspots: Hidden interactive zones that trigger modals when clicked.
+ * 3. Cheats Menu: A floating toggle system to reveal interactive elements.
+ * 4. Responsive Layout: Adapts positioning and scaling for mobile vs desktop.
+ * 5. Audio Integration: Supports ambient and directional sound effects.
+ */
 export default function WorkshopScene({ onHotspotClick, activeId, highlightCategory, onHoverChange, darkMode }: Props) {
   const dm = darkMode ?? false;
   const [isMobile, setIsMobile] = useState(false);

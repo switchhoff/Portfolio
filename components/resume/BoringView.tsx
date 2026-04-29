@@ -8,6 +8,18 @@ import { type Project } from "@/lib/projects";
 import { PATH_DATA } from "@/lib/pathData";
 import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/components/icons";
 
+/**
+ * BoringView Component
+ * 
+ * This is the "Resume" view of the portfolio. It presents professional information
+ * in a clean, high-performance, and accessible layout.
+ * 
+ * Architecture:
+ * - Content is synced with the "Fun" view via pathData.ts.
+ * - Mobile-first design: Automatically stacks columns and hides non-essential sidebars on small screens.
+ * - Smooth Reveal: Uses framer-motion for subtle entry animations as the user scrolls.
+ * - Multi-mode: Supports high-contrast light and dark themes.
+ */
 interface BoringViewProps {
   projects: Project[];
   age: number;
