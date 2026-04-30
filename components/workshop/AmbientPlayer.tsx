@@ -85,15 +85,15 @@ export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
 
   return (
     <div style={{
-      position: "absolute",
-      left: "24%",
-      top: "18%",
-      transform: isMobile ? "scale(0.8) rotate(-15deg)" : "rotate(-25deg)",
+      position: isMobile ? "fixed" : "absolute",
+      left: isMobile ? "12px" : "24%",
+      top: isMobile ? "68px" : "18%",
+      transform: isMobile ? "none" : "rotate(-25deg)",
       transformOrigin: "left center",
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      zIndex: 15,
+      zIndex: isMobile ? 90 : 15,
       pointerEvents: "auto",
       whiteSpace: "nowrap",
     }}>

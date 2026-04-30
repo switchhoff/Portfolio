@@ -110,6 +110,7 @@ export default function Home() {
   const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     const checkTouch = () => setIsTouch(window.matchMedia("(pointer: coarse)").matches);
     
@@ -325,14 +326,14 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 clamp(1.5rem, 5vw, 4rem)",
+          padding: isMobile ? "0 0.75rem" : "0 clamp(1.5rem, 5vw, 4rem)",
           background: darkMode ? "rgba(26,26,26,0.9)" : "rgba(255,255,255,0.7)",
           backdropFilter: "blur(12px)",
           zIndex: 100,
           transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
         }}>
           {/* Logo spacer */}
-          <div style={{ width: isMobile ? "110px" : "clamp(140px, 20vw, 300px)" }} />
+          <div style={{ width: isMobile ? "105px" : "clamp(140px, 20vw, 300px)" }} />
 
           {/* Tab Switcher in Header */}
           <LayoutGroup id="header-tabs">
@@ -356,9 +357,9 @@ export default function Home() {
                   position: "relative",
                   display: "flex",
                   alignItems: "center",
-                  gap: "7px",
-                  padding: "9px 22px",
-                  fontSize: "11px",
+                  gap: isMobile ? "4px" : "7px",
+                  padding: isMobile ? "8px 12px" : "9px 22px",
+                  fontSize: isMobile ? "10px" : "11px",
                   fontWeight: 700,
                   letterSpacing: "0.1em",
                   borderRadius: "10px",
@@ -443,68 +444,65 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
-                style={{ position: "relative", width: "100vw", height: "calc(100vh - 60px)", overflow: "hidden", background: darkMode ? "#111111" : "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}
+                style={{
+                  position: "relative",
+                  width: "100vw",
+                  height: isMobile ? "auto" : "calc(100vh - 60px)",
+                  overflow: isMobile ? "visible" : "hidden",
+                  background: darkMode ? "#111111" : "#ffffff",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: isMobile ? "flex-start" : "center",
+                  padding: 0,
+                }}
               >
-                {/* Shared container — fills viewport at 16:9 on desktop, larger on mobile */}
+                {/* 16:9 image canvas — full screen width on mobile */}
                 <div style={{
                   position: "relative",
                   width: "100%",
-                  height: isMobile ? "auto" : "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
-                  aspectRatio: isMobile ? "16/9" : "auto",
-                  display: "flex",
-                  flexDirection: "column",
+                  height: isMobile ? "calc(100vw * 9 / 16)" : "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
+                  flexShrink: 0,
                   overflow: "hidden",
-                  background: darkMode ? "#0a0a0a" : "#fafafa",
-                  borderRadius: isMobile ? 0 : "12px",
                 }}>
-                  {/* The Interactive Canvas — Always 16:9, centered on mobile */}
-                  <div style={{ 
-                    position: "absolute", 
-                    height: "100%",
-                    width: isMobile ? "100%" : "100%",
-                    aspectRatio: "16/9", 
-                    left: "50%",
-                    top: "0",
-                    transform: "translateX(-50%)",
-                    overflow: "hidden" 
-                  }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/OffswitchBKGHIGH.png"
-                      alt="Background"
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "contain",
-                        objectPosition: "center",
-                        pointerEvents: "none",
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/OffswitchBKGHIGH.png"
+                    alt="Background"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      objectPosition: "center",
+                      pointerEvents: "none",
+                    }}
+                    draggable={false}
+                  />
+                  <div ref={sceneContainerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: active ? 100 : 10 }}>
+                    <WorkshopScene
+                      onHotspotClick={(h, origin) => {
+                        if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
+                        else { setActive(h); setClickOrigin(origin); }
                       }}
-                      draggable={false}
+                      activeId={active?.id ?? null}
+                      highlightCategory={highlightCategory}
+                      onHoverChange={setHoverSpot}
+                      darkMode={darkMode}
                     />
-                    <div ref={sceneContainerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: active ? 100 : 10 }}>
-                      <WorkshopScene
-                        onHotspotClick={(h, origin) => {
-                          if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
-                          else { setActive(h); setClickOrigin(origin); }
-                        }}
-                        activeId={active?.id ?? null}
-                        highlightCategory={highlightCategory}
-                        onHoverChange={setHoverSpot}
-                        darkMode={darkMode}
-                      />
-                      <HotspotModal
-                        hotspot={active}
-                        clickOrigin={clickOrigin}
-                        containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
-                        onClose={() => { setActive(null); setClickOrigin(null); }}
-                      />
-                    </div>
-                    {/* AmbientPlayer lives inside the 16:9 canvas — position:absolute at z=15, above scene */}
-                    <AmbientPlayer darkMode={darkMode} />
+                    <HotspotModal
+                      hotspot={active}
+                      clickOrigin={clickOrigin}
+                      containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
+                      onClose={() => { setActive(null); setClickOrigin(null); }}
+                    />
                   </div>
+                  {/* AmbientPlayer — desktop only inside canvas (mobile renders fixed via component) */}
+                  {!isMobile && <AmbientPlayer darkMode={darkMode} />}
                 </div>
+                {/* Mobile AmbientPlayer rendered fixed top-left (outside canvas so no rotation/position issues) */}
+                {isMobile && <AmbientPlayer darkMode={darkMode} />}
               </motion.section>
             ) : (
               <motion.section

@@ -472,8 +472,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
     >
       {/* ── CHEATS MENU BAR ── */}
       <div style={{
-        position: "absolute",
-        // Position relative to the interactive background elements
+        position: isMobile ? "fixed" : "absolute",
         top: isMobile ? "auto" : "185px",
         bottom: isMobile ? "0" : "auto",
         right: isMobile ? "0" : "75px",
@@ -871,8 +870,15 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             <div
               style={{
                 position: "fixed",
-                left: clickedPath.x - (pathData?.category === "generic" || !pathData?.description ? 80 : 140),
-                top: clickedPath.y - 120,
+                left: (pathData?.category === "generic") 
+                  ? (isMobile ? "50%" : clickedPath.x - 80) 
+                  : "50%",
+                top: (pathData?.category === "generic")
+                  ? (isMobile ? "50%" : clickedPath.y - 120)
+                  : "50%",
+                transform: (pathData?.category === "generic")
+                  ? (isMobile ? "translate(-50%, -50%)" : "none")
+                  : "translate(-50%, -50%)",
                 background: "#ffffff",
                 border: `1px solid ${categoryColor}`,
                 borderRadius: "6px",
@@ -881,9 +887,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                 boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
                 zIndex: 65,
                 fontFamily: "'JetBrains Mono', monospace",
-                width: (pathData?.category === "generic" || !pathData?.description) ? "auto" : "420px",
+                width: (pathData?.category === "generic" || !pathData?.description) ? "auto" : "min(420px, calc(100vw - 40px))",
                 minWidth: (pathData?.category === "generic" || !pathData?.description) ? "140px" : "320px",
                 maxWidth: "420px",
+                maxHeight: "85vh",
+                overflowY: "auto",
               }}
               onClick={(e) => e.stopPropagation()}
             >

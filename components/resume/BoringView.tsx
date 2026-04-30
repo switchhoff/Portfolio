@@ -98,13 +98,31 @@ const S = {
   }),
 };
 
+function CarouselIndicator({ count, activeIndex, color, dark }: { count: number, activeIndex: number, color: string, dark: boolean }) {
+  return (
+    <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginBottom: "1.5rem" }}>
+      {Array.from({ length: count }).map((_, i) => (
+        <motion.div
+          key={i}
+          animate={{
+            width: i === activeIndex ? "24px" : "8px",
+            backgroundColor: i === activeIndex ? color : (dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.1)"),
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          style={{ height: "4px", borderRadius: "2px" }}
+        />
+      ))}
+    </div>
+  );
+}
+
 function Heading({ title, c1, c2, center, dark }: { title: string; c1: string; c2: string; center?: boolean; dark?: boolean }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-      style={{ marginBottom: isMobile ? "2rem" : "4rem", textAlign: center ? "center" : "left" }}>
-      <h2 style={{ fontSize: isMobile ? "1.85rem" : "2.5rem", fontWeight: 300, color: dark ? "#f9fafb" : "#111827", marginBottom: "1rem", lineHeight: 1.15 }}>{title}</h2>
-      <div style={{ ...S.bar(c1, c2), height: "4px", width: "60px", marginBottom: isMobile ? "2rem" : "3rem", ...(center ? { margin: "0 auto 4rem" } : {}) }} />
+      style={{ marginBottom: isMobile ? "1.5rem" : "4rem", textAlign: center ? "center" : "left" }}>
+      <h2 style={{ fontSize: isMobile ? "1.85rem" : "2.5rem", fontWeight: 300, color: dark ? "#f9fafb" : "#111827", marginBottom: "0.5rem", lineHeight: 1.15 }}>{title}</h2>
+      <div style={{ ...S.bar(c1, c2), height: "4px", width: "60px", marginBottom: isMobile ? "1rem" : "3rem", ...(center ? { margin: isMobile ? "0 auto 2rem" : "0 auto 4rem" } : {}) }} />
     </motion.div>
   );
 }
@@ -172,6 +190,9 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
   const dm = darkMode ?? false;
   const [formState, handleSubmit] = useForm("xzdynydr");
   const [activeHackathon, setActiveHackathon] = useState(0);
+  const [activeExp, setActiveExp] = useState(0);
+  const [activeEdu, setActiveEdu] = useState(0);
+  const [activeProject, setActiveProject] = useState(0);
   const [showOverland, setShowOverland] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -291,69 +312,151 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
         <div style={S.inner}>
           <Heading title="Experience" c1="#ef4444" c2="#f97316" dark={dm} />
 
-          {/* ── Work ── */}
-          <div style={{ position: "relative", marginBottom: "5rem" }}>
-            <div style={{ position: "absolute", left: "28px", top: 0, bottom: 0, width: "2px", background: "linear-gradient(to bottom, #ef4444, #f97316, #f59e0b)" }} />
-            <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
-              {WORK_PATHS.map((pathId, i) => {
-                const w = PATH_DATA[pathId];
-                const v = WORK_VISUAL[pathId];
-                if (!w || !v) return null;
-                return (
-                  <motion.div key={pathId} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                    style={{ position: "relative", paddingLeft: isMobile ? "3.5rem" : "5rem" }}>
-                    <div style={{ position: "absolute", left: isMobile ? "14px" : "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}, ${v.color2})`, border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }} />
-                    <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", display: "flex", flexDirection: isMobile ? "column" : "row" }}>
-                      {/* Photo / placeholder */}
-                      <div style={{ width: isMobile ? "100%" : "200px", height: isMobile ? "160px" : "auto", flexShrink: 0, position: "relative", borderRight: !isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", borderBottom: isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)` }}>
-                        {v.photo ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={v.photo} alt={w.company} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
-                        ) : (
-                          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-                            <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}44, ${v.color2}44)`, border: `2px dashed ${v.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={v.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
-                              </svg>
+          {/* ── Experience Content ── */}
+          {isMobile ? (
+            <div style={{ position: "relative", marginBottom: "2rem" }}>
+              <CarouselIndicator count={WORK_PATHS.length} activeIndex={activeExp} color="#ef4444" dark={dm} />
+              
+              <div style={{ position: "relative", height: "460px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+                <div style={{ position: "relative", width: "100%", maxWidth: "320px", height: "100%" }}>
+                  {WORK_PATHS.map((pathId, i) => {
+                    const w = PATH_DATA[pathId];
+                    const v = WORK_VISUAL[pathId];
+                    if (!w || !v) return null;
+
+                    let offset = i - activeExp;
+                    if (offset > WORK_PATHS.length / 2) offset -= WORK_PATHS.length;
+                    if (offset < -WORK_PATHS.length / 2) offset += WORK_PATHS.length;
+
+                    const isActive = offset === 0;
+                    const isVisible = Math.abs(offset) <= 1;
+
+                    return (
+                      <motion.div
+                        key={pathId}
+                        drag="x"
+                        dragConstraints={{ left: 0, right: 0 }}
+                        onDragEnd={(_, info) => {
+                          const threshold = 50;
+                          if (info.offset.x > threshold) setActiveExp((prev) => (prev - 1 + WORK_PATHS.length) % WORK_PATHS.length);
+                          else if (info.offset.x < -threshold) setActiveExp((prev) => (prev + 1) % WORK_PATHS.length);
+                        }}
+                        animate={{
+                          x: `calc(-50% + ${offset * 115}%)`,
+                          y: "-50%",
+                          scale: isActive ? 1 : 0.85,
+                          opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
+                          zIndex: isActive ? 10 : 5 - Math.abs(offset),
+                        }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        style={{ 
+                          position: "absolute", top: "50%", left: "50%", width: "100%", 
+                          background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", 
+                          overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
+                          boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)",
+                          pointerEvents: isActive ? "auto" : "none",
+                          cursor: "grab"
+                        }}
+                        whileTap={{ cursor: "grabbing" }}
+                      >
+                        <div style={{ height: "120px", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, position: "relative", borderBottom: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` }}>
+                          {v.photo ? (
+                            <img src={v.photo} alt={w.company} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+                          ) : (
+                            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}44, ${v.color2}44)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={v.color} strokeWidth="1.5">
+                                  <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+                                </svg>
+                              </div>
                             </div>
-                            <span style={{ fontSize: "0.7rem", color: dm ? "#4b5563" : "#9ca3af" }}>Photo</span>
-                          </div>
-                        )}
-                      </div>
-                      {/* Content — text from pathData */}
-                      <div style={{ padding: "1.75rem 2rem 2rem", flex: 1 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
-                          <div>
-                            <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem", display: "flex", alignItems: "center", gap: "8px" }}>
-                              {w.role ?? w.name}
-                              <span style={{ fontSize: "10px", fontWeight: 700, color: v.color, background: `${v.color}18`, borderRadius: "4px", padding: "2px 6px", fontFamily: "monospace" }}>#{pathId}</span>
-                            </h3>
-                            <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${v.color}, ${v.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
-                          </div>
-                          <span style={{ padding: "0.4rem 1rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{w.date}</span>
+                          )}
                         </div>
-                        <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.75, marginBottom: w.tags?.length ? "1.25rem" : 0 }}>{w.description}</p>
-                        {w.tags && (
-                          <div style={{ 
-                            display: "flex", 
-                            flexWrap: isMobile ? "nowrap" : "wrap", 
-                            gap: "0.5rem",
-                            overflowX: isMobile ? "auto" : "visible",
-                            paddingBottom: isMobile ? "0.5rem" : 0,
-                            WebkitOverflowScrolling: "touch"
-                          }}>
-                            {w.tags.map(t => (
-                              <span key={t} style={{ padding: "0.25rem 0.6rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#374151", borderRadius: "0.5rem", fontSize: "0.8rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}`, whiteSpace: "nowrap" }}>{t}</span>
+                        <div style={{ padding: "1.25rem" }}>
+                          <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>
+                            {w.role ?? w.name}
+                          </h4>
+                          <p style={{ fontSize: "0.9rem", fontWeight: 500, color: v.color, marginBottom: "0.2rem" }}>{w.company}</p>
+                          <p style={{ fontSize: "0.8rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "0.75rem" }}>{w.date}</p>
+                          <p style={{ fontSize: isMobile ? "0.8rem" : "0.85rem", color: dm ? "#d1d5db" : "#4b5563", lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", marginBottom: "0.75rem" }}>
+                            {w.description}
+                          </p>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                            {w.tags?.map(t => (
+                              <span key={t} style={{ fontSize: "0.65rem", padding: "0.15rem 0.5rem", background: dm ? "#222" : "#f3f4f6", color: dm ? "#d1d5db" : "#374151", borderRadius: "9999px", border: `1px solid ${dm ? "#333" : "#e5e7eb"}`, whiteSpace: "nowrap" }}>{t}</span>
                             ))}
                           </div>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div style={{ position: "relative", marginBottom: "5rem" }}>
+              <div style={{ position: "absolute", left: "28px", top: 0, bottom: 0, width: "2px", background: "linear-gradient(to bottom, #ef4444, #f97316, #f59e0b)" }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+                {WORK_PATHS.map((pathId, i) => {
+                  const w = PATH_DATA[pathId];
+                  const v = WORK_VISUAL[pathId];
+                  if (!w || !v) return null;
+                  return (
+                    <motion.div key={pathId} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                      style={{ position: "relative", paddingLeft: isMobile ? "3.5rem" : "5rem" }}>
+                      <div style={{ position: "absolute", left: isMobile ? "14px" : "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}, ${v.color2})`, border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }} />
+                      <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", display: "flex", flexDirection: isMobile ? "column" : "row" }}>
+                        {/* Photo / placeholder */}
+                        <div style={{ width: isMobile ? "100%" : "200px", height: isMobile ? "160px" : "auto", flexShrink: 0, position: "relative", borderRight: !isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", borderBottom: isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)` }}>
+                          {v.photo ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={v.photo} alt={w.company} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
+                          ) : (
+                            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+                              <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}44, ${v.color2}44)`, border: `2px dashed ${v.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={v.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+                                </svg>
+                              </div>
+                              <span style={{ fontSize: "0.7rem", color: dm ? "#4b5563" : "#9ca3af" }}>Photo</span>
+                            </div>
+                          )}
+                        </div>
+                        {/* Content — text from pathData */}
+                        <div style={{ padding: "1.75rem 2rem 2rem", flex: 1 }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
+                            <div>
+                              <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem", display: "flex", alignItems: "center", gap: "8px" }}>
+                                {w.role ?? w.name}
+                                <span style={{ fontSize: "10px", fontWeight: 700, color: v.color, background: `${v.color}18`, borderRadius: "4px", padding: "2px 6px", fontFamily: "monospace" }}>#{pathId}</span>
+                              </h3>
+                              <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${v.color}, ${v.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
+                            </div>
+                            <span style={{ padding: "0.4rem 1rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{w.date}</span>
+                          </div>
+                          <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.75, marginBottom: w.tags?.length ? "1.25rem" : 0 }}>{w.description}</p>
+                          {w.tags && (
+                            <div style={{ 
+                              display: "flex", 
+                              flexWrap: isMobile ? "nowrap" : "wrap", 
+                              gap: "0.5rem",
+                              overflowX: isMobile ? "auto" : "visible",
+                              paddingBottom: isMobile ? "0.5rem" : 0,
+                              WebkitOverflowScrolling: "touch"
+                            }}>
+                              {w.tags.map(t => (
+                                <span key={t} style={{ padding: "0.25rem 0.6rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#374151", borderRadius: "0.5rem", fontSize: "0.8rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}`, whiteSpace: "nowrap" }}>{t}</span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
         </div>
       </section>
@@ -363,22 +466,27 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
         <div style={S.inner}>
           <Heading title="Hackathons" c1="#10b981" c2="#6366f1" dark={dm} />
           <div style={{ position: "relative" }}>
+            {isMobile && <CarouselIndicator count={HACKATHON_PATHS.length} activeIndex={activeHackathon} color="#10b981" dark={dm} />}
+            
+            <div style={{ position: "relative", height: isMobile ? "440px" : "480px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
 
-            <div style={{ position: "relative", height: isMobile ? "540px" : "480px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+              {!isMobile && (
+                <>
+                  <button
+                    onClick={() => setActiveHackathon((prev) => (prev - 1 + HACKATHON_PATHS.length) % HACKATHON_PATHS.length)}
+                    style={{ position: "absolute", left: "1rem", zIndex: 50, background: dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)", border: "none", borderRadius: "50%", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", color: dm ? "#fff" : "#000", cursor: "pointer", transition: "all 0.2s" }}
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
 
-              <button
-                onClick={() => setActiveHackathon((prev) => (prev - 1 + HACKATHON_PATHS.length) % HACKATHON_PATHS.length)}
-                style={{ position: "absolute", left: isMobile ? "0" : "1rem", zIndex: 50, background: dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)", border: "none", borderRadius: "50%", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", color: dm ? "#fff" : "#000", cursor: "pointer", transition: "all 0.2s" }}
-              >
-                <ChevronLeft size={24} />
-              </button>
-
-              <button
-                onClick={() => setActiveHackathon((prev) => (prev + 1) % HACKATHON_PATHS.length)}
-                style={{ position: "absolute", right: isMobile ? "0" : "1rem", zIndex: 50, background: dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)", border: "none", borderRadius: "50%", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", color: dm ? "#fff" : "#000", cursor: "pointer", transition: "all 0.2s" }}
-              >
-                <ChevronRight size={24} />
-              </button>
+                  <button
+                    onClick={() => setActiveHackathon((prev) => (prev + 1) % HACKATHON_PATHS.length)}
+                    style={{ position: "absolute", right: "1rem", zIndex: 50, background: dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)", border: "none", borderRadius: "50%", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", color: dm ? "#fff" : "#000", cursor: "pointer", transition: "all 0.2s" }}
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                </>
+              )}
 
               <div style={{ position: "relative", width: "100%", maxWidth: "340px", height: "100%" }}>
                 {HACKATHON_PATHS.map((pathId, i) => {
@@ -386,31 +494,43 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                   const v = HACKATHON_VISUAL[pathId];
                   if (!h || !v) return null;
 
-                  // Calculate distance from active index, wrapping around
                   let offset = i - activeHackathon;
                   if (offset > HACKATHON_PATHS.length / 2) offset -= HACKATHON_PATHS.length;
                   if (offset < -HACKATHON_PATHS.length / 2) offset += HACKATHON_PATHS.length;
 
                   const isActive = offset === 0;
-                  const isVisible = Math.abs(offset) <= 1; // Only show +/- 1 card
+                  const isVisible = Math.abs(offset) <= 1;
 
                   return (
                     <motion.div
                       key={pathId}
+                      drag={isMobile ? "x" : false}
+                      dragConstraints={{ left: 0, right: 0 }}
+                      onDragEnd={(_, info) => {
+                        const threshold = 50;
+                        if (info.offset.x > threshold) setActiveHackathon((prev) => (prev - 1 + HACKATHON_PATHS.length) % HACKATHON_PATHS.length);
+                        else if (info.offset.x < -threshold) setActiveHackathon((prev) => (prev + 1) % HACKATHON_PATHS.length);
+                      }}
                       animate={{
                         x: `calc(-50% + ${offset * 120}%)`,
                         y: "-50%",
                         scale: isActive ? 1 : 0.85,
-                        opacity: isActive ? 1 : (isVisible ? 0.3 : 0),
+                        opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
                         zIndex: isActive ? 10 : 5 - Math.abs(offset),
                         rotateY: offset * -15
                       }}
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      style={{ position: "absolute", top: "50%", left: "50%", width: "100%", background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.25rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)", pointerEvents: isActive ? "auto" : "none" }}
+                      style={{ 
+                        position: "absolute", top: "50%", left: "50%", width: "100%", 
+                        background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.25rem", 
+                        overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
+                        boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)", 
+                        pointerEvents: isActive ? "auto" : "none",
+                        cursor: isMobile ? "grab" : "default"
+                      }}
                     >
                       <div style={{ height: "160px", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, position: "relative", borderBottom: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` }}>
                         {v.photo ? (
-                          // eslint-disable-next-line @next/next/no-img-element
                           <img src={v.photo} alt={h.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
                         ) : (
                           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -430,11 +550,11 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                           <span style={{ padding: "0.25rem 0.7rem", background: `${v.color}20`, color: v.color, borderRadius: "9999px", fontSize: "0.78rem", whiteSpace: "nowrap", fontWeight: 600, flexShrink: 0 }}>{h.date}</span>
                         </div>
                         <p style={{ fontSize: "0.85rem", fontWeight: 500, color: dm ? "#9ca3af" : "#6b7280", marginBottom: "0.75rem" }}>{h.company}</p>
-                        <p style={{ fontSize: "0.9rem", color: dm ? "#9ca3af" : "#4b5563", lineHeight: 1.5, marginBottom: "1rem" }}>{h.description}</p>
+                        <p style={{ fontSize: isMobile ? "0.8rem" : "0.9rem", color: dm ? "#9ca3af" : "#4b5563", lineHeight: 1.5, marginBottom: "1rem" }}>{h.description}</p>
                         {h.items && h.items.length > 0 && (
                           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
                             {h.items.map((item, ii) => typeof item === "string" ? null : (
-                              <span key={ii} style={{ fontSize: "0.75rem", padding: "0.2rem 0.6rem", background: dm ? "#222" : "#f3f4f6", color: dm ? "#d1d5db" : "#374151", borderRadius: "9999px", border: `1px solid ${dm ? "#333" : "#e5e7eb"}` }}>
+                              <span key={ii} style={{ fontSize: "0.75rem", padding: "0.2rem 0.6rem", background: dm ? "#222" : "#f3f4f6", color: dm ? "#d1d5db" : "#374151", borderRadius: "9999px", border: `1px solid ${dm ? "#333" : "#e5e7eb"}`, whiteSpace: "nowrap" }}>
                                 {item.label}
                               </span>
                             ))}
@@ -454,37 +574,98 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       <section id="boring-education" style={{ ...S.section(isMobile), background: dm ? "linear-gradient(135deg, #111 0%, #1a0a0a 100%)" : "linear-gradient(135deg, #fafafa 0%, #fff5f5 100%)" }}>
         <div style={S.inner}>
           <Heading title="Education" c1="#f97316" c2="#ef4444" dark={dm} />
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-            {EDUCATION.map((edu, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
-                <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
-                <div style={{ padding: isMobile ? "1.5rem" : "2.5rem" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
-                    <div style={{ flex: 1 }}>
-                      <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "8px" }}>
-                        {edu.degree}
-                        <span style={{ fontSize: "10px", fontWeight: 700, color: edu.color, background: `${edu.color}18`, borderRadius: "4px", padding: "2px 6px", fontFamily: "monospace", flexShrink: 0 }}>#{edu.path}</span>
-                      </h3>
-                      <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${edu.color}, ${edu.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{edu.school}</p>
-                    </div>
-                    <span style={{ padding: "0.4rem 1.2rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{edu.period}</span>
-                  </div>
-                  <p style={{ fontSize: "1rem", color: "#9ca3af", marginBottom: "1.5rem", whiteSpace: "pre-wrap" }}>{edu.description}</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-                    {edu.achievements.map((a, ai) => (
-                      <div key={ai} style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1.1rem", background: dm ? "#111" : "#f9fafb", borderRadius: "0.75rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>
-                        <svg style={{ width: "18px", height: "18px", color: "#ef4444", flexShrink: 0 }} fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        <span style={{ fontSize: "0.95rem", color: dm ? "#d1d5db" : "#374151" }}>{a}</span>
-                      </div>
-                    ))}
-                  </div>
+          {/* ── Education Content ── */}
+          {isMobile ? (
+            <div style={{ position: "relative", marginBottom: "2rem" }}>
+              <CarouselIndicator count={EDUCATION.length} activeIndex={activeEdu} color="#f97316" dark={dm} />
+              
+              <div style={{ position: "relative", height: "380px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+                <div style={{ position: "relative", width: "100%", maxWidth: "320px", height: "100%" }}>
+                  {EDUCATION.map((edu, i) => {
+                    let offset = i - activeEdu;
+                    if (offset > EDUCATION.length / 2) offset -= EDUCATION.length;
+                    if (offset < -EDUCATION.length / 2) offset += EDUCATION.length;
+
+                    const isActive = offset === 0;
+                    const isVisible = Math.abs(offset) <= 1;
+
+                    return (
+                      <motion.div
+                        key={i}
+                        drag="x"
+                        dragConstraints={{ left: 0, right: 0 }}
+                        onDragEnd={(_, info) => {
+                          const threshold = 50;
+                          if (info.offset.x > threshold) setActiveEdu((prev) => (prev - 1 + EDUCATION.length) % EDUCATION.length);
+                          else if (info.offset.x < -threshold) setActiveEdu((prev) => (prev + 1) % EDUCATION.length);
+                        }}
+                        animate={{
+                          x: `calc(-50% + ${offset * 115}%)`,
+                          y: "-50%",
+                          scale: isActive ? 1 : 0.85,
+                          opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
+                          zIndex: isActive ? 10 : 5 - Math.abs(offset),
+                        }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        style={{ 
+                          position: "absolute", top: "50%", left: "50%", width: "100%", 
+                          background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", 
+                          overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
+                          boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)",
+                          pointerEvents: isActive ? "auto" : "none",
+                          cursor: "grab"
+                        }}
+                      >
+                        <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
+                        <div style={{ padding: "1.5rem" }}>
+                          <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>
+                            {edu.degree}
+                          </h4>
+                          <p style={{ fontSize: "0.9rem", fontWeight: 500, color: edu.color, marginBottom: "0.5rem" }}>{edu.school}</p>
+                          <p style={{ fontSize: "0.8rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "0.75rem" }}>{edu.period}</p>
+                          <p style={{ fontSize: "0.85rem", color: dm ? "#d1d5db" : "#4b5563", lineHeight: 1.5 }}>
+                            {edu.description}
+                          </p>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+              {EDUCATION.map((edu, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                  style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
+                  <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
+                  <div style={{ padding: isMobile ? "1.5rem" : "2.5rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
+                      <div style={{ flex: 1 }}>
+                        <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "8px" }}>
+                          {edu.degree}
+                          <span style={{ fontSize: "10px", fontWeight: 700, color: edu.color, background: `${edu.color}18`, borderRadius: "4px", padding: "2px 6px", fontFamily: "monospace", flexShrink: 0 }}>#{edu.path}</span>
+                        </h3>
+                        <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${edu.color}, ${edu.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{edu.school}</p>
+                      </div>
+                      <span style={{ padding: "0.4rem 1.2rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{edu.period}</span>
+                    </div>
+                    <p style={{ fontSize: "1rem", color: "#9ca3af", marginBottom: "1.5rem", whiteSpace: "pre-wrap" }}>{edu.description}</p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+                      {edu.achievements.map((a, ai) => (
+                        <div key={ai} style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1.1rem", background: dm ? "#111" : "#f9fafb", borderRadius: "0.75rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>
+                          <svg style={{ width: "18px", height: "18px", color: "#ef4444", flexShrink: 0 }} fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          <span style={{ fontSize: "0.95rem", color: dm ? "#d1d5db" : "#374151" }}>{a}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -494,48 +675,108 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
         <div style={S.inner}>
           <Heading title="Projects" c1="#6366f1" c2="#ec4899" dark={dm} />
         </div>
-        <div style={{ ...S.innerWide, position: "relative", padding: isMobile ? "0 1rem 1rem" : "0" }}>
-          <div style={{ 
-            display: isMobile ? "flex" : "grid", 
-            gridTemplateColumns: isMobile ? "none" : "repeat(auto-fill, minmax(280px, 1fr))", 
-            gap: "1.25rem",
-            overflowX: isMobile ? "auto" : "visible",
-            paddingBottom: isMobile ? "1rem" : "0",
-            WebkitOverflowScrolling: "touch",
-            scrollbarWidth: "none"
-          }}>
-            {projects.map((proj, i) => (
-              <motion.div key={proj.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-                style={{ 
-                  background: dm ? "#1a1a1a" : "#fff", 
-                  borderRadius: "1.5rem", 
-                  overflow: "hidden", 
-                  border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
-                  transition: "transform 0.25s, box-shadow 0.25s", 
-                  cursor: "default",
-                  flexShrink: 0,
-                  width: isMobile ? "280px" : "auto"
-                }}
-                whileHover={isMobile ? {} : { y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}>
-                {/* Colour banner */}
-                <div style={{ height: "140px", background: `linear-gradient(135deg, ${proj.color}cc, ${proj.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4rem", position: "relative" }}>
-                  <span style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.2))" }}>
-                    {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : "💡"}
-                  </span>
-                </div>
-                <div style={{ padding: "1.25rem 1.5rem 1.5rem" }}>
-                  <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem" }}>{proj.name}</h3>
-                  <p style={{ fontSize: "0.9rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.6, marginBottom: "1rem", minHeight: "2.8rem" }}>{proj.tagline}</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-                    {proj.tags.map(t => (
-                      <span key={t} style={{ padding: "0.25rem 0.65rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#4b5563", borderRadius: "0.4rem", fontSize: "0.8rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{t}</span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+        
+        {isMobile ? (
+          <div style={{ position: "relative", marginBottom: "2rem" }}>
+            <div style={{ padding: "0 1rem" }}>
+              <CarouselIndicator count={projects.length} activeIndex={activeProject} color="#6366f1" dark={dm} />
+            </div>
+            
+            <div style={{ position: "relative", height: "420px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+              <div style={{ position: "relative", width: "100%", maxWidth: "300px", height: "100%" }}>
+                {projects.map((proj, i) => {
+                  let offset = i - activeProject;
+                  if (offset > projects.length / 2) offset -= projects.length;
+                  if (offset < -projects.length / 2) offset += projects.length;
+
+                  const isActive = offset === 0;
+                  const isVisible = Math.abs(offset) <= 1;
+
+                  return (
+                    <motion.div
+                      key={proj.id}
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
+                      onDragEnd={(_, info) => {
+                        const threshold = 50;
+                        if (info.offset.x > threshold) setActiveProject((prev) => (prev - 1 + projects.length) % projects.length);
+                        else if (info.offset.x < -threshold) setActiveProject((prev) => (prev + 1) % projects.length);
+                      }}
+                      animate={{
+                        x: `calc(-50% + ${offset * 115}%)`,
+                        y: "-50%",
+                        scale: isActive ? 1 : 0.85,
+                        opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
+                        zIndex: isActive ? 10 : 5 - Math.abs(offset),
+                        rotateY: offset * -10
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      style={{ 
+                        position: "absolute", top: "50%", left: "50%", width: "100%", 
+                        background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", 
+                        overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
+                        boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)", 
+                        pointerEvents: isActive ? "auto" : "none",
+                        cursor: "grab"
+                      }}
+                    >
+                      <div style={{ height: "140px", background: `linear-gradient(135deg, ${proj.color}cc, ${proj.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3.5rem", position: "relative" }}>
+                        <span style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.2))" }}>
+                          {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : "💡"}
+                        </span>
+                      </div>
+                      <div style={{ padding: "1.25rem" }}>
+                        <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>{proj.name}</h3>
+                        <p style={{ fontSize: "0.85rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.5, marginBottom: "1rem" }}>{proj.tagline}</p>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                          {proj.tags.slice(0, 3).map(t => (
+                            <span key={t} style={{ padding: "0.2rem 0.6rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#4b5563", borderRadius: "0.4rem", fontSize: "0.75rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}`, whiteSpace: "nowrap" }}>{t}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div style={{ ...S.innerWide, position: "relative" }}>
+            <div style={{ 
+              display: "grid", 
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+              gap: "1.25rem"
+            }}>
+              {projects.map((proj, i) => (
+                <motion.div key={proj.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+                  style={{ 
+                    background: dm ? "#1a1a1a" : "#fff", 
+                    borderRadius: "1.5rem", 
+                    overflow: "hidden", 
+                    border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
+                    transition: "transform 0.25s, box-shadow 0.25s", 
+                    cursor: "default"
+                  }}
+                  whileHover={{ y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}>
+                  <div style={{ height: "140px", background: `linear-gradient(135deg, ${proj.color}cc, ${proj.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4rem", position: "relative" }}>
+                    <span style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.2))" }}>
+                      {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : "💡"}
+                    </span>
+                  </div>
+                  <div style={{ padding: "1.25rem 1.5rem 1.5rem" }}>
+                    <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem" }}>{proj.name}</h3>
+                    <p style={{ fontSize: "0.9rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.6, marginBottom: "1rem", minHeight: "2.8rem" }}>{proj.tagline}</p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                      {proj.tags.map(t => (
+                        <span key={t} style={{ padding: "0.25rem 0.65rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#4b5563", borderRadius: "0.4rem", fontSize: "0.8rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ── INTERESTS ── */}
@@ -559,7 +800,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
         <div style={{ ...S.inner, position: "relative" }}>
           <Heading title="Let's Connect" c1="#ef4444" c2="#f97316" center dark />
 
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "2fr 3fr", gap: "2rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "2fr 3fr", gap: "2rem", alignItems: "start" }}>
             {/* Links panel */}
             <div style={{ background: "rgba(255,255,255,0.05)", backdropFilter: "blur(12px)", borderRadius: "1.5rem", padding: "2rem", border: "1px solid rgba(255,255,255,0.1)" }}>
               <h3 style={{ fontSize: "1.3rem", color: "#fff", fontWeight: 300, marginBottom: "2rem" }}>Find me at</h3>
