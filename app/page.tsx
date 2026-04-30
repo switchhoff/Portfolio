@@ -472,7 +472,7 @@ export default function Home() {
                 <div style={{
                   position: "relative",
                   width: isMobile ? "100vw" : "min(100vw, calc((100vh - 60px) * 1164 / 1080))",
-                  height: isMobile ? "calc(100vh - 60px)" : "calc(min(100vw * 1080 / 1164, 100vh - 60px))",
+                  height: isMobile ? "calc(100vw * 1080 / 1164)" : "calc(min(100vw * 1080 / 1164, 100vh - 60px))",
                   aspectRatio: isMobile ? undefined : "1164 / 1080",
                   maxHeight: "calc(100vh - 60px)",
                   flexShrink: 0,

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useCallback, useEffect } from "react";
+import { motion } from "framer-motion";
 import { getMappedHotspots, getCategoryColor, type Hotspot } from "@/lib/hotspots-config";
 import { BLOCK_MAPPINGS, CATEGORY_COLORS } from "@/lib/svgBlockMappings";
 import { getPathData } from "@/lib/pathData";
@@ -473,18 +474,21 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", userSelect: "none", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 20 }}
     >
       {/* ── CHEATS MENU BAR ── */}
-      <div style={{
-        position: isMobile ? "fixed" : "absolute",
-        top: isMobile ? "auto" : "50%",
-        transform: isMobile ? undefined : "translateY(-50%)",
-        bottom: isMobile ? "0" : "auto",
-        right: isMobile ? "0" : "10px",
-        left: isMobile ? "0" : "auto",
-        width: isMobile ? "100%" : "180px",
-        display: "flex",
-        flexDirection: isMobile ? "column" : "column",
-        gap: 0,
-        zIndex: 55,
+      <motion.div
+        drag={!isMobile}
+        dragMomentum={false}
+        style={{
+          position: "fixed",
+          top: isMobile ? "auto" : "50%",
+          bottom: isMobile ? "0" : "auto",
+          right: isMobile ? "0" : "20px",
+          left: isMobile ? "0" : "auto",
+          transform: isMobile ? undefined : "translateY(-50%)",
+          width: isMobile ? "100%" : "180px",
+          display: "flex",
+          flexDirection: isMobile ? "column" : "column",
+          gap: 0,
+          zIndex: 55,
         // Adapt to dark mode
         background: dm ? "rgba(10, 15, 10, 0.95)" : "rgba(255, 255, 255, 0.95)",
         backdropFilter: "blur(12px)",
@@ -497,7 +501,8 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
         minWidth: isMobile ? "100%" : "180px",
         fontFamily: "'JetBrains Mono', monospace",
         boxShadow: dm ? "0 -4px 32px rgba(0,0,0,0.5)" : "0 -4px 32px rgba(0,0,0,0.1)",
-        transition: "all 0.3s ease",
+        transition: isMobile ? "all 0.3s ease" : "background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease",
+        cursor: isMobile ? "default" : "grab",
       }}>
         {/* ── CHEATS MASTER TOGGLE — full-width row (mobile: top row; desktop: top of column) ── */}
         <div
@@ -604,7 +609,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
           );
         })}
         </div>
-      </div>
+      </motion.div>
       {/* Weather window SVG layer — same coordinate space as blocks */}
       <svg
         viewBox="0 0 960 540"
