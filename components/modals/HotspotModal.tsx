@@ -51,18 +51,7 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
 
   const catColor = hotspot ? getCategoryColor(hotspot.category) : "#999";
 
-  // Compute clamped position relative to container
-  const modalPos = (() => {
-    if (!clickOrigin || !containerRect || isMobile) {
-      return { left: "50%", top: "50%" };
-    }
-    const MODAL_W = Math.min(380, window.innerWidth - 32);
-    const MODAL_H_APPROX = 320; // rough estimate for clamping
-    const pad = 12;
-    const left = Math.max(MODAL_W / 2 + pad, Math.min(containerRect.width - MODAL_W / 2 - pad, clickOrigin.x));
-    const top = Math.max(MODAL_H_APPROX / 2 + pad, Math.min(containerRect.height - MODAL_H_APPROX / 2 - pad, clickOrigin.y));
-    return { left: `${left}px`, top: `${top}px` };
-  })();
+  const modalPos = { left: "50%", top: "50%" };
 
   function renderContent(h: Hotspot) {
     if (isProject(h)) return <ProjectContent hotspot={h} />;

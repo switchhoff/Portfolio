@@ -257,7 +257,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
   const [golfError, setGolfError] = useState("");
   const [showOverland, setShowOverland] = useState(false);
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
-  const [audioVolume, setAudioVolume] = useState(0.3);
+  const [audioVolume, setAudioVolume] = useState(0.1);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // -- RESPONSIVENESS --
@@ -700,8 +700,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                     onClick={(e) => {
                       const rect = containerRef.current?.getBoundingClientRect();
                       if (rect) {
-                        const scale = rect.width / IMG_W;
-                        onHotspotClick(h, { x: cx * scale, y: cy * scale });
+                        onHotspotClick(h, { x: e.clientX - rect.left, y: e.clientY - rect.top });
                       } else {
                         onHotspotClick(h, { x: e.clientX, y: e.clientY });
                       }
@@ -871,14 +870,12 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
               style={{
                 position: "fixed",
                 left: (pathData?.category === "generic") 
-                  ? (isMobile ? "50%" : clickedPath.x - 80) 
+                  ? (isMobile ? "50%" : clickedPath.x) 
                   : "50%",
                 top: (pathData?.category === "generic")
-                  ? (isMobile ? "50%" : clickedPath.y - 120)
+                  ? (isMobile ? "50%" : clickedPath.y)
                   : "50%",
-                transform: (pathData?.category === "generic")
-                  ? (isMobile ? "translate(-50%, -50%)" : "none")
-                  : "translate(-50%, -50%)",
+                transform: "translate(-50%, -50%)",
                 background: "#ffffff",
                 border: `1px solid ${categoryColor}`,
                 borderRadius: "6px",
@@ -970,9 +967,6 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         {(pathData.category === "experience" || pathData.category === "education") && pathData.company
                           ? pathData.company
                           : pathData.name}
-                        <span style={{ fontSize: "10px", fontWeight: 700, color: categoryColor, opacity: 0.7, background: `${categoryColor}18`, borderRadius: "4px", padding: "1px 5px", fontFamily: "monospace", flexShrink: 0 }}>
-                          #{pathData.path}
-                        </span>
                       </span>
                       {/* Right — WIP tag */}
                       <span style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -1329,7 +1323,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "10px", paddingTop: "8px", borderTop: `1px solid ${categoryColor}22` }}>
                                   <span style={{ fontSize: "10px", color: "#888", whiteSpace: "nowrap" }}>🔊</span>
                                   <input
-                                    type="range" min={0} max={0.6} step={0.01}
+                                    type="range" min={0} max={0.3} step={0.01}
                                     value={audioVolume}
                                     onChange={e => {
                                       const v = parseFloat(e.target.value);
@@ -1338,7 +1332,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                     }}
                                     style={{ flex: 1, accentColor: categoryColor, cursor: "pointer", height: "4px" }}
                                   />
-                                  <span style={{ fontSize: "10px", color: "#888", minWidth: "28px", textAlign: "right" }}>{Math.round((audioVolume / 0.6) * 100)}%</span>
+                                  <span style={{ fontSize: "10px", color: "#888", minWidth: "28px", textAlign: "right" }}>{Math.round((audioVolume / 0.3) * 100)}%</span>
                                 </div>
                               )}
                             </div>
@@ -1486,7 +1480,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                 )
               ) : (
                 <div style={{ fontSize: "14px", color: "#000" }}>
-                  Path #{clickedPath.index}
+                  —
                 </div>
               )}
             </div>

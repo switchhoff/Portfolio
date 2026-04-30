@@ -29,9 +29,9 @@ interface BoringViewProps {
 // Visual-only metadata — all text sourced from pathData.ts
 const WORK_VISUAL: Record<number, { color: string; color2: string; photo: string | null }> = {
   64: { color: "#ef4444", color2: "#f97316", photo: "/singapore2.jpg" }, // Fortifyedge  (path 64)
-  88: { color: "#f97316", color2: "#f59e0b", photo: null }, // Monash TA    (path 88)
+  88: { color: "#f97316", color2: "#f59e0b", photo: "/ta.jpg" }, // Monash TA    (path 88)
   68: { color: "#f59e0b", color2: "#eab308", photo: null }, // Tonbo        (path 68)
-  66: { color: "#eab308", color2: "#facc15", photo: null }, // DefendTex    (path 66)
+  66: { color: "#eab308", color2: "#facc15", photo: "/banshee.jpg" }, // DefendTex    (path 66)
 };
 const WORK_PATHS = [64, 88, 68, 66];
 
@@ -80,8 +80,8 @@ function getInterestItems(path: number): any[] {
 
 const EDUCATION = [
   // Sourced from pathData path 70 (Monash University entries)
-  { path: 70, degree: "Master of Electrical Engineering", school: "Monash University", period: "2024", description: "87 WAM - 4.00 GPA", achievements: ["Academic Medal Winner 2024"], color: "#ef4444", color2: "#f43f5e" },
-  { path: 70, degree: "Bachelor of Robotics and Mechatronics Engineering", school: "Monash University", period: "2020 – 2023", description: "Specialization: Artificial Intelligence\nMinor: Software Engineering", achievements: ["Dean's Honour List 2020–2023"], color: "#f97316", color2: "#ef4444" },
+  { path: 70, degree: "Master of Electrical Engineering", school: "Monash University", period: "2024", description: "87 WAM - 4.00 GPA", achievements: ["Academic Medal Winner 2024"], color: "#ef4444", color2: "#f43f5e", photo: "/award2.jpg" },
+  { path: 70, degree: "Bachelor of Robotics and Mechatronics Engineering", school: "Monash University", period: "2020 – 2023", description: "Specialization: Artificial Intelligence\nMinor: Software Engineering", achievements: ["Dean's Honour List 2020–2023"], color: "#f97316", color2: "#ef4444", photo: "/grad.jpg" },
 ];
 
 
@@ -361,7 +361,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                       >
                         <div style={{ height: "120px", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, position: "relative", borderBottom: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` }}>
                           {v.photo ? (
-                            <img src={v.photo} alt={w.company} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+                            <img src={v.photo} alt={w.company} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "30% center" }} />
                           ) : (
                             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                               <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}44, ${v.color2}44)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -617,7 +617,13 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         }}
                       >
                         <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
-                        <div style={{ padding: "1.5rem" }}>
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                        {edu.photo && (
+                          <div style={{ width: "110px", flexShrink: 0, position: "relative", overflow: "hidden" }}>
+                            <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+                          </div>
+                        )}
+                        <div style={{ padding: "1.5rem", flex: 1 }}>
                           <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>
                             {edu.degree}
                           </h4>
@@ -626,6 +632,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                           <p style={{ fontSize: "0.85rem", color: dm ? "#d1d5db" : "#4b5563", lineHeight: 1.5 }}>
                             {edu.description}
                           </p>
+                        </div>
                         </div>
                       </motion.div>
                     );
@@ -639,7 +646,13 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                   style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
                   <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
-                  <div style={{ padding: isMobile ? "1.5rem" : "2.5rem" }}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                  {edu.photo && (
+                    <div style={{ width: "200px", flexShrink: 0, position: "relative", overflow: "hidden" }}>
+                      <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+                    </div>
+                  )}
+                  <div style={{ padding: isMobile ? "1.5rem" : "2.5rem", flex: 1 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
                       <div style={{ flex: 1 }}>
                         <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "8px" }}>
@@ -661,6 +674,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         </div>
                       ))}
                     </div>
+                  </div>
                   </div>
                 </motion.div>
               ))}
