@@ -257,7 +257,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
   const [golfError, setGolfError] = useState("");
   const [showOverland, setShowOverland] = useState(false);
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
-  const [audioVolume, setAudioVolume] = useState(0.5);
+  const [audioVolume, setAudioVolume] = useState(0.3);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // -- RESPONSIVENESS --
@@ -1329,7 +1329,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "10px", paddingTop: "8px", borderTop: `1px solid ${categoryColor}22` }}>
                                   <span style={{ fontSize: "10px", color: "#888", whiteSpace: "nowrap" }}>🔊</span>
                                   <input
-                                    type="range" min={0} max={1} step={0.01}
+                                    type="range" min={0} max={0.6} step={0.01}
                                     value={audioVolume}
                                     onChange={e => {
                                       const v = parseFloat(e.target.value);
@@ -1338,7 +1338,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                                     }}
                                     style={{ flex: 1, accentColor: categoryColor, cursor: "pointer", height: "4px" }}
                                   />
-                                  <span style={{ fontSize: "10px", color: "#888", minWidth: "28px", textAlign: "right" }}>{Math.round(audioVolume * 100)}%</span>
+                                  <span style={{ fontSize: "10px", color: "#888", minWidth: "28px", textAlign: "right" }}>{Math.round((audioVolume / 0.6) * 100)}%</span>
                                 </div>
                               )}
                             </div>

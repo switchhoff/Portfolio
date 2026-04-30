@@ -457,10 +457,10 @@ export default function Home() {
                   padding: 0,
                 }}
               >
-                {/* 16:9 image canvas — full screen width on mobile */}
+                {/* 16:9 image canvas — constrained by both viewport dimensions */}
                 <div style={{
                   position: "relative",
-                  width: "100%",
+                  width: isMobile ? "100vw" : "min(100vw, calc((100vh - 60px) * 16 / 9))",
                   height: isMobile ? "calc(100vw * 9 / 16)" : "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
                   flexShrink: 0,
                   overflow: "hidden",
@@ -474,8 +474,7 @@ export default function Home() {
                       inset: 0,
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
-                      objectPosition: "center",
+                      objectFit: "contain",
                       pointerEvents: "none",
                     }}
                     draggable={false}

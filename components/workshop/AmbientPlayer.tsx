@@ -48,10 +48,17 @@ export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
     playingRef.current = isPlaying;
 
     const onSaxStart = () => {
-      if (!audio.paused) fadeTo(audio, DUCK_VOLUME, FADE_MS);
+      if (!audio.paused) {
+        fadeTo(audio, 0, FADE_MS);
+        setTimeout(() => audio.pause(), FADE_MS);
+      }
     };
     const onSaxEnd = () => {
-      if (!audio.paused && playingRef.current) fadeTo(audio, FULL_VOLUME, FADE_MS);
+      if (playingRef.current) {
+        audio.volume = 0;
+        audio.play();
+        fadeTo(audio, FULL_VOLUME, FADE_MS);
+      }
     };
 
     window.addEventListener("sax-audio-start", onSaxStart);
