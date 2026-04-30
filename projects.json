@@ -3,7 +3,7 @@
     "id": "portfolio",
     "repo": "switchhoff/Portfolio",
     "name": "Portfolio",
-    "tagline": "This portfolio — isometric workshop, point-and-click",
+    "tagline": "Interactive isometric workshop portfolio — point and click around the room to discover projects.",
     "tags": [
       "Next.js",
       "TypeScript",
@@ -12,29 +12,32 @@
     "color": "#3a5fbf",
     "firebase": null,
     "stars": 0,
-    "updated": "2026-04-29T08:31:23Z"
+    "updated": "2026-04-30T06:38:53Z"
   },
   {
     "id": "pawsbutton",
     "repo": "switchhoff/PawsButton",
     "name": "PawsButton",
-    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tagline": "Family pet care tracker — feeding logs, medication schedules, and real-time sync across the household.",
     "tags": [
-      "TODO",
-      "TypeScript"
+      "Next.js",
+      "TypeScript",
+      "Firebase"
     ],
     "color": "#e67e22",
     "firebase": null,
     "stars": 0,
-    "updated": "2026-04-30T01:03:37Z"
+    "updated": "2026-04-30T06:36:47Z"
   },
   {
     "id": "benfl",
     "repo": "switchhoff/BeNFL",
     "name": "BeNFL",
-    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tagline": "NFL game watchability platform — avoid spoilers and find the best games to watch on replay.",
     "tags": [
-      "TODO"
+      "Web Scraping",
+      "Data Analytics",
+      "NFL"
     ],
     "color": "#27ae60",
     "firebase": null
@@ -82,23 +85,26 @@
     "id": "lastyear",
     "repo": "switchhoff/LastYear",
     "name": "LastYear",
-    "tagline": "App for relationships",
+    "tagline": "Private shared app for two — relive what you were doing together exactly one year ago today.",
     "tags": [
-      "TODO",
-      "TypeScript"
+      "Next.js",
+      "TypeScript",
+      "Firebase"
     ],
     "color": "#c0392b",
     "firebase": null,
     "stars": 0,
-    "updated": "2026-04-30T00:54:40Z"
+    "updated": "2026-04-30T06:38:32Z"
   },
   {
     "id": "sixclicks",
     "repo": "switchhoff/SixClicks",
     "name": "SixClicks",
-    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tagline": "LinkedIn scraper Chrome extension — visualize your professional network as a node map.",
     "tags": [
-      "TODO"
+      "Chrome Extension",
+      "Scraping",
+      "Visualization"
     ],
     "color": "#16a085",
     "firebase": null
@@ -107,7 +113,7 @@
     "id": "bintherestore",
     "repo": "switchhoff/BinThereStoreThat",
     "name": "BinThereStoreThat",
-    "tagline": "RFID-indexed workshop storage & retrieval",
+    "tagline": "QR code-indexed household storage & retrieval tracking system.",
     "tags": [
       "IoT",
       "Hardware",
@@ -123,9 +129,11 @@
     "id": "threadquarters",
     "repo": "switchhoff/Threadquarters",
     "name": "Threadquarters",
-    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tagline": "Garment tracking and workshop software integration.",
     "tags": [
-      "TODO"
+      "Software",
+      "Clothing",
+      "IoT"
     ],
     "color": "#8e44ad",
     "firebase": null
@@ -134,10 +142,11 @@
     "id": "keysborough",
     "repo": "switchhoff/Keysborough-District",
     "name": "Keysborough-District",
-    "tagline": "Keysborough DIstrict MOTM Voting App",
+    "tagline": "Man of the Match voting app for Keysborough District FC.",
     "tags": [
-      "TODO",
-      "TypeScript"
+      "Next.js",
+      "TypeScript",
+      "Firebase"
     ],
     "color": "#2c3e50",
     "firebase": null,
