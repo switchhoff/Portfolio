@@ -93,7 +93,7 @@ export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
   return (
     <div style={{
       position: isMobile ? "relative" : "absolute",
-      left: isMobile ? "auto" : "14%",
+      left: isMobile ? "auto" : "6%",
       top: isMobile ? "auto" : "18%",
       transform: isMobile ? "none" : "rotate(-25deg)",
       transformOrigin: "left center",

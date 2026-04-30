@@ -478,7 +478,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
         top: isMobile ? "auto" : "50%",
         transform: isMobile ? undefined : "translateY(-50%)",
         bottom: isMobile ? "0" : "auto",
-        right: isMobile ? "0" : "20px",
+        right: isMobile ? "0" : "10px",
         left: isMobile ? "0" : "auto",
         width: isMobile ? "100%" : "180px",
         display: "flex",
@@ -608,10 +608,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       {/* Weather window SVG layer — same coordinate space as blocks */}
       <svg
         viewBox="0 0 960 540"
+        preserveAspectRatio={isMobile ? "xMidYMid meet" : "xMidYMid slice"}
         style={{
           position: "absolute",
           inset: 0,
-          left: "-0.83%",
+          left: "-1.33%",
           width: "100%",
           height: "100%",
           pointerEvents: "none",
@@ -626,10 +627,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       <svg
         ref={blockSvgRef}
         viewBox="0 0 960 540"
+        preserveAspectRatio={isMobile ? "xMidYMid meet" : "xMidYMid slice"}
         style={{
           position: "absolute",
           inset: 0,
-          left: "-0.83%",
+          left: "-1.33%",
           width: "100%",
           height: "100%",
           pointerEvents: "auto",
