@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   type Hotspot, getCategoryColor,
@@ -13,28 +13,19 @@ import FormContent from "./FormContent";
 import StatusContent from "./StatusContent";
 import AboutContent from "./AboutContent";
 
-/**
- * HotspotModal Component
- * 
- * A dynamic, responsive modal system that displays content for workshop hotspots.
- * 
- * Features:
- * - Dynamic Positioning: On desktop, it anchors near the clicked hotspot with an arrow.
- * - Mobile Optimized: Automatically centers and scales for touch devices.
- * - Polymorphic Content: Renders different sub-components (Project, Experience, Link, etc.)
- *   based on the hotspot category.
- * - Viewport Awareness: Ensures the modal never bleeds off the screen edges.
- */
 interface Props {
   hotspot: Hotspot | null;
   clickOrigin: { x: number; y: number } | null;
   containerRect: DOMRect | null;
   onClose: () => void;
+  darkMode?: boolean;
 }
 
-export default function HotspotModal({ hotspot, clickOrigin, containerRect, onClose }: Props) {
+export default function HotspotModal({ hotspot, clickOrigin, containerRect, onClose, darkMode }: Props) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const dm = darkMode ?? false;
+
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
@@ -42,7 +33,6 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Close on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", handler);
@@ -50,7 +40,6 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
   }, [onClose]);
 
   const catColor = hotspot ? getCategoryColor(hotspot.category) : "#999";
-
   const modalPos = { left: "50%", top: "50%" };
 
   function renderContent(h: Hotspot) {
@@ -68,7 +57,7 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
     <AnimatePresence>
       {hotspot && (
         <>
-          {/* Backdrop — click to close */}
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -77,20 +66,15 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
             onClick={onClose}
             style={{
               position: "absolute", inset: 0, zIndex: 20,
-              background: "rgba(0,0,0,0.05)",
+              background: dm ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.25)",
             }}
           />
 
-          {/* Tooltip card */}
+          {/* Modal card */}
           <motion.div
             ref={modalRef}
             initial={{ opacity: 0, scale: 0.92, x: "-50%", y: "-50%" }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              x: "-50%",
-              y: "-50%"
-            }}
+            animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
             exit={{ opacity: 0, scale: 0.92 }}
             transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             style={{
@@ -101,12 +85,14 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
               width: "min(380px, calc(100vw - 32px))",
               maxHeight: "85vh",
               overflowY: "auto",
-              background: "#ffffff",
-              border: `1px solid ${catColor}30`,
-              borderLeft: `1px solid ${catColor}30`,
-              borderRight: `1px solid ${catColor}30`,
+              background: dm ? "#141414" : "#ffffff",
               borderTop: `3px solid ${catColor}`,
-              boxShadow: "0 12px 40px rgba(0,0,0,0.12)",
+              borderRight: `1px solid ${catColor}40`,
+              borderBottom: `1px solid ${catColor}40`,
+              borderLeft: `1px solid ${catColor}40`,
+              boxShadow: dm
+                ? "0 12px 40px rgba(0,0,0,0.6)"
+                : "0 12px 40px rgba(0,0,0,0.18)",
               fontFamily: "'JetBrains Mono', monospace",
               borderRadius: isMobile ? "8px" : "0",
             }}
@@ -114,7 +100,7 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
             {/* Header */}
             <div style={{
               padding: "14px 16px 10px",
-              borderBottom: `1px solid ${catColor}15`,
+              borderBottom: `1px solid ${catColor}22`,
               display: "flex", alignItems: "center", justifyContent: "space-between",
             }}>
               <div>
@@ -124,17 +110,33 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
                 }}>
                   {hotspot.category}
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "#1a2e1f" }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: dm ? "#f1f5f9" : "#1a2e1f" }}>
                   {hotspot.label}
                 </div>
               </div>
+
+              {/* Close button — visible */}
               <button
                 onClick={onClose}
                 aria-label="Close"
                 style={{
-                  background: "none", border: "none", cursor: "pointer",
-                  fontSize: 16, color: "#9aaa94", padding: "4px 8px",
-                  fontFamily: "inherit", lineHeight: 1,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  width: 32, height: 32, flexShrink: 0,
+                  background: dm ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.12)",
+                  border: `1px solid ${dm ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.2)"}`,
+                  borderRadius: "50%",
+                  cursor: "pointer",
+                  fontSize: 18, lineHeight: 1,
+                  color: dm ? "#f1f5f9" : "#1f2937",
+                  fontFamily: "inherit",
+                  fontWeight: 600,
+                  transition: "background 0.15s, border-color 0.15s",
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = dm ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.2)";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = dm ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.12)";
                 }}
               >
                 ×
@@ -142,7 +144,7 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
             </div>
 
             {/* Content */}
-            <div style={{ padding: "14px 16px 16px" }}>
+            <div style={{ padding: "14px 16px 16px", color: dm ? "#e2e8f0" : undefined }}>
               {renderContent(hotspot)}
             </div>
           </motion.div>

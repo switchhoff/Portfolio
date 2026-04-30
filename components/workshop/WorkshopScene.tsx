@@ -361,10 +361,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                     }
                   });
 
+                  const rect = containerRef.current?.getBoundingClientRect();
                   setClickedPath({
                     index: groupedIndex,
-                    x: evt.clientX,
-                    y: evt.clientY,
+                    x: rect ? evt.clientX - rect.left : evt.clientX,
+                    y: rect ? evt.clientY - rect.top : evt.clientY,
                   });
                 });
               }
@@ -397,10 +398,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                     }
                   });
 
+                  const rect = containerRef.current?.getBoundingClientRect();
                   setClickedPath({
                     index: groupedIndex,
-                    x: evt.clientX,
-                    y: evt.clientY,
+                    x: rect ? evt.clientX - rect.left : evt.clientX,
+                    y: rect ? evt.clientY - rect.top : evt.clientY,
                   });
                 });
               }
@@ -473,75 +475,74 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       {/* ── CHEATS MENU BAR ── */}
       <div style={{
         position: isMobile ? "fixed" : "absolute",
-        top: isMobile ? "auto" : "185px",
+        top: isMobile ? "auto" : "50%",
+        transform: isMobile ? undefined : "translateY(-50%)",
         bottom: isMobile ? "0" : "auto",
-        right: isMobile ? "0" : "75px",
+        right: isMobile ? "0" : "20px",
         left: isMobile ? "0" : "auto",
+        width: isMobile ? "100%" : "180px",
         display: "flex",
-        flexDirection: isMobile ? "row" : "column",
+        flexDirection: isMobile ? "column" : "column",
         gap: 0,
         zIndex: 55,
         // Adapt to dark mode
         background: dm ? "rgba(10, 15, 10, 0.95)" : "rgba(255, 255, 255, 0.95)",
         backdropFilter: "blur(12px)",
-        border: isMobile ? "none" : (dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)"),
-        borderTop: isMobile ? (dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)") : "none",
+        borderTop: isMobile ? (dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)") : (dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)"),
+        borderRight: isMobile ? "none" : (dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)"),
+        borderBottom: isMobile ? "none" : (dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)"),
+        borderLeft: isMobile ? "none" : (dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)"),
         borderRadius: isMobile ? "0" : "12px",
-        overflow: isMobile ? "auto" : "hidden", // Allow horizontal scroll if many filters
+        overflow: "hidden",
         minWidth: isMobile ? "100%" : "180px",
         fontFamily: "'JetBrains Mono', monospace",
         boxShadow: dm ? "0 -4px 32px rgba(0,0,0,0.5)" : "0 -4px 32px rgba(0,0,0,0.1)",
         transition: "all 0.3s ease",
       }}>
-        {/* ── CHEATS MASTER TOGGLE ── */}
+        {/* ── CHEATS MASTER TOGGLE — full-width row (mobile: top row; desktop: top of column) ── */}
         <div
           onClick={() => {
             setCheatMode(!cheatMode);
-            // If turning off cheats, clear all active highlights
             if (cheatMode) setActiveFilters(new Set());
           }}
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: isMobile ? "12px 20px" : "12px 16px",
+            padding: isMobile ? "10px 16px" : "12px 16px",
             cursor: "pointer",
-            borderBottom: isMobile ? "none" : (dm ? "1px solid rgba(255, 215, 0, 0.15)" : "1px solid rgba(0, 0, 0, 0.08)"),
-            borderRight: isMobile ? (dm ? "1px solid rgba(255, 215, 0, 0.15)" : "1px solid rgba(0, 0, 0, 0.08)") : "none",
+            borderBottom: dm ? "1px solid rgba(255, 215, 0, 0.15)" : "1px solid rgba(0, 0, 0, 0.08)",
             userSelect: "none",
             background: cheatMode ? (dm ? "rgba(255, 215, 0, 0.05)" : "rgba(217, 119, 6, 0.03)") : "transparent",
             flexShrink: 0,
+            width: "100%",
           }}
         >
-          <span style={{ 
-            fontSize: 12, 
-            fontWeight: 700, 
-            letterSpacing: "0.12em", 
-            color: dm ? "#FFD700" : "#d97706" 
-          }}>
+          <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", color: dm ? "#FFD700" : "#d97706" }}>
             CHEATS
           </span>
-          {/* Master Sliding Toggle */}
           <div style={{
             width: 32, height: 16,
             background: cheatMode ? (dm ? "#FFD700" : "#d97706") : (dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"),
-            borderRadius: 8,
-            position: "relative",
-            transition: "all 0.2s ease",
-            flexShrink: 0,
+            borderRadius: 8, position: "relative", transition: "all 0.2s ease", flexShrink: 0,
           }}>
             <div style={{
-              position: "absolute",
-              top: 2, left: cheatMode ? 18 : 2,
-              width: 12, height: 12,
-              borderRadius: "50%",
+              position: "absolute", top: 2, left: cheatMode ? 18 : 2,
+              width: 12, height: 12, borderRadius: "50%",
               background: cheatMode ? (dm ? "#000" : "#fff") : (dm ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.3)"),
               transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
             }} />
           </div>
         </div>
 
-        {/* ── CATEGORY FILTER ROWS ── */}
+        {/* ── CATEGORY FILTER ROWS — horizontal scroll row on mobile, column on desktop ── */}
+        <div style={{
+          display: "flex",
+          flexDirection: isMobile ? "row" : "column",
+          overflowX: isMobile ? "auto" : "visible",
+          overflowY: isMobile ? "visible" : "auto",
+          flex: isMobile ? "none" : 1,
+        }}>
         {Object.entries(FILTER_GROUPS).map(([name, paths]) => {
           const categoryColor = CATEGORY_COLORS[name] || "#999999";
           const isActive = activeFilters.has(name);
@@ -602,6 +603,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             </div>
           );
         })}
+        </div>
       </div>
       {/* Weather window SVG layer — same coordinate space as blocks */}
       <svg
@@ -868,7 +870,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             {/* Popup Card */}
             <div
               style={{
-                position: "fixed",
+                position: "absolute",
                 left: (pathData?.category === "generic") 
                   ? (isMobile ? "50%" : clickedPath.x) 
                   : "50%",
@@ -1458,7 +1460,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
 
                     {/* Tags */}
                     {pathData.tags && pathData.tags.length > 0 && (
-                      <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginTop: "8px", width: "100%" }}>
+                      <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginTop: "8px", width: "100%", alignItems: "stretch" }}>
                         {pathData.tags.map(tag => (
                           <span key={tag} style={{
                             flex: 1,
@@ -1466,10 +1468,14 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                             fontSize: "10px",
                             fontWeight: 700,
                             letterSpacing: "0.12em",
-                            padding: "3px 6px",
+                            padding: "4px 6px",
                             border: `1px solid ${categoryColor}`,
                             color: categoryColor,
                             borderRadius: "2px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            minHeight: "24px", // Ensure minimum height for alignment
                           }}>
                             {tag}
                           </span>

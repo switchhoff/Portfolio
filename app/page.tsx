@@ -449,7 +449,7 @@ export default function Home() {
                   width: "100vw",
                   height: isMobile ? "auto" : "calc(100vh - 60px)",
                   overflow: isMobile ? "visible" : "hidden",
-                  background: darkMode ? "#111111" : "#ffffff",
+                  background: "transparent",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -457,13 +457,27 @@ export default function Home() {
                   padding: 0,
                 }}
               >
-                {/* 16:9 image canvas — constrained by both viewport dimensions */}
+                {/* Mobile: AmbientPlayer sits above the canvas */}
+                {isMobile && <AmbientPlayer darkMode={darkMode} />}
+
+                {/*
+                  Canvas sizing:
+                  - Desktop: 16:9 aspect-ratio, width-constrained by viewport.
+                    aspect-ratio auto-derives height — no overflow possible.
+                  - Mobile: 1164:1080 (image's natural ratio). Image shown with contain.
+                    SVG viewBox 960:540 (16:9) is wider than 1164:1080, so SVG
+                    auto-letterboxes (xMidYMid meet) with transparent bands matching
+                    the image's own transparent padding → perfect overlay.
+                */}
                 <div style={{
                   position: "relative",
-                  width: isMobile ? "100vw" : "min(100vw, calc((100vh - 60px) * 16 / 9))",
-                  height: isMobile ? "calc(100vw * 9 / 16)" : "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
+                  width: isMobile ? "100vw" : "min(100vw, calc((100vh - 60px) * 1164 / 1080))",
+                  height: isMobile ? "calc(100vw * 1080 / 1164)" : "calc(min(100vw * 1080 / 1164, 100vh - 60px))",
+                  aspectRatio: isMobile ? undefined : "1164 / 1080",
+                  maxHeight: "calc(100vh - 60px)",
                   flexShrink: 0,
                   overflow: "hidden",
+                  marginTop: isMobile ? "8px" : undefined,
                 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -474,12 +488,23 @@ export default function Home() {
                       inset: 0,
                       width: "100%",
                       height: "100%",
-                      objectFit: "contain",
+                      objectFit: isMobile ? "contain" : "cover",
+                      objectPosition: "center",
                       pointerEvents: "none",
                     }}
                     draggable={false}
                   />
-                  <div ref={sceneContainerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: active ? 100 : 10 }}>
+                  {/* On mobile: constrain scene to 16:9 center of 1164:1080 canvas so SVG aligns with image content */}
+                  <div ref={sceneContainerRef} style={{
+                    position: "absolute",
+                    left: 0, right: 0,
+                    top: isMobile ? "50%" : 0,
+                    height: isMobile ? "calc(100vw * 9 / 16)" : "100%",
+                    transform: isMobile ? "translateY(-50%)" : undefined,
+                    width: "100%",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    zIndex: active ? 100 : 10,
+                  }}>
                     <WorkshopScene
                       onHotspotClick={(h, origin) => {
                         if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
@@ -495,13 +520,12 @@ export default function Home() {
                       clickOrigin={clickOrigin}
                       containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
                       onClose={() => { setActive(null); setClickOrigin(null); }}
+                      darkMode={darkMode}
                     />
                   </div>
-                  {/* AmbientPlayer — desktop only inside canvas (mobile renders fixed via component) */}
+                  {/* AmbientPlayer — desktop only, inside canvas */}
                   {!isMobile && <AmbientPlayer darkMode={darkMode} />}
                 </div>
-                {/* Mobile AmbientPlayer rendered fixed top-left (outside canvas so no rotation/position issues) */}
-                {isMobile && <AmbientPlayer darkMode={darkMode} />}
               </motion.section>
             ) : (
               <motion.section

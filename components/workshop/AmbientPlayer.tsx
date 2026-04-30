@@ -92,17 +92,19 @@ export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
 
   return (
     <div style={{
-      position: isMobile ? "fixed" : "absolute",
-      left: isMobile ? "12px" : "24%",
-      top: isMobile ? "68px" : "18%",
+      position: isMobile ? "relative" : "absolute",
+      left: isMobile ? "auto" : "14%",
+      top: isMobile ? "auto" : "18%",
       transform: isMobile ? "none" : "rotate(-25deg)",
       transformOrigin: "left center",
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      zIndex: isMobile ? 90 : 15,
+      zIndex: isMobile ? 1 : 15,
       pointerEvents: "auto",
       whiteSpace: "nowrap",
+      padding: isMobile ? "8px 12px" : undefined,
+      width: isMobile ? "100%" : undefined,
     }}>
       <button
         onClick={toggle}

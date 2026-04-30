@@ -126,7 +126,7 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   18: {
     path: 18,
-    name: "Reading",
+    name: "Books",
     category: "interests",
     description: "Favourites",
     items: [

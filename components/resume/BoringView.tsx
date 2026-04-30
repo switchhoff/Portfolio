@@ -47,6 +47,15 @@ const HACKATHON_PATHS = [58, 96, 60, 62];
 // Interests — path numbers matching Fun View SVG cards
 const INTEREST_PATHS = [8, 26, 82, 18, 4, 24, 10, 28, 94, 98, 100, 102];
 
+const INTEREST_PAIRS = [
+  [26, 10], // Photography / Saxophone
+  [4, 24],  // Art / Craft
+  [94, 98], // Board Games / Video Games
+  [82, 102], // Hiking / Running
+  [100, 8],  // Soccer / Golf
+  [28, 18],  // Movies / Books (Reading renamed to Books)
+];
+
 // Extract display labels from pathData items (skip action/audio items)
 function getInterestItems(path: number): any[] {
   const d = PATH_DATA[path];
@@ -55,16 +64,16 @@ function getInterestItems(path: number): any[] {
     { label: "@alexhofmannn", href: "https://instagram.com/alexhofmannn" },
     { label: "@alexhofmannphotography", href: "https://instagram.com/alexhofmannphotography" }]; // Photography — link-only card
   if (path === 10) return ["Alto", "Baritone"]; // Saxophone — items are audio clips, show instruments
-  
+
   const extractedItems: any[] = [];
-  
+
   if (d.items) {
     extractedItems.push(...d.items.filter(i => {
       if (typeof i === "string") return true;
       return !("audio" in i) && (!("action" in i) || i.action === "show_overland");
     }));
   }
-  
+
   if (d.content) {
     d.content.forEach(block => {
       if (block.type === 'text') {
@@ -74,7 +83,7 @@ function getInterestItems(path: number): any[] {
       }
     });
   }
-  
+
   return extractedItems;
 }
 
@@ -88,7 +97,7 @@ const EDUCATION = [
 
 const S = {
   font: "var(--font-inter), system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif",
-  section: (isMobile: boolean) => ({ padding: isMobile ? "4rem 1rem" : "7rem clamp(1.5rem, 6vw, 6rem)" }),
+  section: (isMobile: boolean) => ({ padding: isMobile ? "2rem 1rem" : "3rem clamp(1.5rem, 6vw, 6rem)" }),
   inner: { maxWidth: "1100px", margin: "0 auto", width: "100%" },
   innerWide: { maxWidth: "1280px", margin: "0 auto", width: "100%" },
   bar: (color1: string, color2: string) => ({
@@ -100,7 +109,7 @@ const S = {
 
 function CarouselIndicator({ count, activeIndex, color, dark }: { count: number, activeIndex: number, color: string, dark: boolean }) {
   return (
-    <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginBottom: "1.5rem" }}>
+    <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginTop: "0.75rem" }}>
       {Array.from({ length: count }).map((_, i) => (
         <motion.div
           key={i}
@@ -120,9 +129,9 @@ function Heading({ title, c1, c2, center, dark }: { title: string; c1: string; c
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-      style={{ marginBottom: isMobile ? "1.5rem" : "4rem", textAlign: center ? "center" : "left" }}>
-      <h2 style={{ fontSize: isMobile ? "1.85rem" : "2.5rem", fontWeight: 300, color: dark ? "#f9fafb" : "#111827", marginBottom: "0.5rem", lineHeight: 1.15 }}>{title}</h2>
-      <div style={{ ...S.bar(c1, c2), height: "4px", width: "60px", marginBottom: isMobile ? "1rem" : "3rem", ...(center ? { margin: isMobile ? "0 auto 2rem" : "0 auto 4rem" } : {}) }} />
+      style={{ marginBottom: isMobile ? "1rem" : "2rem", textAlign: center ? "center" : "left" }}>
+      <h2 style={{ fontSize: isMobile ? "1.7rem" : "2.3rem", fontWeight: 300, color: dark ? "#f9fafb" : "#111827", marginBottom: "0.25rem", lineHeight: 1.15 }}>{title}</h2>
+      <div style={{ ...S.bar(c1, c2), height: "4px", width: "60px", marginBottom: isMobile ? "0.75rem" : "1.5rem", ...(center ? { margin: isMobile ? "0 auto 1.5rem" : "0 auto 2.5rem" } : {}) }} />
     </motion.div>
   );
 }
@@ -147,9 +156,8 @@ function InterestCard({ pathId, interest, items, dm, i, onShowOverland }: { path
         transition: "border-color 0.2s, box-shadow 0.2s"
       }}
     >
-      <div style={{ fontSize: "1rem", fontWeight: 600, color: dm ? "#ff0000ff" : "#fb0000ff", marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "6px" }}>
+      <div style={{ fontSize: "0.95rem", fontWeight: 600, color: dm ? "#ff0000ff" : "#fb0000ff", marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "6px" }}>
         {interest.name}
-        <span style={{ fontSize: "9px", fontWeight: 700, color: "#ff0303ff", background: dm ? "#2a2a2a" : "#f3f4f6", borderRadius: "4px", padding: "1px 5px", fontFamily: "monospace" }}>#{pathId}</span>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
         {items.map((item, idx) => {
@@ -159,7 +167,7 @@ function InterestCard({ pathId, interest, items, dm, i, onShowOverland }: { path
           const action = !isString ? item.action : undefined;
 
           return (
-            <div key={idx} style={{ fontSize: "0.875rem", color: dm ? "#d1d5db" : "#3a3d44ff", display: "flex", alignItems: "center" }}>
+            <div key={idx} style={{ fontSize: "0.8rem", color: dm ? "#d1d5db" : "#3a3d44ff", display: "flex", alignItems: "center" }}>
               {action === "show_overland" ? (
                 <button
                   onClick={onShowOverland}
@@ -193,8 +201,27 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
   const [activeExp, setActiveExp] = useState(0);
   const [activeEdu, setActiveEdu] = useState(0);
   const [activeProject, setActiveProject] = useState(0);
+  const [activeInterests, setActiveInterests] = useState(0);
   const [showOverland, setShowOverland] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [activeSection, setActiveSection] = useState("boring-about");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, { threshold: 0.3, rootMargin: "-10% 0px -70% 0px" });
+
+    navItems.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [isMobile]);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -204,16 +231,17 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
   }, []);
 
   const navItems = [
-    { id: "boring-about",      label: "About",      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> },
-    { id: "boring-experience", label: "Experience", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> },
-    { id: "boring-hackathons", label: "Hackathons", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.6-1.4 4.9-3.5 6.2V17a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-1.8A7 7 0 0 1 5 9a7 7 0 0 1 7-7z"/></svg> },
-    { id: "boring-education",  label: "Education",  icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg> },
-    { id: "boring-projects",   label: "Projects",   icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3-3a1 1 0 0 0-1.4-1.4l-3 3"/><path d="M13 8L8 3 4 7l5 5"/><path d="m2 22 5.5-1.5L19 9l-4-4L3.5 16.5z"/></svg> },
-    { id: "boring-interests",  label: "Interests",  icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg> },
+    { id: "boring-about", label: "About", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" /></svg> },
+    { id: "boring-experience", label: "Experience", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></svg> },
+    { id: "boring-hackathons", label: "Hackathons", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.6-1.4 4.9-3.5 6.2V17a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-1.8A7 7 0 0 1 5 9a7 7 0 0 1 7-7z" /></svg> },
+    { id: "boring-education", label: "Education", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" /></svg> },
+    { id: "boring-projects", label: "Projects", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3-3a1 1 0 0 0-1.4-1.4l-3 3" /><path d="M13 8L8 3 4 7l5 5" /><path d="m2 22 5.5-1.5L19 9l-4-4L3.5 16.5z" /></svg> },
+    { id: "boring-interests", label: "Interests", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z" /></svg> },
+    { id: "boring-contact", label: "Contact", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg> },
   ];
 
   return (
-    <div style={{ minHeight: "100vh", width: "100%", background: dm ? "#0f0f0f" : "#fff", color: dm ? "#f9fafb" : "#111827", fontFamily: S.font, fontSize: "15px", position: "relative" }}>
+    <div style={{ minHeight: "100vh", width: "100%", background: dm ? "#0f0f0f" : "#fff", color: dm ? "#f9fafb" : "#111827", fontFamily: S.font, fontSize: "13px", position: "relative" }}>
 
       {/* ── SIDEBAR TOC ── */}
       {!isMobile && (
@@ -227,31 +255,50 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
           flexDirection: "column",
           gap: "0.5rem",
         }}>
+          {/* Pulsing indicator dot */}
+          {activeSection && (
+            <motion.div
+              animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              style={{
+                position: "absolute",
+                left: "-12px",
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                background: "#ef4444",
+                boxShadow: "0 0 10px #ef4444",
+                top: navItems.findIndex(n => n.id === activeSection) * 48 + 16, 
+                transition: "top 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                zIndex: 81,
+              }}
+            />
+          )}
           {navItems.map(({ id, label, icon }) => (
             <button
               key={id}
               title={label}
               onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })}
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "10px",
-                border: `1px solid ${dm ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
-                background: dm ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)",
-                color: dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "all 0.2s",
-              }}
               onMouseEnter={e => {
                 e.currentTarget.style.background = dm ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,1)";
                 e.currentTarget.style.color = dm ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.9)";
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.background = dm ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)";
-                e.currentTarget.style.color = dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)";
+                e.currentTarget.style.color = (id === activeSection) ? "#ef4444" : (dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)");
+              }}
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "10px",
+                border: `1px solid ${id === activeSection ? "#ef444444" : (dm ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)")}`,
+                background: dm ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)",
+                color: id === activeSection ? "#ef4444" : (dm ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)"),
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s",
               }}
             >
               {icon}
@@ -260,8 +307,8 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
         </nav>
       )}
 
-      {/* ── ABOUT / BIO ── */}
-      <section id="boring-about" style={{ ...S.section(isMobile), paddingTop: isMobile ? "2rem" : "8rem", borderBottom: `1px solid ${dm ? "#1a1a1a" : "#f3f4f6"}` }}>
+      {/* ── ABOUT / HERO ── */}
+      <section id="boring-about" style={{ ...S.section(isMobile), paddingTop: isMobile ? "2.5rem" : "4rem", background: dm ? "#0a0a0a" : "#fafafa", borderBottom: `1px solid ${dm ? "#1a1a1a" : "#f3f4f6"}` }}>
         <div style={S.inner}>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr", gap: isMobile ? "3rem" : "5rem", alignItems: "start" }}>
             {/* Photo */}
@@ -282,25 +329,24 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
 
             {/* Bio */}
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <div style={{ display: "inline-block", padding: "0.4rem 1rem", background: dm ? "rgba(239,68,68,0.15)" : "#fef2f2", color: "#dc2626", borderRadius: "9999px", fontSize: "0.9rem", marginBottom: "1.5rem", border: `1px solid ${dm ? "rgba(239,68,68,0.3)" : "#fee2e2"}` }}>
+              <div style={{ display: "inline-block", padding: "0.4rem 1rem", background: dm ? "rgba(239,68,68,0.15)" : "#fef2f2", color: "#dc2626", borderRadius: "9999px", fontSize: "0.85rem", marginBottom: "1.5rem", border: `1px solid ${dm ? "rgba(239,68,68,0.3)" : "#fee2e2"}` }}>
                 Melbourne, VIC
               </div>
-              <h1 style={{ fontSize: "3.5rem", fontWeight: 300, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem", lineHeight: 1.1, display: "flex", alignItems: "baseline", gap: "12px" }}>
+              <h1 style={{ fontSize: "2.8rem", fontWeight: 300, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.5rem", lineHeight: 1.1, display: "flex", alignItems: "baseline", gap: "12px" }}>
                 Alex Hofmann
-                <span style={{ fontSize: "12px", fontWeight: 700, color: "#dc2626", background: "rgba(220,38,38,0.1)", borderRadius: "5px", padding: "2px 7px", fontFamily: "monospace" }}>#76</span>
               </h1>
-              <p style={{ fontSize: "1.35rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "1.5rem" }}>Engineer</p>
-              <p style={{ fontSize: "1.05rem", color: dm ? "#d1d5db" : "#374151", lineHeight: 1.8, marginBottom: "1rem" }}>
+              <p style={{ fontSize: "1.25rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "1.5rem" }}>Engineer</p>
+              <p style={{ fontSize: "0.9rem", color: dm ? "#d1d5db" : "#374151", lineHeight: 1.8, marginBottom: "1rem" }}>
                 Building, making, creating <span style={{ color: "#dc2626", fontWeight: 500 }}>cool things</span>.
               </p>
-              <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "1rem" }}>
-                I build with AI and I build AI — moving fast across the full stack, from hardware electronics through to deployed software. Whatever the tool needed, I find it and learn it.
+              <p style={{ fontSize: "0.95rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "1rem" }}>
+                I build AI and I build with AI — whatever the tool needed, I learn it quickly and build fast across all aspects of complex mechatronics project lifecycles
               </p>
               <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "1rem" }}>
-                I've taught final-year students AI fundamentals in the morning and watched my unmanned vehicle vision system drive autonomously that afternoon. I enjoy the challenge — debugging, building, and pushing OTA updates to devices in Singapore from a walk around the block.
+                I've taught final-year students AI fundamentals in the morning and watched my unmanned vehicle drive autonomously in the afternoon.
               </p>
               <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "2rem" }}>
-                R&D Engineer, Forward Deployed Engineer, Full Stack Developer, Team Lead — across complex mechatronics project lifecycles, predominantly in defence.
+                R&D Engineer → Systems Engineer → Full Stack Developer → FDE → Team Lead → ???
               </p>
             </motion.div>
           </div>
@@ -314,10 +360,8 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
 
           {/* ── Experience Content ── */}
           {isMobile ? (
-            <div style={{ position: "relative", marginBottom: "2rem" }}>
-              <CarouselIndicator count={WORK_PATHS.length} activeIndex={activeExp} color="#ef4444" dark={dm} />
-              
-              <div style={{ position: "relative", height: "460px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+            <div style={{ position: "relative", marginBottom: "0.5rem" }}>
+              <div style={{ position: "relative", height: "420px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
                 <div style={{ position: "relative", width: "100%", maxWidth: "320px", height: "100%" }}>
                   {WORK_PATHS.map((pathId, i) => {
                     const w = PATH_DATA[pathId];
@@ -349,10 +393,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                           zIndex: isActive ? 10 : 5 - Math.abs(offset),
                         }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        style={{ 
-                          position: "absolute", top: "50%", left: "50%", width: "100%", 
-                          background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", 
-                          overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
+                        style={{
+                          position: "absolute", top: "50%", left: "50%", width: "100%",
+                          background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem",
+                          overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`,
                           boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)",
                           pointerEvents: isActive ? "auto" : "none",
                           cursor: "grab"
@@ -392,9 +436,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                   })}
                 </div>
               </div>
+              <CarouselIndicator count={WORK_PATHS.length} activeIndex={activeExp} color="#ef4444" dark={dm} />
             </div>
           ) : (
-            <div style={{ position: "relative", marginBottom: "5rem" }}>
+            <div style={{ position: "relative", marginBottom: "3rem" }}>
               <div style={{ position: "absolute", left: "28px", top: 0, bottom: 0, width: "2px", background: "linear-gradient(to bottom, #ef4444, #f97316, #f59e0b)" }} />
               <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
                 {WORK_PATHS.map((pathId, i) => {
@@ -426,19 +471,19 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         <div style={{ padding: "1.75rem 2rem 2rem", flex: 1 }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
                             <div>
-                              <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem", display: "flex", alignItems: "center", gap: "8px" }}>
+                              <h3 style={{ fontSize: "1.2rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.3rem", display: "flex", alignItems: "center", gap: "8px" }}>
                                 {w.role ?? w.name}
                                 <span style={{ fontSize: "10px", fontWeight: 700, color: v.color, background: `${v.color}18`, borderRadius: "4px", padding: "2px 6px", fontFamily: "monospace" }}>#{pathId}</span>
                               </h3>
-                              <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${v.color}, ${v.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
+                              <p style={{ fontSize: "1rem", fontWeight: 500, background: `linear-gradient(to right, ${v.color}, ${v.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{w.company}</p>
                             </div>
                             <span style={{ padding: "0.4rem 1rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{w.date}</span>
                           </div>
-                          <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.75, marginBottom: w.tags?.length ? "1.25rem" : 0 }}>{w.description}</p>
+                          <p style={{ fontSize: "0.9rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.75, marginBottom: w.tags?.length ? "1.25rem" : 0 }}>{w.description}</p>
                           {w.tags && (
-                            <div style={{ 
-                              display: "flex", 
-                              flexWrap: isMobile ? "nowrap" : "wrap", 
+                            <div style={{
+                              display: "flex",
+                              flexWrap: isMobile ? "nowrap" : "wrap",
                               gap: "0.5rem",
                               overflowX: isMobile ? "auto" : "visible",
                               paddingBottom: isMobile ? "0.5rem" : 0,
@@ -466,9 +511,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
         <div style={S.inner}>
           <Heading title="Hackathons" c1="#10b981" c2="#6366f1" dark={dm} />
           <div style={{ position: "relative" }}>
-            {isMobile && <CarouselIndicator count={HACKATHON_PATHS.length} activeIndex={activeHackathon} color="#10b981" dark={dm} />}
-            
-            <div style={{ position: "relative", height: isMobile ? "440px" : "480px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+            <div style={{ position: "relative", height: isMobile ? "420px" : "480px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
 
               {!isMobile && (
                 <>
@@ -520,11 +563,11 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         rotateY: offset * -15
                       }}
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      style={{ 
-                        position: "absolute", top: "50%", left: "50%", width: "100%", 
-                        background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.25rem", 
-                        overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
-                        boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)", 
+                      style={{
+                        position: "absolute", top: "50%", left: "50%", width: "100%",
+                        background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.25rem",
+                        overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`,
+                        boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)",
                         pointerEvents: isActive ? "auto" : "none",
                         cursor: isMobile ? "grab" : "default"
                       }}
@@ -535,7 +578,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         ) : (
                           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={v.color} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
-                              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+                              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" />
                             </svg>
                           </div>
                         )}
@@ -566,6 +609,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 })}
               </div>
             </div>
+            {isMobile && <CarouselIndicator count={HACKATHON_PATHS.length} activeIndex={activeHackathon} color="#10b981" dark={dm} />}
           </div>
         </div>
       </section>
@@ -576,10 +620,8 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
           <Heading title="Education" c1="#f97316" c2="#ef4444" dark={dm} />
           {/* ── Education Content ── */}
           {isMobile ? (
-            <div style={{ position: "relative", marginBottom: "2rem" }}>
-              <CarouselIndicator count={EDUCATION.length} activeIndex={activeEdu} color="#f97316" dark={dm} />
-              
-              <div style={{ position: "relative", height: "380px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+            <div style={{ position: "relative", marginBottom: "0.5rem" }}>
+              <div style={{ position: "relative", height: "460px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
                 <div style={{ position: "relative", width: "100%", maxWidth: "320px", height: "100%" }}>
                   {EDUCATION.map((edu, i) => {
                     let offset = i - activeEdu;
@@ -607,38 +649,37 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                           zIndex: isActive ? 10 : 5 - Math.abs(offset),
                         }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        style={{ 
-                          position: "absolute", top: "50%", left: "50%", width: "100%", 
-                          background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", 
-                          overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
+                        style={{
+                          position: "absolute", top: "50%", left: "50%", width: "100%",
+                          background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem",
+                          overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`,
                           boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)",
                           pointerEvents: isActive ? "auto" : "none",
                           cursor: "grab"
                         }}
                       >
                         <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
-                        <div style={{ display: "flex", flexDirection: "row" }}>
                         {edu.photo && (
-                          <div style={{ width: "110px", flexShrink: 0, position: "relative", overflow: "hidden" }}>
+                          <div style={{ width: "100%", aspectRatio: "16/9", position: "relative", overflow: "hidden" }}>
                             <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
                           </div>
                         )}
-                        <div style={{ padding: "1.5rem", flex: 1 }}>
-                          <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>
-                            {edu.degree}
-                          </h4>
-                          <p style={{ fontSize: "0.9rem", fontWeight: 500, color: edu.color, marginBottom: "0.5rem" }}>{edu.school}</p>
-                          <p style={{ fontSize: "0.8rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "0.75rem" }}>{edu.period}</p>
-                          <p style={{ fontSize: "0.85rem", color: dm ? "#d1d5db" : "#4b5563", lineHeight: 1.5 }}>
-                            {edu.description}
-                          </p>
-                        </div>
+                        <div style={{ padding: "1.5rem" }}>
+                            <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem" }}>
+                              {edu.degree}
+                            </h4>
+                            <p style={{ fontSize: "0.9rem", fontWeight: 500, color: edu.color, marginBottom: "0.5rem" }}>{edu.school}</p>
+                            <p style={{ fontSize: "0.8rem", color: dm ? "#9ca3af" : "#6b7280", marginBottom: "0.75rem" }}>{edu.period}</p>
+                            <p style={{ fontSize: "0.85rem", color: dm ? "#d1d5db" : "#4b5563", lineHeight: 1.5 }}>
+                              {edu.description}
+                            </p>
                         </div>
                       </motion.div>
                     );
                   })}
                 </div>
               </div>
+              <CarouselIndicator count={EDUCATION.length} activeIndex={activeEdu} color="#f97316" dark={dm} />
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
@@ -647,34 +688,34 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                   style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)" }}>
                   <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
                   <div style={{ display: "flex", flexDirection: "row" }}>
-                  {edu.photo && (
-                    <div style={{ width: "200px", flexShrink: 0, position: "relative", overflow: "hidden" }}>
-                      <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
-                    </div>
-                  )}
-                  <div style={{ padding: isMobile ? "1.5rem" : "2.5rem", flex: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
-                      <div style={{ flex: 1 }}>
-                        <h3 style={{ fontSize: "1.4rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "8px" }}>
-                          {edu.degree}
-                          <span style={{ fontSize: "10px", fontWeight: 700, color: edu.color, background: `${edu.color}18`, borderRadius: "4px", padding: "2px 6px", fontFamily: "monospace", flexShrink: 0 }}>#{edu.path}</span>
-                        </h3>
-                        <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${edu.color}, ${edu.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{edu.school}</p>
+                    {edu.photo && (
+                      <div style={{ width: "200px", flexShrink: 0, position: "relative", overflow: "hidden" }}>
+                        <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
                       </div>
-                      <span style={{ padding: "0.4rem 1.2rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{edu.period}</span>
-                    </div>
-                    <p style={{ fontSize: "1rem", color: "#9ca3af", marginBottom: "1.5rem", whiteSpace: "pre-wrap" }}>{edu.description}</p>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-                      {edu.achievements.map((a, ai) => (
-                        <div key={ai} style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1.1rem", background: dm ? "#111" : "#f9fafb", borderRadius: "0.75rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>
-                          <svg style={{ width: "18px", height: "18px", color: "#ef4444", flexShrink: 0 }} fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
-                          <span style={{ fontSize: "0.95rem", color: dm ? "#d1d5db" : "#374151" }}>{a}</span>
+                    )}
+                    <div style={{ padding: isMobile ? "1.5rem" : "2.5rem", flex: 1 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
+                        <div style={{ flex: 1 }}>
+                          <h3 style={{ fontSize: "1.3rem", fontWeight: 600, color: dm ? "#f9fafb" : "#111827", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "8px" }}>
+                            {edu.degree}
+                            <span style={{ fontSize: "10px", fontWeight: 700, color: edu.color, background: `${edu.color}18`, borderRadius: "4px", padding: "2px 6px", fontFamily: "monospace", flexShrink: 0 }}>#{edu.path}</span>
+                          </h3>
+                          <p style={{ fontSize: "1.05rem", fontWeight: 500, background: `linear-gradient(to right, ${edu.color}, ${edu.color2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{edu.school}</p>
                         </div>
-                      ))}
+                        <span style={{ padding: "0.4rem 1.2rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#9ca3af" : "#6b7280", borderRadius: "9999px", fontSize: "0.85rem", whiteSpace: "nowrap", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{edu.period}</span>
+                      </div>
+                      <p style={{ fontSize: "0.9rem", color: "#9ca3af", marginBottom: "1.5rem", whiteSpace: "pre-wrap" }}>{edu.description}</p>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+                        {edu.achievements.map((a, ai) => (
+                          <div key={ai} style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1.1rem", background: dm ? "#111" : "#f9fafb", borderRadius: "0.75rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>
+                            <svg style={{ width: "18px", height: "18px", color: "#ef4444", flexShrink: 0 }} fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            <span style={{ fontSize: "0.95rem", color: dm ? "#d1d5db" : "#374151" }}>{a}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
                   </div>
                 </motion.div>
               ))}
@@ -689,13 +730,9 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
         <div style={S.inner}>
           <Heading title="Projects" c1="#6366f1" c2="#ec4899" dark={dm} />
         </div>
-        
+
         {isMobile ? (
           <div style={{ position: "relative", marginBottom: "2rem" }}>
-            <div style={{ padding: "0 1rem" }}>
-              <CarouselIndicator count={projects.length} activeIndex={activeProject} color="#6366f1" dark={dm} />
-            </div>
-            
             <div style={{ position: "relative", height: "420px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
               <div style={{ position: "relative", width: "100%", maxWidth: "300px", height: "100%" }}>
                 {projects.map((proj, i) => {
@@ -725,11 +762,11 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         rotateY: offset * -10
                       }}
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      style={{ 
-                        position: "absolute", top: "50%", left: "50%", width: "100%", 
-                        background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", 
-                        overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
-                        boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)", 
+                      style={{
+                        position: "absolute", top: "50%", left: "50%", width: "100%",
+                        background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem",
+                        overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`,
+                        boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)",
                         pointerEvents: isActive ? "auto" : "none",
                         cursor: "grab"
                       }}
@@ -753,22 +790,23 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 })}
               </div>
             </div>
+            <CarouselIndicator count={projects.length} activeIndex={activeProject} color="#6366f1" dark={dm} />
           </div>
         ) : (
           <div style={{ ...S.innerWide, position: "relative" }}>
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
               gap: "1.25rem"
             }}>
               {projects.map((proj, i) => (
                 <motion.div key={proj.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-                  style={{ 
-                    background: dm ? "#1a1a1a" : "#fff", 
-                    borderRadius: "1.5rem", 
-                    overflow: "hidden", 
-                    border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
-                    transition: "transform 0.25s, box-shadow 0.25s", 
+                  style={{
+                    background: dm ? "#1a1a1a" : "#fff",
+                    borderRadius: "1.5rem",
+                    overflow: "hidden",
+                    border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`,
+                    transition: "transform 0.25s, box-shadow 0.25s",
                     cursor: "default"
                   }}
                   whileHover={{ y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}>
@@ -797,19 +835,72 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       <section id="boring-interests" style={{ ...S.section(isMobile), background: dm ? "#0f0f0f" : "#fff" }}>
         <div style={S.inner}>
           <Heading title="Interests" c1="#ef4444" c2="#ec4899" dark={dm} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.25rem" }}>
-            {INTEREST_PATHS.map((pathId, i) => {
-              const interest = PATH_DATA[pathId];
-              if (!interest) return null;
-              const items = getInterestItems(pathId);
-              return <InterestCard key={pathId} pathId={pathId} interest={interest} items={items} dm={dm} i={i} onShowOverland={() => setShowOverland(true)} />;
-            })}
-          </div>
+          
+          {isMobile ? (
+            <div style={{ position: "relative", marginBottom: "2rem" }}>
+              <div style={{ position: "relative", height: "580px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+                <div style={{ position: "relative", width: "100%", maxWidth: "300px", height: "100%" }}>
+                  {INTEREST_PAIRS.map((pair, i) => {
+                    let offset = i - activeInterests;
+                    if (offset > INTEREST_PAIRS.length / 2) offset -= INTEREST_PAIRS.length;
+                    if (offset < -INTEREST_PAIRS.length / 2) offset += INTEREST_PAIRS.length;
+
+                    const isActive = offset === 0;
+                    const isVisible = Math.abs(offset) <= 1;
+
+                    return (
+                      <motion.div
+                        key={i}
+                        drag="x"
+                        dragConstraints={{ left: 0, right: 0 }}
+                        onDragEnd={(_, info) => {
+                          const threshold = 50;
+                          if (info.offset.x > threshold) setActiveInterests((prev) => (prev - 1 + INTEREST_PAIRS.length) % INTEREST_PAIRS.length);
+                          else if (info.offset.x < -threshold) setActiveInterests((prev) => (prev + 1) % INTEREST_PAIRS.length);
+                        }}
+                        animate={{
+                          x: `calc(-50% + ${offset * 115}%)`,
+                          y: "-50%",
+                          scale: isActive ? 1 : 0.85,
+                          opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
+                          zIndex: isActive ? 10 : 5 - Math.abs(offset),
+                        }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        style={{
+                          position: "absolute", top: "50%", left: "50%", width: "100%",
+                          display: "flex", flexDirection: "column", gap: "1rem",
+                          pointerEvents: isActive ? "auto" : "none",
+                          cursor: "grab"
+                        }}
+                      >
+                        {pair.map((pathId) => {
+                          const interest = PATH_DATA[pathId];
+                          if (!interest) return null;
+                          const items = getInterestItems(pathId);
+                          return <InterestCard key={pathId} pathId={pathId} interest={interest} items={items} dm={dm} i={i} onShowOverland={() => setShowOverland(true)} />;
+                        })}
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+              <CarouselIndicator count={INTEREST_PAIRS.length} activeIndex={activeInterests} color="#ef4444" dark={dm} />
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.25rem" }}>
+              {INTEREST_PATHS.map((pathId, i) => {
+                const interest = PATH_DATA[pathId];
+                if (!interest) return null;
+                const items = getInterestItems(pathId);
+                return <InterestCard key={pathId} pathId={pathId} interest={interest} items={items} dm={dm} i={i} onShowOverland={() => setShowOverland(true)} />;
+              })}
+            </div>
+          )}
         </div>
       </section>
 
       {/* ── CONTACT ── */}
-      <section style={{ ...S.section(isMobile), position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #111827 0%, #1e1b4b 50%, #312e81 100%)" }}>
+      <section id="boring-contact" style={{ ...S.section(isMobile), position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #111827 0%, #1e1b4b 50%, #312e81 100%)" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 50%, rgba(239,68,68,0.08), transparent 60%)", pointerEvents: "none" }} />
         <div style={{ ...S.inner, position: "relative" }}>
           <Heading title="Let's Connect" c1="#ef4444" c2="#f97316" center dark />
