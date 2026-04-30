@@ -32,10 +32,15 @@ function fadeTo(audio: HTMLAudioElement, target: number, ms: number) {
 export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
   const [playing, setPlaying] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const playingRef = useRef(false);
 
   useEffect(() => {
     setMounted(true);
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+
     const audio = getAudio();
     // Sync UI state with actual audio state on mount (e.g. after tab switch)
     const isPlaying = !audio.paused;
@@ -56,6 +61,7 @@ export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
       // Do NOT pause audio on unmount — singleton persists across tab switches
       window.removeEventListener("sax-audio-start", onSaxStart);
       window.removeEventListener("sax-audio-end", onSaxEnd);
+      window.removeEventListener("resize", check);
     };
   }, []);
 
@@ -82,7 +88,7 @@ export default function AmbientPlayer({ darkMode }: { darkMode?: boolean }) {
       position: "absolute",
       left: "24%",
       top: "18%",
-      transform: "rotate(-25deg)",
+      transform: isMobile ? "scale(0.8) rotate(-15deg)" : "rotate(-25deg)",
       transformOrigin: "left center",
       display: "flex",
       alignItems: "center",

@@ -36,11 +36,11 @@ const WORK_VISUAL: Record<number, { color: string; color2: string; photo: string
 const WORK_PATHS = [64, 88, 68, 66];
 
 // Hackathon entries — paths 58, 60, 62, 96 in pathData.ts
-const HACKATHON_VISUAL: Record<number, { color: string; color2: string }> = {
-  58: { color: "#10b981", color2: "#059669" }, // Humanitarian Innovation — PowerPots
-  96: { color: "#14b8a6", color2: "#0d9488" }, // Humanitarian Innovation — Fiji
-  60: { color: "#6366f1", color2: "#8b5cf6" }, // Robot Building Competition
-  62: { color: "#ec4899", color2: "#db2777" }, // Monash HardHack
+const HACKATHON_VISUAL: Record<number, { color: string; color2: string; photo?: string }> = {
+  58: { color: "#10b981", color2: "#059669", photo: "/humanitarian.jpg" }, // Humanitarian Innovation — PowerPots
+  96: { color: "#14b8a6", color2: "#0d9488", photo: "/fiji.jpg" }, // Humanitarian Innovation — Fiji
+  60: { color: "#6366f1", color2: "#8b5cf6", photo: "/robot.jpg" }, // Robot Building Competition
+  62: { color: "#ec4899", color2: "#db2777", photo: "/hardhack.jpg" }, // Monash HardHack
 };
 const HACKATHON_PATHS = [58, 96, 60, 62];
 
@@ -99,11 +99,12 @@ const S = {
 };
 
 function Heading({ title, c1, c2, center, dark }: { title: string; c1: string; c2: string; center?: boolean; dark?: boolean }) {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-      style={{ marginBottom: "4rem", textAlign: center ? "center" : "left" }}>
-      <h2 style={{ fontSize: "3rem", fontWeight: 300, color: dark ? "#f9fafb" : "#111827", marginBottom: "1rem", lineHeight: 1.15 }}>{title}</h2>
-      <div style={{ ...S.bar(c1, c2), ...(center ? { margin: "0 auto 4rem" } : {}) }} />
+      style={{ marginBottom: isMobile ? "2rem" : "4rem", textAlign: center ? "center" : "left" }}>
+      <h2 style={{ fontSize: isMobile ? "1.85rem" : "2.5rem", fontWeight: 300, color: dark ? "#f9fafb" : "#111827", marginBottom: "1rem", lineHeight: 1.15 }}>{title}</h2>
+      <div style={{ ...S.bar(c1, c2), height: "4px", width: "60px", marginBottom: isMobile ? "2rem" : "3rem", ...(center ? { margin: "0 auto 4rem" } : {}) }} />
     </motion.div>
   );
 }
@@ -191,7 +192,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
   ];
 
   return (
-    <div style={{ minHeight: "100vh", width: "100%", background: dm ? "#0f0f0f" : "#fff", color: dm ? "#f9fafb" : "#111827", fontFamily: S.font, fontSize: "16px", position: "relative" }}>
+    <div style={{ minHeight: "100vh", width: "100%", background: dm ? "#0f0f0f" : "#fff", color: dm ? "#f9fafb" : "#111827", fontFamily: S.font, fontSize: "15px", position: "relative" }}>
 
       {/* ── SIDEBAR TOC ── */}
       {!isMobile && (
@@ -272,17 +273,13 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 Building, making, creating <span style={{ color: "#dc2626", fontWeight: 500 }}>cool things</span>.
               </p>
               <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "1rem" }}>
-                I'm moving with the times — building AI and building with AI to achieve faster outcomes than ever before.
+                I build with AI and I build AI — moving fast across the full stack, from hardware electronics through to deployed software. Whatever the tool needed, I find it and learn it.
               </p>
               <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "1rem" }}>
-                I'm adaptable, working from hardware electronics through to full-stack software - whatever the tool needed, I identify it quickly and I learn it quickly.
-              </p>
-              <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "1rem" }}>
-                I've taught final year university students the fundamentals of AI in the morning and watched on as my unmanned vehicle vision system autonomously drives down a road in the afternoon. I enjoy a challenge, things like debugging, building and pushing the latest apk over the air to devices in Singapore while on a walk around the block.
+                I've taught final-year students AI fundamentals in the morning and watched my unmanned vehicle vision system drive autonomously that afternoon. I enjoy the challenge — debugging, building, and pushing OTA updates to devices in Singapore from a walk around the block.
               </p>
               <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.8, marginBottom: "2rem" }}>
-                I've been an R&D Engineer / Forward Deployed Engineer / Full Stack Developer /  Team Lead in complex mechatronics environments across project lifecycles, predominantly within the defense industry.
-
+                R&D Engineer, Forward Deployed Engineer, Full Stack Developer, Team Lead — across complex mechatronics project lifecycles, predominantly in defence.
               </p>
             </motion.div>
           </div>
@@ -337,9 +334,16 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         </div>
                         <p style={{ fontSize: "1rem", color: dm ? "#9ca3af" : "#6b7280", lineHeight: 1.75, marginBottom: w.tags?.length ? "1.25rem" : 0 }}>{w.description}</p>
                         {w.tags && (
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                          <div style={{ 
+                            display: "flex", 
+                            flexWrap: isMobile ? "nowrap" : "wrap", 
+                            gap: "0.5rem",
+                            overflowX: isMobile ? "auto" : "visible",
+                            paddingBottom: isMobile ? "0.5rem" : 0,
+                            WebkitOverflowScrolling: "touch"
+                          }}>
                             {w.tags.map(t => (
-                              <span key={t} style={{ padding: "0.35rem 0.75rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#374151", borderRadius: "0.5rem", fontSize: "0.875rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}` }}>{t}</span>
+                              <span key={t} style={{ padding: "0.25rem 0.6rem", background: dm ? "#111" : "#f9fafb", color: dm ? "#d1d5db" : "#374151", borderRadius: "0.5rem", fontSize: "0.8rem", border: `1px solid ${dm ? "#2a2a2a" : "#e5e7eb"}`, whiteSpace: "nowrap" }}>{t}</span>
                             ))}
                           </div>
                         )}
@@ -404,7 +408,19 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                       style={{ position: "absolute", top: "50%", left: "50%", width: "100%", background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.25rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: isActive ? "0 12px 32px rgba(0,0,0,0.15)" : "0 4px 16px rgba(0,0,0,0.06)", pointerEvents: isActive ? "auto" : "none" }}
                     >
-                      <div style={{ height: "5px", background: `linear-gradient(to right, ${v.color}, ${v.color2})` }} />
+                      <div style={{ height: "160px", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, position: "relative", borderBottom: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` }}>
+                        {v.photo ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={v.photo} alt={h.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+                        ) : (
+                          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={v.color} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
+                              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ height: "4px", background: `linear-gradient(to right, ${v.color}, ${v.color2})` }} />
                       <div style={{ padding: "1.5rem" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.6rem" }}>
                           <h4 style={{ fontSize: "1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", lineHeight: 1.3, display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
@@ -478,12 +494,29 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
         <div style={S.inner}>
           <Heading title="Projects" c1="#6366f1" c2="#ec4899" dark={dm} />
         </div>
-        <div style={{ ...S.innerWide, position: "relative" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.75rem" }}>
+        <div style={{ ...S.innerWide, position: "relative", padding: isMobile ? "0 1rem 1rem" : "0" }}>
+          <div style={{ 
+            display: isMobile ? "flex" : "grid", 
+            gridTemplateColumns: isMobile ? "none" : "repeat(auto-fill, minmax(280px, 1fr))", 
+            gap: "1.25rem",
+            overflowX: isMobile ? "auto" : "visible",
+            paddingBottom: isMobile ? "1rem" : "0",
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "none"
+          }}>
             {projects.map((proj, i) => (
               <motion.div key={proj.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-                style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, transition: "transform 0.25s, box-shadow 0.25s", cursor: "default" }}
-                whileHover={{ y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}>
+                style={{ 
+                  background: dm ? "#1a1a1a" : "#fff", 
+                  borderRadius: "1.5rem", 
+                  overflow: "hidden", 
+                  border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, 
+                  transition: "transform 0.25s, box-shadow 0.25s", 
+                  cursor: "default",
+                  flexShrink: 0,
+                  width: isMobile ? "280px" : "auto"
+                }}
+                whileHover={isMobile ? {} : { y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}>
                 {/* Colour banner */}
                 <div style={{ height: "140px", background: `linear-gradient(135deg, ${proj.color}cc, ${proj.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4rem", position: "relative" }}>
                   <span style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.2))" }}>
@@ -538,16 +571,15 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                   { href: "https://instagram.com/alexhofmannn", icon: <InstagramIcon size={22} />, label: "Instagram", value: "@alexhofmannn", bg: "rgba(233, 89, 57, 0.15)", color: "#ee7a06ff" },
                 ].map(item => (
                   <a key={item.label} href={item.href} target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", gap: "1rem", textDecoration: "none" }}>
-                    <div style={{ width: "52px", height: "52px", borderRadius: "0.875rem", background: item.bg, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", flexShrink: 0 }}>
+                    <div style={{ width: "48px", height: "48px", borderRadius: "0.875rem", background: item.bg, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", flexShrink: 0 }}>
                       {item.icon}
                     </div>
                     <div>
-                      <div style={{ fontSize: "0.75rem", color: item.color, marginBottom: "2px" }}>{item.label}</div>
-                      <div style={{ fontSize: "0.95rem", color: "#fff" }}>{item.value}</div>
+                      <div style={{ fontSize: "0.7rem", color: item.color, marginBottom: "1px" }}>{item.label}</div>
+                      <div style={{ fontSize: "0.85rem", color: "#fff" }}>{item.value}</div>
                     </div>
                   </a>
                 ))}
-
               </div>
             </div>
 

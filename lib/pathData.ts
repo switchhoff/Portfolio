@@ -242,7 +242,7 @@ export const PATH_DATA: Record<number, PathObject> = {
           { src: "/singapore.jpg", label: "Singapore" },
           { src: "/india.jpg", label: "India" },
           { src: "/placeholder-sa.jpg", label: "South Africa" },
-          { src: "/placeholder-germany.jpg", label: "Germany" }
+          { src: "/germany.jpeg", label: "Germany" }
         ]
       }
     ],

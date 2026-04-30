@@ -13,6 +13,18 @@ import FormContent from "./FormContent";
 import StatusContent from "./StatusContent";
 import AboutContent from "./AboutContent";
 
+/**
+ * HotspotModal Component
+ * 
+ * A dynamic, responsive modal system that displays content for workshop hotspots.
+ * 
+ * Features:
+ * - Dynamic Positioning: On desktop, it anchors near the clicked hotspot with an arrow.
+ * - Mobile Optimized: Automatically centers and scales for touch devices.
+ * - Polymorphic Content: Renders different sub-components (Project, Experience, Link, etc.)
+ *   based on the hotspot category.
+ * - Viewport Awareness: Ensures the modal never bleeds off the screen edges.
+ */
 interface Props {
   hotspot: Hotspot | null;
   clickOrigin: { x: number; y: number } | null;
@@ -23,48 +35,12 @@ interface Props {
 export default function HotspotModal({ hotspot, clickOrigin, containerRect, onClose }: Props) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [pos, setPos] = useState<{ left: number | string; top: number | string; arrowSide: "left" | "right" }>({ left: 0, top: 0, arrowSide: "left" });
-
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
-
-  const computePosition = useCallback(() => {
-    if (!containerRect || !modalRef.current) return;
-
-    if (isMobile) {
-      setPos({ left: "50%", top: "50%", arrowSide: "left" });
-      return;
-    }
-
-    const modal = modalRef.current.getBoundingClientRect();
-    const mw = modal.width || 380;
-    const mh = modal.height || 300;
-    // If no click origin (e.g. cheat guide), center in container
-    const origin = clickOrigin ?? { x: containerRect.width / 2, y: containerRect.height / 2 };
-
-    // Center popup exactly on cursor (container-relative coords → viewport coords for position:fixed)
-    let left = origin.x - mw / 2;
-    let arrowSide: "left" | "right" = "left";
-
-    // Clamp horizontally within container
-    left = Math.max(8, Math.min(left, containerRect.width - mw - 8));
-
-    // Center vertically on cursor, clamp to container
-    let top = origin.y - mh / 2;
-    top = Math.max(8, Math.min(top, containerRect.height - mh - 8));
-
-    setPos({ left, top, arrowSide });
-  }, [clickOrigin, containerRect]);
-
-  useEffect(() => {
-    if (hotspot) {
-      requestAnimationFrame(() => requestAnimationFrame(computePosition));
-    }
-  }, [hotspot, computePosition]);
 
   // Close on Escape
   useEffect(() => {
@@ -106,24 +82,28 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
           {/* Tooltip card */}
           <motion.div
             ref={modalRef}
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.92, x: "-50%", y: "-50%" }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1,
+              x: "-50%",
+              y: "-50%" 
+            }}
             exit={{ opacity: 0, scale: 0.92 }}
             transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             style={{
               position: "absolute",
-              left: isMobile ? "50%" : pos.left,
-              top: isMobile ? "50%" : pos.top,
-              transform: isMobile ? "translate(-50%, -50%)" : "none",
+              left: "50%",
+              top: "50%",
               zIndex: 25,
               width: "min(380px, calc(100vw - 32px))",
               maxHeight: "85vh",
               overflowY: "auto",
               background: "#ffffff",
               border: `1px solid ${catColor}30`,
-              borderLeft: !isMobile && pos.arrowSide === "left" ? `3px solid ${catColor}` : `1px solid ${catColor}30`,
-              borderRight: !isMobile && pos.arrowSide === "right" ? `3px solid ${catColor}` : `1px solid ${catColor}30`,
-              borderTop: isMobile ? `3px solid ${catColor}` : `1px solid ${catColor}30`,
+              borderLeft: `1px solid ${catColor}30`,
+              borderRight: `1px solid ${catColor}30`,
+              borderTop: `3px solid ${catColor}`,
               boxShadow: "0 12px 40px rgba(0,0,0,0.12)",
               fontFamily: "'JetBrains Mono', monospace",
               borderRadius: isMobile ? "8px" : "0",

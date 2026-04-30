@@ -269,6 +269,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
   }, []);
 
   // -- HOTSPOT CONFIG --
+  const FILTER_ORDER = ["about", "interests", "projects", "education", "experience"];
   const FILTER_GROUPS: Record<string, number[]> = Object.fromEntries(
     FILTER_ORDER
       .filter(k => BLOCK_MAPPINGS[k as keyof typeof BLOCK_MAPPINGS])
@@ -474,21 +475,23 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
         position: "absolute",
         // Position relative to the interactive background elements
         top: isMobile ? "auto" : "185px",
-        bottom: isMobile ? "20px" : "auto",
-        right: isMobile ? "20px" : "75px",
+        bottom: isMobile ? "0" : "auto",
+        right: isMobile ? "0" : "75px",
+        left: isMobile ? "0" : "auto",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: isMobile ? "row" : "column",
         gap: 0,
         zIndex: 55,
         // Adapt to dark mode
-        background: dm ? "rgba(10, 15, 10, 0.82)" : "rgba(255, 255, 255, 0.85)",
-        backdropFilter: "blur(10px)",
-        border: dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)",
-        borderRadius: "12px",
-        overflow: "hidden",
-        minWidth: isMobile ? "160px" : "180px",
+        background: dm ? "rgba(10, 15, 10, 0.95)" : "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(12px)",
+        border: isMobile ? "none" : (dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)"),
+        borderTop: isMobile ? (dm ? "1px solid rgba(255, 215, 0, 0.25)" : "1px solid rgba(0, 0, 0, 0.1)") : "none",
+        borderRadius: isMobile ? "0" : "12px",
+        overflow: isMobile ? "auto" : "hidden", // Allow horizontal scroll if many filters
+        minWidth: isMobile ? "100%" : "180px",
         fontFamily: "'JetBrains Mono', monospace",
-        boxShadow: dm ? "0 8px 32px rgba(0,0,0,0.4)" : "0 8px 32px rgba(0,0,0,0.1)",
+        boxShadow: dm ? "0 -4px 32px rgba(0,0,0,0.5)" : "0 -4px 32px rgba(0,0,0,0.1)",
         transition: "all 0.3s ease",
       }}>
         {/* ── CHEATS MASTER TOGGLE ── */}
@@ -502,11 +505,13 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "12px 16px",
+            padding: isMobile ? "12px 20px" : "12px 16px",
             cursor: "pointer",
-            borderBottom: dm ? "1px solid rgba(255, 215, 0, 0.15)" : "1px solid rgba(0, 0, 0, 0.08)",
+            borderBottom: isMobile ? "none" : (dm ? "1px solid rgba(255, 215, 0, 0.15)" : "1px solid rgba(0, 0, 0, 0.08)"),
+            borderRight: isMobile ? (dm ? "1px solid rgba(255, 215, 0, 0.15)" : "1px solid rgba(0, 0, 0, 0.08)") : "none",
             userSelect: "none",
             background: cheatMode ? (dm ? "rgba(255, 215, 0, 0.05)" : "rgba(217, 119, 6, 0.03)") : "transparent",
+            flexShrink: 0,
           }}
         >
           <span style={{ 
@@ -556,13 +561,17 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "10px 16px",
+                padding: isMobile ? "10px 20px" : "10px 16px",
                 cursor: cheatMode ? "pointer" : "not-allowed",
                 opacity: cheatMode ? 1 : 0.3,
-                borderBottom: dm ? "1px solid rgba(255,255,255,0.05)" : "1px solid rgba(0,0,0,0.03)",
+                borderBottom: isMobile ? "none" : (dm ? "1px solid rgba(255,255,255,0.05)" : "1px solid rgba(0,0,0,0.03)"),
+                borderRight: isMobile ? (dm ? "1px solid rgba(255,255,255,0.05)" : "1px solid rgba(0,0,0,0.03)") : "none",
                 userSelect: "none",
                 transition: "all 0.2s ease",
                 background: isActive ? `${categoryColor}10` : "transparent",
+                flexShrink: 0,
+                minWidth: isMobile ? "110px" : "auto",
+                gap: isMobile ? "12px" : "0",
               }}
             >
               <span style={{

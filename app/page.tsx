@@ -184,9 +184,9 @@ export default function Home() {
             layout
             style={{
               position: splashDone ? "fixed" : "relative",
-              top: splashDone ? "10px" : "auto",
-              left: splashDone ? "24px" : "auto",
-              width: splashDone ? "clamp(120px, 15vw, 160px)" : "100%",
+              top: splashDone ? "14px" : "auto",
+              left: splashDone ? (isMobile ? "12px" : "24px") : "auto",
+              width: splashDone ? (isMobile ? "100px" : "clamp(120px, 15vw, 160px)") : "100%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -332,9 +332,10 @@ export default function Home() {
           transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
         }}>
           {/* Logo spacer */}
-          <div style={{ width: "clamp(140px, 20vw, 300px)" }} />
+          <div style={{ width: isMobile ? "110px" : "clamp(140px, 20vw, 300px)" }} />
 
           {/* Tab Switcher in Header */}
+          <LayoutGroup id="header-tabs">
           <div suppressHydrationWarning style={{
             position: "relative",
             display: "flex",
@@ -344,30 +345,6 @@ export default function Home() {
             border: `1px solid ${mounted ? (darkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)") : "rgba(0,0,0,0.1)"}`,
             boxShadow: "inset 0 1px 3px rgba(0,0,0,0.15)",
           }}>
-            {/* Sliding pill indicator — only animate after mount to avoid SSR mismatch */}
-            {mounted ? (
-              <motion.div
-                layout
-                transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                style={{
-                  position: "absolute",
-                  top: "4px",
-                  bottom: "4px",
-                  borderRadius: "10px",
-                  background: "linear-gradient(135deg, #cc0000, #ff4444)",
-                  boxShadow: "0 2px 12px rgba(200,0,0,0.4)",
-                  left: activeTab === "fun" ? "4px" : "calc(50% + 2px)",
-                  width: "calc(50% - 6px)",
-                }}
-              />
-            ) : (
-              <div style={{
-                position: "absolute", top: "4px", bottom: "4px", borderRadius: "10px",
-                background: "linear-gradient(135deg, #cc0000, #ff4444)",
-                boxShadow: "0 2px 12px rgba(200,0,0,0.4)",
-                left: "4px", width: "calc(50% - 6px)",
-              }} />
-            )}
             {[
               { id: "fun", label: "FUN", icon: <Gamepad2 size={14} /> },
               { id: "boring", label: "BORING", icon: <FileText size={14} /> }
@@ -377,7 +354,6 @@ export default function Home() {
                 onClick={() => setActiveTab(t.id as any)}
                 style={{
                   position: "relative",
-                  zIndex: 1,
                   display: "flex",
                   alignItems: "center",
                   gap: "7px",
@@ -396,19 +372,38 @@ export default function Home() {
                   flex: 1,
                   justifyContent: "center",
                   whiteSpace: "nowrap",
+                  outline: "none",
                   fontFamily: "var(--font-mono)",
                 }}
               >
-                {t.icon} {t.label}
+                {activeTab === t.id && (
+                  <motion.div
+                    layoutId="header-pill"
+                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      borderRadius: "10px",
+                      background: "linear-gradient(135deg, #cc0000, #ff4444)",
+                      boxShadow: "0 2px 12px rgba(200,0,0,0.4)",
+                      zIndex: 0,
+                    }}
+                  />
+                )}
+                <span style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", gap: "7px" }}>
+                  {t.icon}
+                  {t.label}
+                </span>
               </button>
             ))}
           </div>
+          </LayoutGroup>
 
           <div style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
-            width: "clamp(140px, 20vw, 300px)",
+            width: isMobile ? "40px" : "clamp(140px, 20vw, 300px)",
           }}>
             <button
               onClick={handleDarkModeToggle}
@@ -453,14 +448,26 @@ export default function Home() {
                 {/* Shared container — fills viewport at 16:9 on desktop, larger on mobile */}
                 <div style={{
                   position: "relative",
-                  width: isMobile ? "100%" : "min(100vw, calc((100vh - 60px) * 16 / 9))",
+                  width: "100%",
                   height: isMobile ? "auto" : "min(calc(100vh - 60px), calc(100vw * 9 / 16))",
-                  aspectRatio: isMobile ? "auto" : "16 / 9",
-                  minHeight: isMobile ? "280px" : "0",
+                  aspectRatio: isMobile ? "16/9" : "auto",
                   display: "flex",
-                  flexDirection: "column"
+                  flexDirection: "column",
+                  overflow: "hidden",
+                  background: darkMode ? "#0a0a0a" : "#fafafa",
+                  borderRadius: isMobile ? 0 : "12px",
                 }}>
-                  <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", overflow: "hidden" }}>
+                  {/* The Interactive Canvas — Always 16:9, centered on mobile */}
+                  <div style={{ 
+                    position: "absolute", 
+                    height: "100%",
+                    width: isMobile ? "100%" : "100%",
+                    aspectRatio: "16/9", 
+                    left: "50%",
+                    top: "0",
+                    transform: "translateX(-50%)",
+                    overflow: "hidden" 
+                  }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="/OffswitchBKGHIGH.png"

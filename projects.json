@@ -10,7 +10,9 @@
       "Three.js"
     ],
     "color": "#3a5fbf",
-    "firebase": null
+    "firebase": null,
+    "stars": 0,
+    "updated": "2026-04-29T08:31:23Z"
   },
   {
     "id": "pawsbutton",
@@ -18,10 +20,13 @@
     "name": "PawsButton",
     "tagline": "TODO: Add description to portfolio-meta.json",
     "tags": [
-      "TODO"
+      "TODO",
+      "TypeScript"
     ],
     "color": "#e67e22",
-    "firebase": null
+    "firebase": null,
+    "stars": 0,
+    "updated": "2026-04-30T01:03:37Z"
   },
   {
     "id": "benfl",
@@ -77,12 +82,15 @@
     "id": "lastyear",
     "repo": "switchhoff/LastYear",
     "name": "LastYear",
-    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tagline": "App for relationships",
     "tags": [
-      "TODO"
+      "TODO",
+      "TypeScript"
     ],
     "color": "#c0392b",
-    "firebase": null
+    "firebase": null,
+    "stars": 0,
+    "updated": "2026-04-30T00:54:40Z"
   },
   {
     "id": "sixclicks",
@@ -103,10 +111,13 @@
     "tags": [
       "IoT",
       "Hardware",
-      "Web"
+      "Web",
+      "TypeScript"
     ],
     "color": "#2d8a50",
-    "firebase": null
+    "firebase": null,
+    "stars": 0,
+    "updated": "2026-04-30T01:00:14Z"
   },
   {
     "id": "threadquarters",
@@ -123,11 +134,14 @@
     "id": "keysborough",
     "repo": "switchhoff/Keysborough-District",
     "name": "Keysborough-District",
-    "tagline": "TODO: Add description to portfolio-meta.json",
+    "tagline": "Keysborough DIstrict MOTM Voting App",
     "tags": [
-      "TODO"
+      "TODO",
+      "TypeScript"
     ],
     "color": "#2c3e50",
-    "firebase": null
+    "firebase": null,
+    "stars": 0,
+    "updated": "2026-04-30T01:03:42Z"
   }
 ]
