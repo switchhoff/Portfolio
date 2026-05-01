@@ -36,12 +36,12 @@ const WORK_VISUAL: Record<number, { color: string; color2: string; photo: string
 const WORK_PATHS = [64, 88, 68, 66];
 
 // Hackathon entries — paths 58, 60, 62, 96 in pathData.ts
-const HACKATHON_VISUAL: Record<number, { color: string; color2: string; photo?: string }> = {
+const HACKATHON_VISUAL: Record<number, { color: string; color2: string; photo?: string; video?: string }> = {
   57: { color: "#f59e0b", color2: "#d97706", photo: "/powerpots.png" }, // Laing O'Rourke Prize — PowerPots
-  58: { color: "#10b981", color2: "#059669", photo: "/humanitarian.jpg" }, // Humanitarian Innovation — PowerPots
+  58: { color: "#10b981", color2: "#059669", video: "/sandfilter.mp4" }, // Humanitarian Innovation — PowerPots
   96: { color: "#14b8a6", color2: "#0d9488", photo: "/CoolRoof.png" }, // Humanitarian Innovation — Fiji
   60: { color: "#6366f1", color2: "#8b5cf6", photo: "/robot.jpg" }, // Robot Building Competition
-  62: { color: "#ec4899", color2: "#db2777", photo: "/hardhack.jpg" }, // Monash HardHack
+  62: { color: "#ec4899", color2: "#db2777", photo: "/alphabot.JPG" }, // Monash HardHack
 };
 const HACKATHON_PATHS = [57, 58, 96, 60, 62];
 
@@ -574,7 +574,16 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                       }}
                     >
                       <div style={{ height: "160px", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, position: "relative", borderBottom: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` }}>
-                        {v.photo ? (
+                        {v.video ? (
+                          <video
+                            src={v.video}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+                          />
+                        ) : v.photo ? (
                           <img src={v.photo} alt={h.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
                         ) : (
                           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
