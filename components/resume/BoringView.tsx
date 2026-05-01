@@ -46,16 +46,15 @@ const HACKATHON_VISUAL: Record<number, { color: string; color2: string; photo?: 
 const HACKATHON_PATHS = [57, 58, 96, 60, 62];
 
 // Interests — path numbers matching Fun View SVG cards
-const INTEREST_PATHS = [8, 100, 4, 24, 94, 98, 102, 82, 18, 28, 26, 10, 42];
+const INTEREST_PATHS = [8, 100, 4, 24, 94, 98, 102, 82, 18, 28, 26, 10];
 
 const INTEREST_PAIRS = [
-  [42, 82],  // Travel / Hiking
   [26, 10],  // Photography / Saxophone
   [4, 24],   // Art / Craft
-  [94, 102], // Board Games / Running
+  [82, 94],  // Board Games / Video Games
+  [98, 102], // Hiking / Running
   [100, 8],  // Soccer / Golf
   [28, 18],  // Movies / Books
-  [98, 98],  // Video Games (Single, but using pair logic)
 ];
 
 // Extract display labels from pathData items (skip action/audio items)
@@ -846,7 +845,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                   whileHover={{ y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}>
                   <div style={{ height: "140px", background: `linear-gradient(135deg, ${proj.color}cc, ${proj.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4rem", position: "relative" }}>
                     <span style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.2))" }}>
-                      {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : "💡"}
+                      {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : proj.id === "worldmap" ? "🌍" : "💡"}
                     </span>
                   </div>
                   <div style={{ padding: "1.25rem 1.5rem 1.5rem" }}>
