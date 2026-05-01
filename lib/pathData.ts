@@ -50,7 +50,11 @@ export const PATH_DATA: Record<number, PathObject> = {
     content: [
       { type: 'text', text: "I am in the process of creating a thematic reskin of Dune: Imperium, based on the book Monsoon by Wilbur Smith — following the Courtney Family's adventures on the high seas of East Africa." },
       { type: 'text', text: "I'm working to map all elements into consistent, aesthetic equivalents and redesign the base to suit my vision. Sneak peek at some concept art below." },
-      { type: 'image', src: "/General Pieces.png" }
+      { type: 'gallery', images: [
+        { src: "/capetown.jpg", label: "Cape Town" },
+        { src: "/courtney.jpg", label: "Courtney" },
+        { src: "/General Pieces.png", label: "Concept Art" },
+      ]}
     ],
   },
   4: {
@@ -242,7 +246,7 @@ export const PATH_DATA: Record<number, PathObject> = {
           { src: "/thailand.jpg", label: "Thailand" },
           { src: "/singapore.jpg", label: "Singapore" },
           { src: "/india.jpg", label: "India" },
-          { src: "/placeholder-sa.jpg", label: "South Africa" },
+          { src: "/southafrica.jpg", label: "South Africa" },
           { src: "/germany.jpeg", label: "Germany" }
         ]
       }

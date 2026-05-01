@@ -30,7 +30,7 @@ interface BoringViewProps {
 const WORK_VISUAL: Record<number, { color: string; color2: string; photo: string | null }> = {
   64: { color: "#ef4444", color2: "#f97316", photo: "/singapore2.jpg" }, // Fortifyedge  (path 64)
   88: { color: "#f97316", color2: "#f59e0b", photo: "/ta.jpg" }, // Monash TA    (path 88)
-  68: { color: "#f59e0b", color2: "#eab308", photo: null }, // Tonbo        (path 68)
+  68: { color: "#f59e0b", color2: "#eab308", photo: "/tonbo.jpg" }, // Tonbo        (path 68)
   66: { color: "#eab308", color2: "#facc15", photo: "/banshee.jpg" }, // DefendTex    (path 66)
 };
 const WORK_PATHS = [64, 88, 68, 66];
@@ -40,7 +40,7 @@ const HACKATHON_VISUAL: Record<number, { color: string; color2: string; photo?: 
   57: { color: "#f59e0b", color2: "#d97706", photo: "/powerpots.png" }, // Laing O'Rourke Prize — PowerPots
   58: { color: "#10b981", color2: "#059669", video: "/sandfilter.mp4" }, // Humanitarian Innovation — PowerPots
   96: { color: "#14b8a6", color2: "#0d9488", photo: "/CoolRoof.png" }, // Humanitarian Innovation — Fiji
-  60: { color: "#6366f1", color2: "#8b5cf6", photo: "/robot.jpg" }, // Robot Building Competition
+  60: { color: "#6366f1", color2: "#8b5cf6", photo: "/rbc.avif" }, // Robot Building Competition
   62: { color: "#ec4899", color2: "#db2777", photo: "/alphabot.JPG" }, // Monash HardHack
 };
 const HACKATHON_PATHS = [57, 58, 96, 60, 62];
