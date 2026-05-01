@@ -12,7 +12,7 @@
     "color": "#3a5fbf",
     "firebase": null,
     "stars": 0,
-    "updated": "2026-05-01T05:35:41Z"
+    "updated": "2026-05-01T06:45:31Z"
   },
   {
     "id": "pawsbutton",
@@ -33,14 +33,17 @@
     "id": "benfl",
     "repo": "switchhoff/BeNFL",
     "name": "BeNFL",
-    "tagline": "NFL game watchability platform — avoid spoilers and find the best games to watch on replay.",
+    "tagline": "Browse NFL replays ranked by excitement — spoiler-free until you're ready to reveal the score.",
     "tags": [
-      "Web Scraping",
-      "Data Analytics",
-      "NFL"
+      "Next.js",
+      "TypeScript",
+      "Firebase",
+      "Genkit AI"
     ],
     "color": "#27ae60",
-    "firebase": null
+    "firebase": null,
+    "stars": 0,
+    "updated": "2026-05-01T06:27:54Z"
   },
   {
     "id": "minimise",

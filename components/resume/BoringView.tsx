@@ -693,7 +693,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
                         {edu.photo && (
                           <div style={{ width: "100%", aspectRatio: "16/9", position: "relative", overflow: "hidden" }}>
-                            <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: edu.photo === "/award2.jpg" ? "center 40%" : "center" }} />
+                            <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: edu.photo === "/award2.jpg" ? "center 20%" : "center" }} />
                           </div>
                         )}
                         <div style={{ padding: "1.5rem" }}>
@@ -722,7 +722,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     {edu.photo && (
                       <div style={{ width: "200px", flexShrink: 0, position: "relative", overflow: "hidden" }}>
-                        <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+                        <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: edu.photo === "/award2.jpg" ? "center 20%" : "center" }} />
                       </div>
                     )}
                     <div style={{ padding: isMobile ? "1.5rem" : "2.5rem", flex: 1 }}>

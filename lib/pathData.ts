@@ -39,6 +39,7 @@ export interface PathObject {
     label?: string;
   }[];
   imageStyle?: React.CSSProperties;
+  icon?: string;
 }
 
 export const PATH_DATA: Record<number, PathObject> = {
@@ -124,9 +125,8 @@ export const PATH_DATA: Record<number, PathObject> = {
       { type: 'text', text: "I've built a set of progressive web apps for my football team as a platform for man of the match voting, fan engagement and stat tracking — reducing unnecessary messages, confusion about game locations, and directly connecting fans to players. Currently 30+ users across Players, Coaches, Admin and Fans, with plans to deploy to the wider community." },
       {
         type: 'gallery',
-        aspectRatio: "3/4",
         objectFit: "contain",
-        style: { width: "70%", margin: "0 auto" },
+        style: { width: "80%", height: "50%", margin: "0 auto" },
         images: [
           { src: "/kdfc1.png" },
           { src: "/kdfc2.png" },
@@ -143,10 +143,12 @@ export const PATH_DATA: Record<number, PathObject> = {
     content: [
       { type: "text", text: "I've built a web-scraping platform for a custom use case: avoiding sport spoilers before watching the game. It collects stats from every NFL game and runs them through a custom algorithm designed by my brother to calculate Watchability — without revealing the score. The user can then identify the best game of the week to watch on replay." },
       {
-        type: gallery,
+        type: 'gallery',
+        objectFit: "contain",
+        style: { width: "70%", margin: "0 auto" },
         images: [
-          { type: "gif", src: "/benfl.gif", style: { width: "70%", margin: "0 auto" } },
-          { type: "gif", src: "/benfl2.gif", style: { width: "70%", margin: "0 auto" } },
+          { src: "/benfl.gif" },
+          { src: "/benfl2.gif" },
         ]
       }
     ],
@@ -257,7 +259,15 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 38,
     name: "LastYear",
     category: "projects",
-    description: "Private shared app for two — relive exactly what you were doing together one year ago today. A daily memory feed that surfaces photos, notes and moments from twelve months prior. No followers, no feed, just the two of you.",
+    content: [
+      { type: 'text', text: "Private shared app for two — relive exactly what you were doing together one year ago today. A daily memory feed that brings up a specific saved note from a year ago. No followers, no feed, just the two of you. Reactions and chat included." },
+      {
+        type: 'gallery', images: [
+          { src: "/lastyear1.png", style: { width: "100%", margin: "0 auto" } },
+          { src: "/lastyear2.png", style: { width: "100%", margin: "0 auto" } },
+        ]
+      },
+    ],
     tags: ["SOFTWARE", "RELATIONSHIP"],
     links: [{ github: "https://github.com/switchhoff/LastYear", label: "GitHub" }],
   },
@@ -296,7 +306,6 @@ export const PATH_DATA: Record<number, PathObject> = {
     tags: ["3D PRINTING", "DESIGN"],
     content: [
       { type: 'text', text: "CAD and 3D printing useful objects around the house — from a necklace shelf and iPad case to medication boxes, a soldering stand, and infinitely more." },
-      { type: 'link', url: "https://www.printables.com/@AlexHofmann_3702877", label: "Printables", icon: "printables" }
     ],
   },
   46: {
@@ -319,7 +328,7 @@ export const PATH_DATA: Record<number, PathObject> = {
       { type: 'text', text: "Inspired by the point-and-click adventure games I grew up playing — every object in the workshop is a clickable hotspot telling a piece of my story." },
       { type: 'gif', src: "/transistorswitch.gif" },
       { type: 'text', text: "The website logo is actually a working electrical circuit seen here - the transistor acting as a switch to turn on and off the light." },
-      { type: 'gif', src: "/logo.gif", aspectRatio: "1.67 / 1" },
+      { type: 'gif', src: "/logo.gif", aspectRatio: "4.4/ 1" },
       { type: 'link', url: "https://github.com/switchhoff/Portfolio", label: "GitHub", icon: "github" }
     ]
   },
@@ -392,8 +401,9 @@ export const PATH_DATA: Record<number, PathObject> = {
     date: "2022",
     company: "Monash Engineering",
     role: "HardHack Winner",
-    description: "Designed, built, and tested small unmanned aquatic vehicle with underwater sonar topology mapping.",
-    image: "/alphabot.JPG",
+    description: "Designed, built, and tested small unmanned aquatic vehicle with underwater sonar topology mapping for disaster management relief.",
+    image: "https://hardhack.monash.edu/uploads/1/0/1/7/101799490/31913939-1678583782196837-6994091462551928832-o_1_orig.jpg",
+    imageStyle: { width: "40%", margin: "0 auto" },
     tags: ["HACKATHON"],
     links: [],
   },
@@ -436,7 +446,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "education",
     description: "",
     image: "/grad.jpg",
-    imageStyle: { width: "65%", margin: "0 auto" },
+    imageStyle: { width: "5%", margin: "0 auto" },
     entries: [
       { date: "2024", title: "Master of Electrical Engineering" },
       { date: "2020–2023", title: "Bachelor of Robotics and Mechatronics Engineering" },
@@ -458,6 +468,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     role: "Flight Systems Member",
     description: "Conducted research on non-combustible rocket deployment systems. Composite manufacturing of rocket body components.",
     image: "/HPR.jpg",
+    imageStyle: { width: "60%", margin: "0 auto" },
     tags: ["ROCKETRY", "MANUFACTURING"],
     links: [],
   },

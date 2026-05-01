@@ -165,9 +165,9 @@ function GalleryCarousel({ images, categoryColor, aspectRatio = "4/3", objectFit
           const offset = i - activeIndex;
           const absOffset = Math.abs(offset);
           const scale = absOffset === 0 ? 1 : Math.max(0.7, 1 - absOffset * 0.15);
-          const opacity = absOffset === 0 ? 1 : Math.max(0, 0.6 - absOffset * 0.2);
+          const opacity = absOffset === 0 ? 1 : 0;
           const zIndex = 10 - absOffset;
-          const translateX = offset * 60; // percentage
+          const translateX = offset * 100; // percentage
           
           return (
             <div 
