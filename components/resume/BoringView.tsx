@@ -46,13 +46,13 @@ const HACKATHON_VISUAL: Record<number, { color: string; color2: string; photo?: 
 const HACKATHON_PATHS = [57, 58, 96, 60, 62];
 
 // Interests — path numbers matching Fun View SVG cards
-const INTEREST_PATHS = [8, 100, 4, 24, 94, 98, 102, 82, 18, 28, 26, 10];
+const INTEREST_PATHS = [8, 100, 4, 24, 94, 98, 42, 82, 18, 28, 26, 10];
 
 const INTEREST_PAIRS = [
   [26, 10], // Photography / Saxophone
   [4, 24],  // Art / Craft
-  [94, 98], // Board Games / Video Games
-  [82, 102], // Hiking / Running
+  [42, 82],  // Travel / Hiking
+  [94, 102], // Board Games / Running
   [100, 8],  // Soccer / Golf
   [28, 18],  // Movies / Books (Reading renamed to Books)
 ];
@@ -95,6 +95,11 @@ const EDUCATION = [
 ];
 
 
+
+// Manual projects not sourced from GitHub
+const MANUAL_PROJECTS = [
+  { id: "worldmap", repo: "", name: "World Map", tagline: "A custom, hand-cut and assembled world map out of wood", tags: ["WOODWORKING", "TRAVEL"], color: "#10b981", firebase: null },
+];
 
 const S = {
   font: "var(--font-inter), system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif",
@@ -201,6 +206,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
   const [activeHackathon, setActiveHackathon] = useState(0);
   const [activeExp, setActiveExp] = useState(0);
   const [activeEdu, setActiveEdu] = useState(0);
+  const allProjects = [...projects, ...MANUAL_PROJECTS];
   const [activeProject, setActiveProject] = useState(0);
   const [activeInterests, setActiveInterests] = useState(0);
   const [showOverland, setShowOverland] = useState(false);
@@ -412,7 +418,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                               width: "100%", 
                               height: "100%", 
                               objectFit: "cover", 
-                              objectPosition: pathId === 88 ? "center" : "30% center",
+                              objectPosition: pathId === 88 ? "center" : (isMobile && pathId === 66) ? "30% bottom" : (isMobile && pathId === 64) ? "30% 40%" : "30% center",
                               transform: pathId === 88 ? "scale(1.2)" : "none" 
                             }} />
                           ) : (
@@ -601,7 +607,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
                           />
                         ) : v.photo ? (
-                          <img src={v.photo} alt={h.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+                          <img src={v.photo} alt={h.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: pathId === 57 ? "center 70%" : "center" }} />
                         ) : (
                           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={v.color} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
@@ -688,7 +694,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         <div style={{ height: "6px", background: `linear-gradient(to right, ${edu.color}, ${edu.color2})` }} />
                         {edu.photo && (
                           <div style={{ width: "100%", aspectRatio: "16/9", position: "relative", overflow: "hidden" }}>
-                            <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+                            <img src={edu.photo} alt={edu.degree} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: edu.photo === "/award2.jpg" ? "center 40%" : "center" }} />
                           </div>
                         )}
                         <div style={{ padding: "1.5rem" }}>
@@ -762,10 +768,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
           <div style={{ position: "relative", marginBottom: "2rem" }}>
             <div style={{ position: "relative", height: "420px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
               <div style={{ position: "relative", width: "100%", maxWidth: "300px", height: "100%" }}>
-                {projects.map((proj, i) => {
+                {allProjects.map((proj, i) => {
                   let offset = i - activeProject;
-                  if (offset > projects.length / 2) offset -= projects.length;
-                  if (offset < -projects.length / 2) offset += projects.length;
+                  if (offset > allProjects.length / 2) offset -= allProjects.length;
+                  if (offset < -allProjects.length / 2) offset += allProjects.length;
 
                   const isActive = offset === 0;
                   const isVisible = Math.abs(offset) <= 1;
@@ -777,8 +783,8 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                       dragConstraints={{ left: 0, right: 0 }}
                       onDragEnd={(_, info) => {
                         const threshold = 50;
-                        if (info.offset.x > threshold) setActiveProject((prev) => (prev - 1 + projects.length) % projects.length);
-                        else if (info.offset.x < -threshold) setActiveProject((prev) => (prev + 1) % projects.length);
+                        if (info.offset.x > threshold) setActiveProject((prev) => (prev - 1 + allProjects.length) % allProjects.length);
+                        else if (info.offset.x < -threshold) setActiveProject((prev) => (prev + 1) % allProjects.length);
                       }}
                       animate={{
                         x: `calc(-50% + ${offset * 115}%)`,
@@ -800,7 +806,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                     >
                       <div style={{ height: "140px", background: `linear-gradient(135deg, ${proj.color}cc, ${proj.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3.5rem", position: "relative" }}>
                         <span style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.2))" }}>
-                          {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : "💡"}
+                          {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : proj.id === "worldmap" ? "🌍" : "💡"}
                         </span>
                       </div>
                       <div style={{ padding: "1.25rem" }}>
@@ -817,7 +823,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                 })}
               </div>
             </div>
-            <CarouselIndicator count={projects.length} activeIndex={activeProject} color="#6366f1" dark={dm} />
+            <CarouselIndicator count={allProjects.length} activeIndex={activeProject} color="#6366f1" dark={dm} />
           </div>
         ) : (
           <div style={{ ...S.innerWide, position: "relative" }}>
@@ -826,7 +832,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
               gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
               gap: "1.25rem"
             }}>
-              {projects.map((proj, i) => (
+              {allProjects.map((proj, i) => (
                 <motion.div key={proj.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
                   style={{
                     background: dm ? "#1a1a1a" : "#fff",

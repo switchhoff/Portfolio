@@ -50,11 +50,13 @@ export const PATH_DATA: Record<number, PathObject> = {
     content: [
       { type: 'text', text: "I am in the process of creating a thematic reskin of Dune: Imperium, based on the book Monsoon by Wilbur Smith — following the Courtney Family's adventures on the high seas of East Africa." },
       { type: 'text', text: "I'm working to map all elements into consistent, aesthetic equivalents and redesign the base to suit my vision. Sneak peek at some concept art below." },
-      { type: 'gallery', images: [
-        { src: "/capetown.jpg", label: "Cape Town" },
-        { src: "/courtney.jpg", label: "Courtney" },
-        { src: "/General Pieces.png", label: "Concept Art" },
-      ]}
+      {
+        type: 'gallery', images: [
+          { src: "/capetown.jpg", label: "Cape Town" },
+          { src: "/courtney.jpg", label: "Courtney" },
+          { src: "/General Pieces.png", label: "Concept Art" },
+        ]
+      }
     ],
   },
   4: {
@@ -116,7 +118,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "projects",
     description: "I've built a web-scraping platform for a custom use case: avoiding sport spoilers before watching the game. It collects stats from every NFL game and runs them through a custom algorithm designed by my brother to calculate Watchability — without revealing the score. The user can then identify the best game of the week to watch on replay.",
     image: "/benfl.png",
-    tags: ["DATA ANALYTICS", "SPORT"],
+    tags: ["DATA ANALYTICS", "SCRAPING", "SPORT"],
     links: [{ github: "https://github.com/switchhoff/BeNFL", label: "GitHub" }],
   },
   16: {
@@ -237,8 +239,8 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   42: {
     path: 42,
-    name: "World Map",
-    category: "projects",
+    name: "Travel",
+    category: "interests",
     content: [
       { type: 'text', text: "A custom world travel map built as a woodworking project — continents cut, stained, and assembled by hand on a backing board, tracking every country visited." },
       {
