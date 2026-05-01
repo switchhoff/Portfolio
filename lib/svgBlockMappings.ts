@@ -11,6 +11,7 @@ export const BLOCK_MAPPINGS = {
     { fillPath: 28, strokePath: 29 },
     { fillPath: 82, strokePath: 83 },
     { fillPath: 94, strokePath: 95 },
+    { fillPath: 42, strokePath: 43 },
   ],
   projects: [
     { fillPath: 2, strokePath: 3 },
@@ -25,7 +26,6 @@ export const BLOCK_MAPPINGS = {
     { fillPath: 36, strokePath: 37 },
     { fillPath: 38, strokePath: 39 },
     { fillPath: 40, strokePath: 41 },
-    { fillPath: 42, strokePath: 43 },
     { fillPath: 44, strokePath: 45 },
     { fillPath: 46, strokePath: 47 },
     { fillPath: 48, strokePath: 49 },

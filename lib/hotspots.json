@@ -534,8 +534,7 @@
     "id": "world_map",
     "label": "World Map",
     "svgElement": "world_map",
-    "color": "#27ae60",
-    "category": "about",
+    "category": "interests",
     "type": "popup",
     "points": "",
     "popup": {
