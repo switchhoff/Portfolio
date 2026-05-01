@@ -4,6 +4,18 @@ export default function ExperienceContent({ hotspot }: { hotspot: ExperienceHots
   const e = hotspot.experience;
   return (
     <div>
+      {e.media?.type === 'video' && (
+        <div style={{ marginBottom: 12, borderRadius: 4, overflow: "hidden" }}>
+          <video
+            src={e.media.src}
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{ width: "100%", display: "block", maxHeight: 200, objectFit: "cover" }}
+          />
+        </div>
+      )}
       {e.period && (
         <div style={{ fontSize: 9, color: "#9aaa94", letterSpacing: "0.1em", marginBottom: 4 }}>
           {e.period}

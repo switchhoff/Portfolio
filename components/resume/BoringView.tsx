@@ -37,15 +37,16 @@ const WORK_PATHS = [64, 88, 68, 66];
 
 // Hackathon entries — paths 58, 60, 62, 96 in pathData.ts
 const HACKATHON_VISUAL: Record<number, { color: string; color2: string; photo?: string }> = {
+  57: { color: "#f59e0b", color2: "#d97706", photo: "/powerpots.png" }, // Laing O'Rourke Prize — PowerPots
   58: { color: "#10b981", color2: "#059669", photo: "/humanitarian.jpg" }, // Humanitarian Innovation — PowerPots
-  96: { color: "#14b8a6", color2: "#0d9488", photo: "/fiji.jpg" }, // Humanitarian Innovation — Fiji
+  96: { color: "#14b8a6", color2: "#0d9488", photo: "/CoolRoof.png" }, // Humanitarian Innovation — Fiji
   60: { color: "#6366f1", color2: "#8b5cf6", photo: "/robot.jpg" }, // Robot Building Competition
   62: { color: "#ec4899", color2: "#db2777", photo: "/hardhack.jpg" }, // Monash HardHack
 };
-const HACKATHON_PATHS = [58, 96, 60, 62];
+const HACKATHON_PATHS = [57, 58, 96, 60, 62];
 
 // Interests — path numbers matching Fun View SVG cards
-const INTEREST_PATHS = [8, 26, 82, 18, 4, 24, 10, 28, 94, 98, 100, 102];
+const INTEREST_PATHS = [8, 100, 4, 24, 94, 98, 102, 82, 18, 28, 26, 10];
 
 const INTEREST_PAIRS = [
   [26, 10], // Photography / Saxophone

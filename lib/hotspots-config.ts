@@ -41,6 +41,7 @@ export interface ExperienceHotspot extends BaseHotspot {
     description?: string;
     items?: Array<{ degree?: string; institution?: string; period?: string; note?: string }>;
     tags?: string[];
+    media?: { type: 'video'; src: string };
   };
 }
 

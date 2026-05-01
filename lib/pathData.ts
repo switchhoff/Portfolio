@@ -310,6 +310,17 @@ export const PATH_DATA: Record<number, PathObject> = {
     description: "Beans",
     links: [],
   },
+  57: {
+    path: 57,
+    name: "Laing O'Rourke Prize Winner",
+    category: "experience",
+    date: "2023",
+    company: "Humanitarian Innovation Hackathon",
+    role: "Laing O'Rourke Prize Winner",
+    description: "PowerPots — a low-cost, community-centred cooking solution for off-grid communities. Awarded the Laing O'Rourke Prize for engineering innovation.",
+    tags: ["HACKATHON"],
+    links: [],
+  },
   58: {
     path: 58,
     name: "Humanitarian Innovation Hackathon PowerPots",

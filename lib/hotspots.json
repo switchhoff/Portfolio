@@ -390,7 +390,8 @@
       "period": "Hackathon Winner",
       "role": "Designer",
       "description": "Designed low-cost water filtration units using sand, plastic bottles, and locally-available materials for communities in Vanuatu. Rapid prototyping, deployment-ready solution.",
-      "tags": ["Humanitarian", "Water", "Hackathon"]
+      "tags": ["Humanitarian", "Water", "Hackathon"],
+      "media": { "type": "video", "src": "/sandfilter.mp4" }
     }
   },
   {

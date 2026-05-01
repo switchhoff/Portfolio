@@ -523,9 +523,16 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             width: "100%",
           }}
         >
-          <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", color: dm ? "#FFD700" : "#d97706" }}>
-            CHEATS
-          </span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", color: dm ? "#FFD700" : "#d97706" }}>
+              CHEATS
+            </span>
+            {!isMobile && (
+              <span style={{ fontSize: 8, fontWeight: 400, letterSpacing: "0.04em", color: dm ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.35)", fontStyle: "italic", lineHeight: 1.4 }}>
+                This menu can<br />be moved
+              </span>
+            )}
+          </div>
           <div style={{
             width: 32, height: 16,
             background: cheatMode ? (dm ? "#FFD700" : "#d97706") : (dm ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"),
@@ -613,11 +620,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       {/* Weather window SVG layer — same coordinate space as blocks */}
       <svg
         viewBox="0 0 960 540"
-        preserveAspectRatio={isMobile ? "xMidYMid meet" : "xMidYMid slice"}
+        preserveAspectRatio="xMidYMid slice"
         style={{
           position: "absolute",
-          inset: 0,
-          left: "-1.33%",
+          top: 0, bottom: 0,
+          left: isMobile ? "-1.35%" : "-1.4%",
           width: "100%",
           height: "100%",
           pointerEvents: "none",
@@ -632,11 +639,11 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       <svg
         ref={blockSvgRef}
         viewBox="0 0 960 540"
-        preserveAspectRatio={isMobile ? "xMidYMid meet" : "xMidYMid slice"}
+        preserveAspectRatio="xMidYMid slice"
         style={{
           position: "absolute",
-          inset: 0,
-          left: "-1.33%",
+          top: 0, bottom: 0,
+          left: isMobile ? "-1.35%" : "-1.4%",
           width: "100%",
           height: "100%",
           pointerEvents: "auto",

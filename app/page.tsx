@@ -457,73 +457,133 @@ export default function Home() {
                   padding: 0,
                 }}
               >
-                {/* Mobile: AmbientPlayer sits above the canvas */}
-                {isMobile && <AmbientPlayer darkMode={darkMode} />}
+                {/* ── MOBILE canvas ── */}
+                {isMobile && (
+                  <>
+                    <AmbientPlayer darkMode={darkMode} />
+                    {/*
+                      Container matches image natural ratio (1164×1080) so the full image
+                      is visible with no cropping. On a 390px phone this gives ~362px height
+                      vs the old 219px (16:9).
 
-                {/*
-                  Canvas sizing:
-                  - Desktop: 16:9 aspect-ratio, width-constrained by viewport.
-                    aspect-ratio auto-derives height — no overflow possible.
-                  - Mobile: 1164:1080 (image's natural ratio). Image shown with contain.
-                    SVG viewBox 960:540 (16:9) is wider than 1164:1080, so SVG
-                    auto-letterboxes (xMidYMid meet) with transparent bands matching
-                    the image's own transparent padding → perfect overlay.
-                */}
-                <div style={{
-                  position: "relative",
-                  width: isMobile ? "100vw" : "min(100vw, calc((100vh - 60px) * 1164 / 1080))",
-                  height: isMobile ? "calc(100vw * 1080 / 1164)" : "calc(min(100vw * 1080 / 1164, 100vh - 60px))",
-                  aspectRatio: isMobile ? undefined : "1164 / 1080",
-                  maxHeight: "calc(100vh - 60px)",
-                  flexShrink: 0,
-                  overflow: "hidden",
-                  marginTop: isMobile ? "8px" : undefined,
-                }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/OffswitchBKGHIGH.png"
-                    alt="Background"
-                    style={{
+                      The SVG (viewBox 960×540 = 16:9) is designed to overlay the center
+                      16:9 crop of the image — the same region objectFit:cover shows on
+                      desktop. That strip sits at:
+                        top  = (1 − 9/16 ÷ (1080/1164)) / 2  ≈ 19.69% of container height
+                        height = 9/16 ÷ (1080/1164)           ≈ 60.62% of container height
+                      sceneContainerRef is positioned exactly over that strip so SVG
+                      coordinates map correctly to both the image and click events.
+                    */}
+                    <div style={{
+                      position: "relative",
+                      /* Fit within available space between AmbientPlayer and fixed footbar.
+                         Overhead: 60px header + ~36px ambient + 16px margin + ~80px footbar = ~192px */
+                      width: "min(100vw, calc((100vh - 192px) * 1164 / 1080))",
+                      aspectRatio: "1164 / 1080",
+                      flexShrink: 0,
+                      overflow: "hidden",
+                      marginTop: "16px",
+                    }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/OffswitchBKGHIGH.png"
+                        alt="Background"
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "fill",
+                          pointerEvents: "none",
+                        }}
+                        draggable={false}
+                      />
+                      {/* SVG fills full canvas — slice scales to cover the container */}
+                      <div ref={sceneContainerRef} style={{
+                        position: "absolute",
+                        inset: 0,
+                        width: "100%",
+                        height: "100%",
+                        zIndex: active ? 100 : 10,
+                      }}>
+                        <WorkshopScene
+                          onHotspotClick={(h, origin) => {
+                            if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
+                            else { setActive(h); setClickOrigin(origin); }
+                          }}
+                          activeId={active?.id ?? null}
+                          highlightCategory={highlightCategory}
+                          onHoverChange={setHoverSpot}
+                          darkMode={darkMode}
+                        />
+                        <HotspotModal
+                          hotspot={active}
+                          clickOrigin={clickOrigin}
+                          containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
+                          onClose={() => { setActive(null); setClickOrigin(null); }}
+                          darkMode={darkMode}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* ── DESKTOP canvas ── */}
+                {!isMobile && (
+                  <div style={{
+                    /* Image is 1164×1080 (ratio 1.078:1). Container matches that ratio
+                       so the full image shows with no cropping.
+                       Height fills the available viewport; width derives from image ratio.
+                       If the derived width exceeds 100vw (portrait-ish screen), width
+                       clamps to 100vw and aspectRatio derives a shorter height instead. */
+                    position: "relative",
+                    width: "min(100vw, calc((100vh - 60px) * 1164 / 1080))",
+                    aspectRatio: "1164 / 1080",
+                    overflow: "hidden",
+                  }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/OffswitchBKGHIGH.png"
+                      alt="Background"
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "fill",
+                        pointerEvents: "none",
+                      }}
+                      draggable={false}
+                    />
+                    <div ref={sceneContainerRef} style={{
                       position: "absolute",
                       inset: 0,
                       width: "100%",
                       height: "100%",
-                      objectFit: isMobile ? "contain" : "cover",
-                      objectPosition: "center",
-                      pointerEvents: "none",
-                    }}
-                    draggable={false}
-                  />
-                  {/* On mobile: constrain scene to 16:9 center of 1164:1080 canvas so SVG aligns with image content */}
-                  <div ref={sceneContainerRef} style={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    zIndex: active ? 100 : 10,
-                  }}>
-                    <WorkshopScene
-                      onHotspotClick={(h, origin) => {
-                        if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
-                        else { setActive(h); setClickOrigin(origin); }
-                      }}
-                      activeId={active?.id ?? null}
-                      highlightCategory={highlightCategory}
-                      onHoverChange={setHoverSpot}
-                      darkMode={darkMode}
-                    />
-                    <HotspotModal
-                      hotspot={active}
-                      clickOrigin={clickOrigin}
-                      containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
-                      onClose={() => { setActive(null); setClickOrigin(null); }}
-                      darkMode={darkMode}
-                    />
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      zIndex: active ? 100 : 10,
+                    }}>
+                      <WorkshopScene
+                        onHotspotClick={(h, origin) => {
+                          if (active?.id === h.id) { setActive(null); setClickOrigin(null); }
+                          else { setActive(h); setClickOrigin(origin); }
+                        }}
+                        activeId={active?.id ?? null}
+                        highlightCategory={highlightCategory}
+                        onHoverChange={setHoverSpot}
+                        darkMode={darkMode}
+                      />
+                      <HotspotModal
+                        hotspot={active}
+                        clickOrigin={clickOrigin}
+                        containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
+                        onClose={() => { setActive(null); setClickOrigin(null); }}
+                        darkMode={darkMode}
+                      />
+                    </div>
+                    <AmbientPlayer darkMode={darkMode} />
                   </div>
-                  {/* AmbientPlayer — desktop only, inside canvas */}
-                  {!isMobile && <AmbientPlayer darkMode={darkMode} />}
-                </div>
+                )}
               </motion.section>
             ) : (
               <motion.section
