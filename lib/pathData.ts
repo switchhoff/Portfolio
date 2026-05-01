@@ -38,6 +38,7 @@ export interface PathObject {
     external?: string;
     label?: string;
   }[];
+  imageStyle?: React.CSSProperties;
 }
 
 export const PATH_DATA: Record<number, PathObject> = {
@@ -139,8 +140,16 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 14,
     name: "BeNFL",
     category: "projects",
-    description: "I've built a web-scraping platform for a custom use case: avoiding sport spoilers before watching the game. It collects stats from every NFL game and runs them through a custom algorithm designed by my brother to calculate Watchability — without revealing the score. The user can then identify the best game of the week to watch on replay.",
-    image: "/benfl.png",
+    content: [
+      { type: "text", text: "I've built a web-scraping platform for a custom use case: avoiding sport spoilers before watching the game. It collects stats from every NFL game and runs them through a custom algorithm designed by my brother to calculate Watchability — without revealing the score. The user can then identify the best game of the week to watch on replay." },
+      {
+        type: gallery,
+        images: [
+          { type: "gif", src: "/benfl.gif", style: { width: "70%", margin: "0 auto" } },
+          { type: "gif", src: "/benfl2.gif", style: { width: "70%", margin: "0 auto" } },
+        ]
+      }
+    ],
     tags: ["DATA ANALYTICS", "SCRAPING", "SPORT"],
     links: [{ github: "https://github.com/switchhoff/BeNFL", label: "GitHub" }],
   },
@@ -427,6 +436,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "education",
     description: "",
     image: "/grad.jpg",
+    imageStyle: { width: "65%", margin: "0 auto" },
     entries: [
       { date: "2024", title: "Master of Electrical Engineering" },
       { date: "2020–2023", title: "Bachelor of Robotics and Mechatronics Engineering" },
@@ -523,7 +533,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "experience",
     role: "Teaching Associate",
     company: "Monash University",
-    date: "2025",
+    date: "2024",
     description: "I've taught students the fundamentals of AI development, and how to apply the concepts of cutting-edge robotic control to achieve their project outcomes. This included covering fundamentals of SLAM, path planning and object avoidance, as well as training custom AI models. ",
     items: ["ECE4179 Neural Networks", "ECE4078 Intelligent Robotics"],
     tags: ["TEACHING", "AI", "ROBOTICS"],

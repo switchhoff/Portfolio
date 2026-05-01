@@ -33,7 +33,7 @@ const WORK_VISUAL: Record<number, { color: string; color2: string; photo: string
   68: { color: "#f59e0b", color2: "#eab308", photo: "/tonbo.jpg" }, // Tonbo        (path 68)
   66: { color: "#eab308", color2: "#facc15", photo: "/banshee.jpg" }, // DefendTex    (path 66)
 };
-const WORK_PATHS = [64, 88, 68, 66];
+const WORK_PATHS = [64, 68, 88, 66];
 
 // Hackathon entries — paths 58, 60, 62, 96 in pathData.ts
 const HACKATHON_VISUAL: Record<number, { color: string; color2: string; photo?: string; video?: string }> = {
@@ -393,10 +393,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                           else if (info.offset.x < -threshold) setActiveExp((prev) => (prev + 1) % WORK_PATHS.length);
                         }}
                         animate={{
-                          x: `calc(-50% + ${offset * 115}%)`,
+                          x: `calc(-50% + ${offset * 108}%)`,
                           y: "-50%",
                           scale: isActive ? 1 : 0.85,
-                          opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
+                          opacity: isActive ? 1 : (isVisible ? 0.4 : 0),
                           zIndex: isActive ? 10 : 5 - Math.abs(offset),
                         }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -579,10 +579,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         else if (info.offset.x < -threshold) setActiveHackathon((prev) => (prev + 1) % HACKATHON_PATHS.length);
                       }}
                       animate={{
-                        x: `calc(-50% + ${offset * 120}%)`,
+                        x: `calc(-50% + ${offset * 108}%)`,
                         y: "-50%",
                         scale: isActive ? 1 : 0.85,
-                        opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
+                        opacity: isActive ? 1 : (isVisible ? 0.4 : 0),
                         zIndex: isActive ? 10 : 5 - Math.abs(offset),
                         rotateY: offset * -15
                       }}
@@ -621,7 +621,6 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.6rem" }}>
                           <h4 style={{ fontSize: "1rem", fontWeight: 700, color: dm ? "#f9fafb" : "#111827", lineHeight: 1.3, display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
                             {h.role ?? h.name}
-                            <span style={{ fontSize: "10px", fontWeight: 700, color: v.color, background: `${v.color}18`, borderRadius: "4px", padding: "1px 5px", fontFamily: "monospace", flexShrink: 0 }}>#{pathId}</span>
                           </h4>
                           <span style={{ padding: "0.25rem 0.7rem", background: `${v.color}20`, color: v.color, borderRadius: "9999px", fontSize: "0.78rem", whiteSpace: "nowrap", fontWeight: 600, flexShrink: 0 }}>{h.date}</span>
                         </div>
@@ -675,10 +674,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                           else if (info.offset.x < -threshold) setActiveEdu((prev) => (prev + 1) % EDUCATION.length);
                         }}
                         animate={{
-                          x: `calc(-50% + ${offset * 115}%)`,
+                          x: `calc(-50% + ${offset * 108}%)`,
                           y: "-50%",
                           scale: isActive ? 1 : 0.85,
-                          opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
+                          opacity: isActive ? 1 : (isVisible ? 0.4 : 0),
                           zIndex: isActive ? 10 : 5 - Math.abs(offset),
                         }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -787,10 +786,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         else if (info.offset.x < -threshold) setActiveProject((prev) => (prev + 1) % allProjects.length);
                       }}
                       animate={{
-                        x: `calc(-50% + ${offset * 115}%)`,
+                        x: `calc(-50% + ${offset * 108}%)`,
                         y: "-50%",
                         scale: isActive ? 1 : 0.85,
-                        opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
+                        opacity: isActive ? 1 : (isVisible ? 0.4 : 0),
                         zIndex: isActive ? 10 : 5 - Math.abs(offset),
                         rotateY: offset * -10
                       }}
@@ -892,10 +891,10 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                           else if (info.offset.x < -threshold) setActiveInterests((prev) => (prev + 1) % INTEREST_PAIRS.length);
                         }}
                         animate={{
-                          x: `calc(-50% + ${offset * 115}%)`,
+                          x: `calc(-50% + ${offset * 108}%)`,
                           y: "-50%",
                           scale: isActive ? 1 : 0.85,
-                          opacity: isActive ? 1 : (isVisible ? 0.35 : 0),
+                          opacity: isActive ? 1 : (isVisible ? 0.4 : 0),
                           zIndex: isActive ? 10 : 5 - Math.abs(offset),
                         }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
