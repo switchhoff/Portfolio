@@ -404,9 +404,17 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                         }}
                         whileTap={{ cursor: "grabbing" }}
                       >
-                        <div style={{ height: "120px", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, position: "relative", borderBottom: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` }}>
+                        <div style={{ height: "120px", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, position: "relative", borderBottom: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, overflow: "hidden" }}>
                           {v.photo ? (
-                            <img src={v.photo} alt={w.company} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "30% center" }} />
+                            <img src={v.photo} alt={w.company} style={{ 
+                              position: "absolute", 
+                              inset: 0, 
+                              width: "100%", 
+                              height: "100%", 
+                              objectFit: "cover", 
+                              objectPosition: pathId === 88 ? "center" : "30% center",
+                              transform: pathId === 88 ? "scale(1.2)" : "none" 
+                            }} />
                           ) : (
                             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                               <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}44, ${v.color2}44)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -453,10 +461,19 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                       <div style={{ position: "absolute", left: isMobile ? "14px" : "20px", top: "2rem", width: "18px", height: "18px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}, ${v.color2})`, border: `3px solid ${dm ? "#0f0f0f" : "#fff"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }} />
                       <div style={{ background: dm ? "#1a1a1a" : "#fff", borderRadius: "1.5rem", overflow: "hidden", border: `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}`, boxShadow: "0 4px 24px rgba(0,0,0,0.07)", display: "flex", flexDirection: isMobile ? "column" : "row" }}>
                         {/* Photo / placeholder */}
-                        <div style={{ width: isMobile ? "100%" : "200px", height: isMobile ? "160px" : "auto", flexShrink: 0, position: "relative", borderRight: !isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", borderBottom: isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)` }}>
+                        <div style={{ width: isMobile ? "100%" : "200px", height: isMobile ? "160px" : "auto", flexShrink: 0, position: "relative", borderRight: !isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", borderBottom: isMobile ? `2px solid ${dm ? "#2a2a2a" : "#f3f4f6"}` : "none", background: `linear-gradient(135deg, ${v.color}22, ${v.color2}11)`, overflow: "hidden" }}>
                           {v.photo ? (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={v.photo} alt={w.company} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
+                            <img src={v.photo} alt={w.company} style={{ 
+                              position: "absolute", 
+                              inset: 0, 
+                              width: "100%", 
+                              height: "100%", 
+                              objectFit: "cover", 
+                              objectPosition: "center", 
+                              display: "block",
+                              transform: pathId === 88 ? "scale(1.1)" : "none"
+                            }} />
                           ) : (
                             <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
                               <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `linear-gradient(135deg, ${v.color}44, ${v.color2}44)`, border: `2px dashed ${v.color}66`, display: "flex", alignItems: "center", justifyContent: "center" }}>
