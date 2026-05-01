@@ -935,7 +935,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                                 </div>
                               )}
                               <InterestCard pathId={pathId} interest={interest} items={items} dm={dm} i={i} onShowOverland={() => setShowOverland(true)} />
-                            </React.Fragment>
+                            </Fragment>
                           );
                         })}
                       </motion.div>
