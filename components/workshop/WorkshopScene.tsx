@@ -8,7 +8,7 @@ import { getPathData } from "@/lib/pathData";
 import { WeatherWindow } from "./WeatherWindow";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { GithubIcon, LinkedinIcon, InstagramIcon, PhoneIcon, MailIcon, PrinterIcon, ExternalLinkIcon } from "@/components/icons";
+import { GithubIcon, LinkedinIcon, InstagramIcon, PhoneIcon, MailIcon, PrinterIcon, ExternalLinkIcon, GlobeIcon } from "@/components/icons";
 
 interface Props {
   /** Callback for when a hotspot is clicked */
@@ -42,6 +42,7 @@ const LinkDock = ({ links, categoryColor }: { links: any[], categoryColor: strin
         else if (link.icon === 'mail') icon = <MailIcon size={24} />;
         else if (link.icon === 'phone') icon = <PhoneIcon size={24} />;
         else if (link.icon === 'github') icon = <GithubIcon size={24} />;
+        else if (link.icon === 'globe') icon = <GlobeIcon size={24} />;
 
         return (
           <div key={idx} style={{ position: "relative", display: "flex", justifyContent: "center" }}>
@@ -130,7 +131,13 @@ const GROUP_PATHS = new Map<number, number[]>([
   [78, [78, 80]],
 ]);
 
-function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?: string, link?: string, label?: string}[], categoryColor: string }) {
+function GalleryCarousel({ images, categoryColor, aspectRatio = "4/3", objectFit = "cover", style }: { 
+  images: {src: string, alt?: string, link?: string, label?: string, style?: React.CSSProperties}[], 
+  categoryColor: string,
+  aspectRatio?: string,
+  objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down",
+  style?: React.CSSProperties
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const scroll = (dir: "left" | "right") => {
@@ -141,12 +148,12 @@ function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?
   };
 
   return (
-    <div style={{ position: "relative", marginBottom: "12px" }}>
+    <div style={{ position: "relative", marginBottom: "12px", ...style }}>
       <div 
         style={{ 
           position: "relative",
           width: "100%",
-          aspectRatio: "4/3",
+          aspectRatio: aspectRatio,
           display: "flex", 
           alignItems: "center",
           justifyContent: "center",
@@ -183,11 +190,11 @@ function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?
               {img.link ? (
                 <a href={absOffset === 0 ? img.link : undefined} target="_blank" rel="noopener noreferrer" style={{ display: "block", height: "100%" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover", ...img.style }} />
+                  <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: objectFit, ...img.style }} />
                 </a>
               ) : (
                 /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover", ...img.style }} />
+                <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: objectFit, ...img.style }} />
               )}
             </div>
           );
@@ -784,9 +791,9 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
       )}
 
       {/* Golf form modal */}
-      {golfForm !== null && (
+      {golfForm !== null && createPortal(
         <>
-          <div style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(0,0,0,0.3)" }}
+          <div style={{ position: "fixed", inset: 0, zIndex: 2999, background: "rgba(0,0,0,0.3)" }}
             onClick={() => setGolfForm(null)} />
           <div style={{
             position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
@@ -794,7 +801,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             border: `2px solid ${dm ? "#27ae60" : "#27ae60"}`, 
             borderRadius: isMobile ? "0" : "8px",
             padding: isMobile ? "24px 16px" : "20px 24px", 
-            zIndex: 1005, 
+            zIndex: 3000, 
             width: isMobile ? "100vw" : "400px",
             fontFamily: "'JetBrains Mono', monospace",
             boxShadow: "0 20px 50px rgba(0,0,0,0.3)",
@@ -846,7 +853,8 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
               </form>
             )}
           </div>
-        </>
+        </>,
+        document.body
       )}
 
       {/* Tooltip near cursor */}
@@ -1008,6 +1016,7 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         gap: "5px",
                         whiteSpace: "nowrap",
                       }}>
+                        {pathData.icon === "globe" && <GlobeIcon size={16} style={{ color: categoryColor }} />}
                         {(pathData.category === "experience" || pathData.category === "education") && pathData.company
                           ? pathData.company
                           : pathData.name}
@@ -1065,7 +1074,14 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                             );
                           }
                           if (block.type === 'gallery') {
-                            return <GalleryCarousel key={idx} images={block.images} categoryColor={categoryColor} />;
+                            return <GalleryCarousel 
+                              key={idx} 
+                              images={block.images} 
+                              categoryColor={categoryColor} 
+                              aspectRatio={block.aspectRatio}
+                              objectFit={block.objectFit}
+                              style={block.style}
+                            />;
                           }
                           if (block.type === 'audio') {
                             return (
@@ -1496,11 +1512,31 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                         {pathData.imageLink ? (
                           <a href={pathData.imageLink} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={pathData.image} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} onError={e => { (e.currentTarget.parentElement!.parentElement as HTMLElement).style.display = "none"; }} />
+                            <img 
+                              src={pathData.image} 
+                              alt="" 
+                              style={{ 
+                                width: "100%", 
+                                display: "block", 
+                                objectFit: "cover",
+                                ...pathData.imageStyle
+                              }} 
+                              onError={e => { (e.currentTarget.parentElement!.parentElement as HTMLElement).style.display = "none"; }} 
+                            />
                           </a>
                         ) : (
                           /* eslint-disable-next-line @next/next/no-img-element */
-                          <img src={pathData.image} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} onError={e => { (e.currentTarget.parentElement as HTMLElement).style.display = "none"; }} />
+                          <img 
+                            src={pathData.image} 
+                            alt="" 
+                            style={{ 
+                              width: "100%", 
+                              display: "block", 
+                              objectFit: "cover",
+                              ...pathData.imageStyle
+                            }} 
+                            onError={e => { (e.currentTarget.parentElement as HTMLElement).style.display = "none"; }} 
+                          />
                         )}
                       </div>
                     )}

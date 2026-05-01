@@ -9,7 +9,7 @@
 export type ContentBlock =
   | { type: 'text'; text: string }
   | { type: 'image' | 'gif'; src: string; alt?: string; link?: string; aspectRatio?: string; style?: React.CSSProperties }
-  | { type: 'gallery'; images: { src: string; alt?: string; link?: string; label?: string }[] }
+  | { type: 'gallery'; images: { src: string; alt?: string; link?: string; label?: string; style?: React.CSSProperties }[]; aspectRatio?: string; objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down"; style?: React.CSSProperties }
   | { type: 'audio'; src: string; label: string }
   | { type: 'link'; url: string; label?: string; icon?: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone'; fontSize?: string | number }
   | { type: 'link_dock'; links: { url: string; label: string; icon: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone' }[] }
@@ -84,7 +84,10 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 6,
     name: "Threadquarters",
     category: "projects",
-    description: "Wardrobe management app — catalogue your clothes, dress a personal avatar with your actual wardrobe, track wear history, and get weather-aware outfit suggestions. Built for people who own more clothes than they remember.",
+    content: [
+      { type: 'text', text: "Wardrobe management app — catalogue your clothes, dress a personal avatar with your actual wardrobe, track wear history, and get weather-aware outfit suggestions. Built for people who own more clothes than they remember." },
+      { type: 'image', src: "thread.png", style: { width: "70%", margin: "0 auto" } },
+    ],
     wip: true,
     tags: ["SOFTWARE", "CLOTHING"],
     links: [{ github: "https://github.com/switchhoff/Threadquarters", label: "GitHub" }],
@@ -116,8 +119,19 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 12,
     name: "Votemotm",
     category: "projects",
-    description: "I've built a set of progressive web apps for my football team as a platform for man of the match voting, fan engagement and stat tracking — reducing unnecessary messages, confusion about game locations, and directly connecting fans to players. Currently 30+ users across Players, Coaches, Admin and Fans, with plans to deploy to the wider community.",
-    image: "/kdfcmotm.png",
+    content: [
+      { type: 'text', text: "I've built a set of progressive web apps for my football team as a platform for man of the match voting, fan engagement and stat tracking — reducing unnecessary messages, confusion about game locations, and directly connecting fans to players. Currently 30+ users across Players, Coaches, Admin and Fans, with plans to deploy to the wider community." },
+      {
+        type: 'gallery',
+        aspectRatio: "3/4",
+        objectFit: "contain",
+        style: { width: "70%", margin: "0 auto" },
+        images: [
+          { src: "/kdfc1.png" },
+          { src: "/kdfc2.png" },
+        ]
+      }
+    ],
     tags: ["DATA ANALYTICS", "SPORT"],
     links: [{ github: "https://github.com/switchhoff/Votemotm", label: "GitHub" }],
   },
@@ -204,6 +218,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     category: "projects",
     description: "135+ Multiboard grids 3D printed and installed across the workshop — wall-mounting tools, art, monitors, and keeping cables under control.",
     image: "/multiboard.jpg",
+    imageStyle: { width: "90%", margin: "0 auto" },
     links: [{ external: "https://multibuild.io/", label: "multibuild.io" }],
   },
   32: {

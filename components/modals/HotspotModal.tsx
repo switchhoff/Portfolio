@@ -12,6 +12,7 @@ import LinkContent from "./LinkContent";
 import FormContent from "./FormContent";
 import StatusContent from "./StatusContent";
 import AboutContent from "./AboutContent";
+import { GlobeIcon } from "../icons";
 
 interface Props {
   hotspot: Hotspot | null;
@@ -112,8 +113,11 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
                 }}>
                   {hotspot.category}
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: dm ? "#f1f5f9" : "#1a2e1f" }}>
-                  {hotspot.label}
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  {hotspot.id === "world_map" && <GlobeIcon size={16} style={{ color: catColor }} />}
+                  <div style={{ fontSize: 14, fontWeight: 600, color: dm ? "#f1f5f9" : "#1a2e1f" }}>
+                    {hotspot.label}
+                  </div>
                 </div>
               </div>
 

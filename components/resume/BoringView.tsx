@@ -6,7 +6,7 @@ import { useForm, ValidationError } from "@formspree/react";
 import { type Project } from "@/lib/projects";
 // Single source of truth — shared with Fun View SVG popup cards
 import { PATH_DATA } from "@/lib/pathData";
-import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/components/icons";
+import { GithubIcon, LinkedinIcon, InstagramIcon, GlobeIcon } from "@/components/icons";
 
 /**
  * BoringView Component
@@ -845,7 +845,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                   whileHover={{ y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}>
                   <div style={{ height: "140px", background: `linear-gradient(135deg, ${proj.color}cc, ${proj.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4rem", position: "relative" }}>
                     <span style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.2))" }}>
-                      {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : proj.id === "worldmap" ? "🌍" : "💡"}
+                      {proj.id === "portfolio" ? "🖥️" : proj.id === "pawsbutton" ? "🐾" : proj.id === "benfl" ? "🏈" : proj.id === "minimise" ? "📱" : proj.id === "habitat" ? "🌱" : proj.id === "cavedisto" ? "📡" : proj.id === "lastyear" ? "📅" : proj.id === "sixclicks" ? "🔗" : proj.id === "bintherestore" ? "📦" : proj.id === "threadquarters" ? "🧵" : proj.id === "keysborough" ? "⚽" : proj.id === "worldmap" ? <GlobeIcon size={64} style={{ color: "#fff", opacity: 0.9 }} /> : "💡"}
                     </span>
                   </div>
                   <div style={{ padding: "1.25rem 1.5rem 1.5rem" }}>
