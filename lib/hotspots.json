@@ -11,7 +11,11 @@
       "name": "PawsButton",
       "repo": "switchhoff/PawsButton",
       "tagline": "Pet feeding, tracking, and logging app for dogs",
-      "tags": ["iOS", "React Native", "Firebase"],
+      "tags": [
+        "iOS",
+        "React Native",
+        "Firebase"
+      ],
       "description": "Companion app for pet owners. Track feeding schedules, health logs, vet appointments. Real-time sync across devices."
     }
   },
@@ -27,7 +31,11 @@
       "name": "VoteMotM",
       "repo": "switchhoff/VoteMotM",
       "tagline": "Vote for man of the match in your local soccer team",
-      "tags": ["Web", "React", "Real-time"],
+      "tags": [
+        "Web",
+        "React",
+        "Real-time"
+      ],
       "description": "Live voting during matches. See who your community thinks played best. Stats, leaderboards, seasonal tracking."
     }
   },
@@ -43,7 +51,11 @@
       "name": "LastYear",
       "repo": "switchhoff/LastYear",
       "tagline": "Memory journal—one year ago on this day",
-      "tags": ["iOS", "Swift", "Local Storage"],
+      "tags": [
+        "iOS",
+        "Swift",
+        "Local Storage"
+      ],
       "description": "Relive memories. App shows what happened exactly one year ago today. Build a timeline of moments over years."
     }
   },
@@ -59,7 +71,11 @@
       "name": "Portfolio",
       "repo": "switchhoff/Portfolio",
       "tagline": "This website—interactive portfolio with dynamic project metadata",
-      "tags": ["Next.js", "TypeScript", "3D"],
+      "tags": [
+        "Next.js",
+        "TypeScript",
+        "3D"
+      ],
       "description": "Point-and-click portfolio. Isometric workshop scene. Dynamically fetches project data from GitHub and per-repo metadata."
     }
   },
@@ -75,7 +91,11 @@
       "name": "MiniMise",
       "repo": "switchhoff/MiniMise",
       "tagline": "Minimalist Android launcher for intentional phone use",
-      "tags": ["Android", "Kotlin", "UX"],
+      "tags": [
+        "Android",
+        "Kotlin",
+        "UX"
+      ],
       "description": "Strip-down launcher. Essential apps only. Reduce distractions, foster intentionality. Customizable, lightweight."
     }
   },
@@ -91,7 +111,11 @@
       "name": "BeNFL",
       "repo": "switchhoff/BeNFL",
       "tagline": "NFL fan experience—antispoiler game app",
-      "tags": ["Web", "React", "Sports"],
+      "tags": [
+        "Web",
+        "React",
+        "Sports"
+      ],
       "description": "Watch NFL games spoiler-free. Control what you see, when you see it. Live scores without reveals."
     }
   },
@@ -107,7 +131,11 @@
       "name": "Habitat",
       "repo": "switchhoff/Habitat",
       "tagline": "Habit tracker—streaks, intent, accountability",
-      "tags": ["Mobile", "TypeScript", "Psychology"],
+      "tags": [
+        "Mobile",
+        "TypeScript",
+        "Psychology"
+      ],
       "description": "Build habits that stick. Track streaks. Visual progress. Community accountability. Science-backed reminders."
     }
   },
@@ -123,7 +151,11 @@
       "name": "CaveDisto",
       "repo": "switchhoff/CaveDisto",
       "tagline": "Hardware infrared laser measuring device for caving surveys",
-      "tags": ["Firmware", "Hardware", "Optics"],
+      "tags": [
+        "Firmware",
+        "Hardware",
+        "Optics"
+      ],
       "description": "Handheld cave surveying tool. Laser rangefinder + IMU. Logs bearing, pitch, distance. Custom PCB, MicroPython."
     }
   },
@@ -139,7 +171,11 @@
       "name": "6 Clicks",
       "repo": "switchhoff/6Clicks",
       "tagline": "Visualize your professional network and theirs—degrees of separation",
-      "tags": ["Web", "Graph", "Network"],
+      "tags": [
+        "Web",
+        "Graph",
+        "Network"
+      ],
       "description": "Map your professional connections. See how you're linked to others. Weak ties, bridges, clusters. LinkedIn integration."
     }
   },
@@ -155,7 +191,11 @@
       "name": "Threadquarters",
       "repo": "switchhoff/Threadquarters",
       "tagline": "Outfit tracker and inspiration log—clothes, combos, moments",
-      "tags": ["iOS", "Swift", "Fashion"],
+      "tags": [
+        "iOS",
+        "Swift",
+        "Fashion"
+      ],
       "description": "Photo journal of fits. Log outfits with context. Find inspo from your wardrobe. Stats on colors, brands, styles."
     }
   },
@@ -171,7 +211,11 @@
       "name": "BinThereStoreThat",
       "repo": "switchhoff/BinThereStoreThat",
       "tagline": "QR-indexed personal inventory—never lose track of your stuff",
-      "tags": ["IoT", "Hardware", "Web"],
+      "tags": [
+        "IoT",
+        "Hardware",
+        "Web"
+      ],
       "description": "RFID/QR storage system. Know what's in each bin. Search by item. Track location, quantity, condition."
     }
   },
@@ -186,12 +230,25 @@
     "about": {
       "name": "Alex Hofmann",
       "tagline": "Forward-deployed engineer building systems end-to-end",
-      "tags": ["FDE", "Mechatronics", "Melbourne"],
+      "tags": [
+        "FDE",
+        "Mechatronics",
+        "Melbourne"
+      ],
       "bio": "I like to build things: for work, for fun, for anywhere or anything. I've held various roles in the Australian Defence industry across cutting-edge R&D to customer facing forward deployments on tech stacks that I have owned fully. I love a challenge, and when I'm not shipping code or building systems professionally, I'll be tinkering away in my home office, putting on 3D prints and designing mini apps.",
       "links": [
-        { "label": "GitHub", "url": "https://github.com/switchhoff" },
-        { "label": "LinkedIn", "url": "https://linkedin.com/in/hofmannalexb" },
-        { "label": "Email", "url": "mailto:alex@hoffswitch.com" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/switchhoff"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://linkedin.com/in/hofmannalexb"
+        },
+        {
+          "label": "Email",
+          "url": "mailto:alex@hoffswitch.com"
+        }
       ]
     }
   },
@@ -207,7 +264,11 @@
       "name": "Printables",
       "repo": null,
       "tagline": "3D CAD modelling and 3D printing portfolio",
-      "tags": ["PROJECT", "CAD", "3D Printing"],
+      "tags": [
+        "PROJECT",
+        "CAD",
+        "3D Printing"
+      ],
       "description": "I design and iterate functional parts, enclosures, and tools in CAD. Upload finished models to Printables for community sharing and iteration.",
       "link": "https://www.printables.com/@switchhoff"
     }
@@ -224,7 +285,11 @@
       "name": "Monsoon",
       "repo": null,
       "tagline": "Original board game design—mechanics, balance, playtesting",
-      "tags": ["PROJECT", "Game Design", "Tabletop"],
+      "tags": [
+        "PROJECT",
+        "Game Design",
+        "Tabletop"
+      ],
       "description": "Designed and playtested a complete board game. Iterative mechanics refinement, component design, rulebook documentation."
     }
   },
@@ -240,7 +305,11 @@
       "name": "Multiboard",
       "repo": null,
       "tagline": "Desk storage transformation—modular wall-mounted system",
-      "tags": ["PROJECT", "Organization", "DIY"],
+      "tags": [
+        "PROJECT",
+        "Organization",
+        "DIY"
+      ],
       "description": "Custom modular storage system for desk. Iterative design and installation. Before/after photos showing transformation."
     }
   },
@@ -255,11 +324,21 @@
     "popup": {
       "title": "Games I Play",
       "items": [
-        { "name": "Terraria" },
-        { "name": "Call of Duty" },
-        { "name": "Minecraft" },
-        { "name": "Assassins Creed" },
-        { "name": "Civilization V" }
+        {
+          "name": "Terraria"
+        },
+        {
+          "name": "Call of Duty"
+        },
+        {
+          "name": "Minecraft"
+        },
+        {
+          "name": "Assassins Creed"
+        },
+        {
+          "name": "Civilization V"
+        }
       ]
     }
   },
@@ -274,9 +353,15 @@
     "popup": {
       "title": "Favourite Books",
       "items": [
-        { "name": "Brotherband Chronicle" },
-        { "name": "The 100-Year-Old Man Who Climbed Out the Window and Disappeared" },
-        { "name": "Conn Iggulden's Genghis Khan Series" }
+        {
+          "name": "Brotherband Chronicle"
+        },
+        {
+          "name": "The 100-Year-Old Man Who Climbed Out the Window and Disappeared"
+        },
+        {
+          "name": "Conn Iggulden's Genghis Khan Series"
+        }
       ]
     }
   },
@@ -291,9 +376,20 @@
     "experience": {
       "title": "Education",
       "items": [
-        { "degree": "Master of Electrical Engineering", "institution": "Monash University", "note": "2024 Master of Engineering Academic Medal Winner" },
-        { "degree": "Bachelor of Mechatronics & Robotics Engineering (AI)", "institution": "Monash University", "note": "AI Specialisation | Dean's Honour List 2020–2023" },
-        { "degree": "Minor — Software Engineering", "institution": "Monash University" }
+        {
+          "degree": "Master of Electrical Engineering",
+          "institution": "Monash University",
+          "note": "2024 Master of Engineering Academic Medal Winner"
+        },
+        {
+          "degree": "Bachelor of Mechatronics & Robotics Engineering (AI)",
+          "institution": "Monash University",
+          "note": "AI Specialisation | Dean's Honour List 2020–2023"
+        },
+        {
+          "degree": "Minor — Software Engineering",
+          "institution": "Monash University"
+        }
       ]
     }
   },
@@ -310,7 +406,11 @@
       "period": "2022–2023",
       "role": "R&D Engineer",
       "description": "Navigation and autonomous systems for Unmanned Ground Vehicles. Sensor fusion, path planning, obstacle avoidance.",
-      "tags": ["Robotics", "Autonomous Systems", "ROS"]
+      "tags": [
+        "Robotics",
+        "Autonomous Systems",
+        "ROS"
+      ]
     }
   },
   {
@@ -326,7 +426,11 @@
       "period": "2023",
       "role": "Engineer",
       "description": "Thermal imaging sensor integration and system development. Custom imaging pipelines, sensor calibration, real-time processing.",
-      "tags": ["Thermal Imaging", "Sensors", "Signal Processing"]
+      "tags": [
+        "Thermal Imaging",
+        "Sensors",
+        "Signal Processing"
+      ]
     }
   },
   {
@@ -342,7 +446,11 @@
       "period": "2024–Present",
       "role": "Chief Engineer",
       "description": "Defence tech. Full-system ownership from architecture through deployment. Firmware, hardware, cloud infrastructure, team leadership.",
-      "tags": ["Defence Tech", "Full-Stack", "Leadership"]
+      "tags": [
+        "Defence Tech",
+        "Full-Stack",
+        "Leadership"
+      ]
     }
   },
   {
@@ -358,7 +466,12 @@
       "period": "University",
       "role": "Team Member",
       "description": "Design and build high-powered rocket systems. Avionics, structural engineering, launch operations. Competition-level payload delivery.",
-      "tags": ["Rocketry", "Avionics", "Aerospace", "Manufacturing"]
+      "tags": [
+        "Rocketry",
+        "Avionics",
+        "Aerospace",
+        "Manufacturing"
+      ]
     }
   },
   {
@@ -374,7 +487,12 @@
       "period": "University",
       "role": "Team Member",
       "description": "Design and operate autonomous drones. Flight control systems, mission planning, computer vision integration.",
-      "tags": ["UAS", "Drones", "Autonomy", "Manufacturing"]
+      "tags": [
+        "UAS",
+        "Drones",
+        "Autonomy",
+        "Manufacturing"
+      ]
     }
   },
   {
@@ -390,8 +508,15 @@
       "period": "Hackathon Winner",
       "role": "Designer",
       "description": "Designed low-cost water filtration units using sand, plastic bottles, and locally-available materials for communities in Vanuatu. Rapid prototyping, deployment-ready solution.",
-      "tags": ["Humanitarian", "Water", "Hackathon"],
-      "media": { "type": "video", "src": "/sandfilter.mp4" }
+      "tags": [
+        "Humanitarian",
+        "Water",
+        "Hackathon"
+      ],
+      "media": {
+        "type": "video",
+        "src": "/sandfilter.mp4"
+      }
     }
   },
   {
@@ -406,7 +531,10 @@
       "title": "Monash University",
       "period": "2025",
       "role": "Teaching Associate",
-      "tags": ["ECE4179 Neural Networks", "ECE4078 Intelligent Robotics"]
+      "tags": [
+        "ECE4179 Neural Networks",
+        "ECE4078 Intelligent Robotics"
+      ]
     }
   },
   {
@@ -436,10 +564,30 @@
       "title": "Get in Touch",
       "description": "Drop a line — let's chat about projects, opportunities, or just say hi.",
       "fields": [
-        { "name": "name", "label": "Name", "type": "text", "required": true },
-        { "name": "email", "label": "Email", "type": "email", "required": true },
-        { "name": "subject", "label": "Subject", "type": "text", "required": true },
-        { "name": "message", "label": "Message", "type": "textarea", "required": true }
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "email",
+          "required": true
+        },
+        {
+          "name": "subject",
+          "label": "Subject",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "message",
+          "label": "Message",
+          "type": "textarea",
+          "required": true
+        }
       ]
     }
   },
@@ -469,11 +617,21 @@
     "popup": {
       "title": "Crafting & Making",
       "items": [
-        { "name": "Sewing & textile work" },
-        { "name": "Leather crafting" },
-        { "name": "3D printing functional art" },
-        { "name": "Woodworking & furniture" },
-        { "name": "Custom gear & bags" }
+        {
+          "name": "Sewing & textile work"
+        },
+        {
+          "name": "Leather crafting"
+        },
+        {
+          "name": "3D printing functional art"
+        },
+        {
+          "name": "Woodworking & furniture"
+        },
+        {
+          "name": "Custom gear & bags"
+        }
       ]
     }
   },
@@ -491,11 +649,30 @@
       "description": "Real-time connection to workshop printer",
       "liveData": true,
       "fields": [
-        { "label": "Printer", "value": "Prusa i3 MK3S+" },
-        { "label": "Status", "value": "monitoring", "source": "mqtt" },
-        { "label": "Nozzle Temp", "value": "0°C", "source": "mqtt" },
-        { "label": "Bed Temp", "value": "0°C", "source": "mqtt" },
-        { "label": "Job Progress", "value": "idle", "source": "mqtt" }
+        {
+          "label": "Printer",
+          "value": "Prusa i3 MK3S+"
+        },
+        {
+          "label": "Status",
+          "value": "monitoring",
+          "source": "mqtt"
+        },
+        {
+          "label": "Nozzle Temp",
+          "value": "0°C",
+          "source": "mqtt"
+        },
+        {
+          "label": "Bed Temp",
+          "value": "0°C",
+          "source": "mqtt"
+        },
+        {
+          "label": "Job Progress",
+          "value": "idle",
+          "source": "mqtt"
+        }
       ]
     }
   },
@@ -522,11 +699,31 @@
         "night": "#1a1a2e"
       },
       "fields": [
-        { "label": "Temperature", "value": "20°C", "source": "openweathermap" },
-        { "label": "Condition", "value": "Partly Cloudy", "source": "openweathermap" },
-        { "label": "Humidity", "value": "65%", "source": "openweathermap" },
-        { "label": "Wind", "value": "12 km/h", "source": "openweathermap" },
-        { "label": "Feels Like", "value": "18°C", "source": "openweathermap" }
+        {
+          "label": "Temperature",
+          "value": "20°C",
+          "source": "openweathermap"
+        },
+        {
+          "label": "Condition",
+          "value": "Partly Cloudy",
+          "source": "openweathermap"
+        },
+        {
+          "label": "Humidity",
+          "value": "65%",
+          "source": "openweathermap"
+        },
+        {
+          "label": "Wind",
+          "value": "12 km/h",
+          "source": "openweathermap"
+        },
+        {
+          "label": "Feels Like",
+          "value": "18°C",
+          "source": "openweathermap"
+        }
       ]
     }
   },
@@ -535,14 +732,21 @@
     "label": "World Map",
     "svgElement": "world_map",
     "category": "interests",
+    "color": "#98D8C8",
     "type": "popup",
     "points": "",
     "popup": {
       "title": "Where I'm From",
       "items": [
-        { "name": "Born in South Africa" },
-        { "name": "Now based in Melbourne, Australia" },
-        { "name": "Between continents — global perspective" }
+        {
+          "name": "Born in South Africa"
+        },
+        {
+          "name": "Now based in Melbourne, Australia"
+        },
+        {
+          "name": "Between continents — global perspective"
+        }
       ]
     }
   },
@@ -557,9 +761,15 @@
     "popup": {
       "title": "Golf",
       "items": [
-        { "name": "Precision sport" },
-        { "name": "Outdoor recreation" },
-        { "name": "Strategic thinking" }
+        {
+          "name": "Precision sport"
+        },
+        {
+          "name": "Outdoor recreation"
+        },
+        {
+          "name": "Strategic thinking"
+        }
       ]
     }
   },
@@ -574,14 +784,32 @@
     "popup": {
       "title": "Saxophone",
       "items": [
-        { "name": "Jazz improvisation" },
-        { "name": "Musical expression" },
-        { "name": "Jazz standards" }
+        {
+          "name": "Jazz improvisation"
+        },
+        {
+          "name": "Musical expression"
+        },
+        {
+          "name": "Jazz standards"
+        }
       ],
       "songs": [
-        { "name": "Daisy Bell", "audio": "/audio/daisy-bell.mp3", "link": "https://www.youtube.com/watch?v=vHxxGFqK4O8" },
-        { "name": "The Entertainer", "audio": "/audio/the-entertainer.mp3", "link": "https://www.youtube.com/watch?v=STjcT9ExiaY" },
-        { "name": "Stitches", "audio": "/audio/stitches.mp3", "link": "https://www.youtube.com/watch?v=qywMxj-G1MM" }
+        {
+          "name": "Daisy Bell",
+          "audio": "/audio/daisy-bell.mp3",
+          "link": "https://www.youtube.com/watch?v=vHxxGFqK4O8"
+        },
+        {
+          "name": "The Entertainer",
+          "audio": "/audio/the-entertainer.mp3",
+          "link": "https://www.youtube.com/watch?v=STjcT9ExiaY"
+        },
+        {
+          "name": "Stitches",
+          "audio": "/audio/stitches.mp3",
+          "link": "https://www.youtube.com/watch?v=qywMxj-G1MM"
+        }
       ]
     }
   },
@@ -596,9 +824,15 @@
     "popup": {
       "title": "Video Games",
       "items": [
-        { "name": "Terraria" },
-        { "name": "Civilization V" },
-        { "name": "Fall Guys" }
+        {
+          "name": "Terraria"
+        },
+        {
+          "name": "Civilization V"
+        },
+        {
+          "name": "Fall Guys"
+        }
       ]
     }
   }

@@ -46,15 +46,16 @@ const HACKATHON_VISUAL: Record<number, { color: string; color2: string; photo?: 
 const HACKATHON_PATHS = [57, 58, 96, 60, 62];
 
 // Interests — path numbers matching Fun View SVG cards
-const INTEREST_PATHS = [8, 100, 4, 24, 94, 98, 42, 82, 18, 28, 26, 10];
+const INTEREST_PATHS = [8, 100, 4, 24, 94, 98, 102, 82, 18, 28, 26, 10, 42];
 
 const INTEREST_PAIRS = [
-  [26, 10], // Photography / Saxophone
-  [4, 24],  // Art / Craft
   [42, 82],  // Travel / Hiking
+  [26, 10],  // Photography / Saxophone
+  [4, 24],   // Art / Craft
   [94, 102], // Board Games / Running
   [100, 8],  // Soccer / Golf
-  [28, 18],  // Movies / Books (Reading renamed to Books)
+  [28, 18],  // Movies / Books
+  [98, 98],  // Video Games (Single, but using pair logic)
 ];
 
 // Extract display labels from pathData items (skip action/audio items)
@@ -865,13 +866,13 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
       </section>
 
       {/* ── INTERESTS ── */}
-      <section id="boring-interests" style={{ ...S.section(isMobile), background: dm ? "#0f0f0f" : "#fff" }}>
+      <section id="boring-interests" style={{ ...S.section(isMobile), padding: isMobile ? "1rem 1rem 1.5rem" : S.section(isMobile).padding, background: dm ? "#0f0f0f" : "#fff" }}>
         <div style={S.inner}>
           <Heading title="Interests" c1="#ef4444" c2="#ec4899" dark={dm} />
           
           {isMobile ? (
-            <div style={{ position: "relative", marginBottom: "2rem" }}>
-              <div style={{ position: "relative", height: "580px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
+            <div style={{ position: "relative", marginBottom: "1rem" }}>
+              <div style={{ position: "relative", height: "520px", display: "flex", alignItems: "center", justifyContent: "center", perspective: "1000px", width: "100%", overflow: "hidden" }}>
                 <div style={{ position: "relative", width: "100%", maxWidth: "300px", height: "100%" }}>
                   {INTEREST_PAIRS.map((pair, i) => {
                     let offset = i - activeInterests;
@@ -906,11 +907,36 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                           cursor: "grab"
                         }}
                       >
-                        {pair.map((pathId) => {
+                        {pair.map((pathId, idx) => {
                           const interest = PATH_DATA[pathId];
                           if (!interest) return null;
                           const items = getInterestItems(pathId);
-                          return <InterestCard key={pathId} pathId={pathId} interest={interest} items={items} dm={dm} i={i} onShowOverland={() => setShowOverland(true)} />;
+                          const isSecond = idx === 1 && pair[0] !== pair[1];
+                          
+                          return (
+                            <React.Fragment key={`${pathId}-${idx}`}>
+                              {isSecond && (
+                                <div style={{ 
+                                  height: "20px", 
+                                  display: "flex", 
+                                  alignItems: "center", 
+                                  justifyContent: "center",
+                                  position: "relative",
+                                  margin: "-0.5rem 0"
+                                }}>
+                                  <div style={{ width: "2px", height: "100%", background: `linear-gradient(to bottom, transparent, ${dm ? "#ffffff33" : "#00000011"}, transparent)` }} />
+                                  <div style={{ 
+                                    position: "absolute", 
+                                    width: "6px", height: "6px", 
+                                    borderRadius: "50%", 
+                                    border: `1.5px solid ${dm ? "#ffffff33" : "#00000011"}`,
+                                    background: dm ? "#0f0f0f" : "#fff"
+                                  }} />
+                                </div>
+                              )}
+                              <InterestCard pathId={pathId} interest={interest} items={items} dm={dm} i={i} onShowOverland={() => setShowOverland(true)} />
+                            </React.Fragment>
+                          );
                         })}
                       </motion.div>
                     );
