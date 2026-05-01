@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Send, ChevronLeft, ChevronRight } from "lucide-react";
 import { useForm, ValidationError } from "@formspree/react";
@@ -914,7 +914,7 @@ export default function BoringView({ projects, age, darkMode }: BoringViewProps)
                           const isSecond = idx === 1 && pair[0] !== pair[1];
                           
                           return (
-                            <React.Fragment key={`${pathId}-${idx}`}>
+                            <Fragment key={`${pathId}-${idx}`}>
                               {isSecond && (
                                 <div style={{ 
                                   height: "20px", 
