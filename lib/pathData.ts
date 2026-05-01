@@ -48,13 +48,12 @@ export const PATH_DATA: Record<number, PathObject> = {
     wip: true,
     tags: ["GAME DESIGN", "ART"],
     content: [
-      { type: 'text', text: "I am in the process of creating a thematic reskin of Dune: Imperium, based on the book Monsoon by Wilbur Smith — following the Courtney Family's adventures on the high seas of East Africa." },
-      { type: 'text', text: "I'm working to map all elements into consistent, aesthetic equivalents and redesign the base to suit my vision. Sneak peek at some concept art below." },
+      { type: 'text', text: "I'm creating a thematic reskin of Dune: Imperium, based on the book Monsoon by Wilbur Smith — following the Courtney Family's adventures on the high seas of East Africa." },
       {
         type: 'gallery', images: [
-          { src: "/capetown.jpg", label: "Cape Town" },
-          { src: "/courtney.jpg", label: "Courtney" },
-          { src: "/General Pieces.png", label: "Concept Art" },
+          { src: "/capetown.png" },
+          { src: "/courtney.png" },
+          { src: "/General Pieces.png" },
         ]
       }
     ],
@@ -242,7 +241,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     name: "Travel",
     category: "interests",
     content: [
-      { type: 'text', text: "A custom world travel map built as a woodworking project — continents cut, stained, and assembled by hand on a backing board, tracking every country visited." },
+      { type: 'text', text: "Born in South Africa, I moved to Australia in 2009. I've been lucky enough to travel to some incredible places, and these are some of my favourites." },
       {
         type: 'gallery', images: [
           { src: "/thailand.jpg", label: "Thailand" },

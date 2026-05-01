@@ -402,8 +402,8 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                   const rect = containerRef.current?.getBoundingClientRect();
                   setClickedPath({
                     index: groupedIndex,
-                    x: rect ? evt.clientX - rect.left : evt.clientX,
-                    y: rect ? evt.clientY - rect.top : evt.clientY,
+                    x: evt.clientX,
+                    y: evt.clientY,
                   });
                 });
               }
@@ -770,9 +770,14 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             onClick={() => setGolfForm(null)} />
           <div style={{
             position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
-            background: "#fff", border: "2px solid #27ae60", borderRadius: "8px",
-            padding: "20px 24px", zIndex: 61, width: "300px",
+            background: dm ? "#141414" : "#fff", 
+            border: `2px solid ${dm ? "#27ae60" : "#27ae60"}`, 
+            borderRadius: isMobile ? "0" : "8px",
+            padding: isMobile ? "24px 16px" : "20px 24px", 
+            zIndex: 1005, 
+            width: isMobile ? "100vw" : "400px",
             fontFamily: "'JetBrains Mono', monospace",
+            boxShadow: "0 20px 50px rgba(0,0,0,0.3)",
           }}
             onClick={e => e.stopPropagation()}
           >
@@ -869,7 +874,9 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
               style={{
                 position: "fixed",
                 inset: 0,
-                zIndex: 56,
+                zIndex: 1000,
+                background: "rgba(0,0,0,0.1)",
+                backdropFilter: "blur(2px)",
               }}
               onClick={() => {
                 const allPaths = blockSvgRef.current?.querySelectorAll("path") ?? [];
@@ -884,25 +891,27 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
             {/* Popup Card */}
             <div
               style={{
-                position: "absolute",
+                position: "fixed",
                 left: (pathData?.category === "generic") 
-                  ? (isMobile ? "50%" : clickedPath.x) 
+                  ? clickedPath.x 
                   : "50%",
                 top: (pathData?.category === "generic")
-                  ? (isMobile ? "50%" : clickedPath.y)
+                  ? clickedPath.y
                   : "50%",
                 transform: "translate(-50%, -50%)",
                 background: "#ffffff",
                 border: `1px solid ${categoryColor}`,
-                borderRadius: "6px",
+                borderRadius: isMobile ? "0" : "6px",
                 padding: "12px 14px",
                 pointerEvents: "auto",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
-                zIndex: 65,
+                zIndex: 1001,
                 fontFamily: "'JetBrains Mono', monospace",
-                width: (pathData?.category === "generic" || !pathData?.description) ? "auto" : "min(420px, calc(100vw - 40px))",
+                width: isMobile 
+                  ? (pathData?.category === "generic" ? "auto" : "100vw")
+                  : ((pathData?.category === "generic" || !pathData?.description) ? "auto" : "min(420px, calc(100vw - 40px))"),
                 minWidth: (pathData?.category === "generic" || !pathData?.description) ? "140px" : "320px",
-                maxWidth: "420px",
+                maxWidth: isMobile ? "100vw" : "420px",
                 maxHeight: "85vh",
                 overflowY: "auto",
               }}

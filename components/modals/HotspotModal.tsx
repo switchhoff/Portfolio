@@ -65,8 +65,9 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
             transition={{ duration: 0.15 }}
             onClick={onClose}
             style={{
-              position: "absolute", inset: 0, zIndex: 20,
+              position: "fixed", inset: 0, zIndex: 1000,
               background: dm ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.25)",
+              backdropFilter: "blur(4px)",
             }}
           />
 
@@ -78,11 +79,12 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
             exit={{ opacity: 0, scale: 0.92 }}
             transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             style={{
-              position: "absolute",
+              position: "fixed",
               left: modalPos.left,
               top: modalPos.top,
-              zIndex: 25,
-              width: "min(380px, calc(100vw - 32px))",
+              zIndex: 1001,
+              width: isMobile ? "100vw" : "min(380px, calc(100vw - 32px))",
+              maxWidth: "100vw",
               maxHeight: "85vh",
               overflowY: "auto",
               background: dm ? "#141414" : "#ffffff",
@@ -94,7 +96,7 @@ export default function HotspotModal({ hotspot, clickOrigin, containerRect, onCl
                 ? "0 12px 40px rgba(0,0,0,0.6)"
                 : "0 12px 40px rgba(0,0,0,0.18)",
               fontFamily: "'JetBrains Mono', monospace",
-              borderRadius: isMobile ? "8px" : "0",
+               borderRadius: isMobile ? "0" : "12px",
             }}
           >
             {/* Header */}
