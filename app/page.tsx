@@ -152,7 +152,7 @@ export default function Home() {
       transition: "background 0.5s, color 0.5s",
       overflowX: "hidden"
     }}>
-      {ready && !isTouch && <CustomCursor activeTab={activeTab} />}
+      {ready && !isMobile && <CustomCursor activeTab={activeTab} />}
 
       {/* ── SPLASH BACKDROP ── */}
       <div style={{
@@ -516,13 +516,6 @@ export default function Home() {
                           onHoverChange={setHoverSpot}
                           darkMode={darkMode}
                         />
-                        <HotspotModal
-                          hotspot={active}
-                          clickOrigin={clickOrigin}
-                          containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
-                          onClose={() => { setActive(null); setClickOrigin(null); }}
-                          darkMode={darkMode}
-                        />
                       </div>
                     </div>
                   </>
@@ -573,13 +566,6 @@ export default function Home() {
                         onHoverChange={setHoverSpot}
                         darkMode={darkMode}
                       />
-                      <HotspotModal
-                        hotspot={active}
-                        clickOrigin={clickOrigin}
-                        containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
-                        onClose={() => { setActive(null); setClickOrigin(null); }}
-                        darkMode={darkMode}
-                      />
                     </div>
                     <AmbientPlayer darkMode={darkMode} />
                   </div>
@@ -602,6 +588,13 @@ export default function Home() {
 
 
 
+        <HotspotModal
+          hotspot={active}
+          clickOrigin={clickOrigin}
+          containerRect={sceneContainerRef.current?.getBoundingClientRect() ?? null}
+          onClose={() => { setActive(null); setClickOrigin(null); }}
+          darkMode={darkMode}
+        />
       </div>
     </div>
   );

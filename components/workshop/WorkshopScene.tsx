@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { getMappedHotspots, getCategoryColor, type Hotspot } from "@/lib/hotspots-config";
 import { BLOCK_MAPPINGS, CATEGORY_COLORS } from "@/lib/svgBlockMappings";
@@ -182,11 +183,11 @@ function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?
               {img.link ? (
                 <a href={absOffset === 0 ? img.link : undefined} target="_blank" rel="noopener noreferrer" style={{ display: "block", height: "100%" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }} />
+                  <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover", ...img.style }} />
                 </a>
               ) : (
                 /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }} />
+                <img src={img.src} alt={img.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover", ...img.style }} />
               )}
             </div>
           );
@@ -196,12 +197,31 @@ function GalleryCarousel({ images, categoryColor }: { images: {src: string, alt?
       <div style={{ 
         textAlign: "center", 
         marginTop: "12px", 
-        fontSize: "13px", 
-        fontWeight: 600, 
-        color: "#333",
-        height: "16px",
+        minHeight: "34px",
       }}>
-        {images[activeIndex]?.label || ""}
+        <div style={{ 
+          fontSize: "13px", 
+          fontWeight: 600, 
+          color: "#333",
+        }}>
+          {images[activeIndex]?.label || ""}
+        </div>
+        {images[activeIndex]?.link && (
+          <a 
+            href={images[activeIndex].link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ 
+              fontSize: "11px", 
+              color: categoryColor, 
+              textDecoration: "underline", 
+              display: "block",
+              marginTop: "2px"
+            }}
+          >
+            Visit Artist Website →
+          </a>
+        )}
       </div>
 
       {images.length > 1 && (
@@ -365,8 +385,8 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                   const rect = containerRef.current?.getBoundingClientRect();
                   setClickedPath({
                     index: groupedIndex,
-                    x: rect ? evt.clientX - rect.left : evt.clientX,
-                    y: rect ? evt.clientY - rect.top : evt.clientY,
+                    x: evt.clientX,
+                    y: evt.clientY,
                   });
                 });
               }
@@ -869,54 +889,53 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
         const categoryColor = pathData ? CATEGORY_COLORS[pathData.category] : "#999999";
         return (
           <>
-            {/* Click outside to close */}
-            <div
-              style={{
-                position: "fixed",
-                inset: 0,
-                zIndex: 1000,
-                background: "rgba(0,0,0,0.1)",
-                backdropFilter: "blur(2px)",
-              }}
-              onClick={() => {
-                const allPaths = blockSvgRef.current?.querySelectorAll("path") ?? [];
-                allPaths.forEach((p) => (p as SVGPathElement).setAttribute("stroke", "none"));
-                if (clickedPath) {
-
-                }
-                setClickedPath(null);
-              }}
-            />
+            {createPortal(
+              <>
+                <div
+                  style={{
+                    position: "fixed",
+                    inset: 0,
+                    zIndex: 2000,
+                    background: "rgba(0,0,0,0.1)",
+                    backdropFilter: "blur(2px)",
+                  }}
+                  onClick={() => {
+                    const allPaths = blockSvgRef.current?.querySelectorAll("path") ?? [];
+                    allPaths.forEach((p) => (p as SVGPathElement).setAttribute("stroke", "none"));
+                    setClickedPath(null);
+                  }}
+                />
+    
 
             {/* Popup Card */}
-            <div
-              style={{
-                position: "fixed",
-                left: (pathData?.category === "generic") 
-                  ? clickedPath.x 
-                  : "50%",
-                top: (pathData?.category === "generic")
-                  ? clickedPath.y
-                  : "50%",
-                transform: "translate(-50%, -50%)",
-                background: "#ffffff",
-                border: `1px solid ${categoryColor}`,
-                borderRadius: isMobile ? "0" : "6px",
-                padding: "12px 14px",
-                pointerEvents: "auto",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
-                zIndex: 1001,
-                fontFamily: "'JetBrains Mono', monospace",
-                width: isMobile 
-                  ? (pathData?.category === "generic" ? "auto" : "100vw")
-                  : ((pathData?.category === "generic" || !pathData?.description) ? "auto" : "min(420px, calc(100vw - 40px))"),
-                minWidth: (pathData?.category === "generic" || !pathData?.description) ? "140px" : "320px",
-                maxWidth: isMobile ? "100vw" : "420px",
-                maxHeight: "85vh",
-                overflowY: "auto",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
+                <div
+                  style={{
+                    position: "fixed",
+                    left: (pathData?.category === "generic") 
+                      ? clickedPath.x 
+                      : "50%",
+                    top: (pathData?.category === "generic")
+                      ? clickedPath.y
+                      : "50%",
+                    transform: "translate(-50%, -50%)",
+                    background: "#ffffff",
+                    border: `1px solid ${categoryColor}`,
+                    borderRadius: isMobile ? "0" : "6px",
+                    padding: "12px 14px",
+                    pointerEvents: "auto",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
+                    zIndex: 2001,
+                    fontFamily: "'JetBrains Mono', monospace",
+                    width: isMobile 
+                      ? (pathData?.category === "generic" ? "auto" : "100vw")
+                      : ((pathData?.category === "generic" || !pathData?.description) ? "auto" : "min(420px, calc(100vw - 40px))"),
+                    minWidth: (pathData?.category === "generic" || !pathData?.description) ? "140px" : "320px",
+                    maxWidth: isMobile ? "100vw" : "420px",
+                    maxHeight: "85vh",
+                    overflowY: "auto",
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
               {/* Close button */}
               <button
                 onClick={() => {
@@ -1020,22 +1039,27 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
 
                     {/* Content Block Renderer (NEW) or Legacy Description */}
                     {pathData.content && pathData.content.length > 0 ? (
-                      <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "8px" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "8px" }}>
                         {pathData.content.map((block, idx) => {
                           if (block.type === 'text') {
                             return <div key={idx} style={{ fontSize: "13px", color: "#333", lineHeight: "1.5" }}>{block.text}</div>;
                           }
                           if (block.type === 'image' || block.type === 'gif') {
                             return (
-                              <div key={idx} style={{ borderRadius: "4px", overflow: "hidden" }}>
+                              <div key={idx} style={{ 
+                                borderRadius: "4px", 
+                                overflow: "hidden",
+                                aspectRatio: block.aspectRatio,
+                                ...block.style
+                              }}>
                                 {block.link ? (
-                                  <a href={block.link} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
+                                  <a href={block.link} target="_blank" rel="noopener noreferrer" style={{ display: "block", height: "100%" }}>
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={block.src} alt={block.alt || ""} style={{ width: "100%", display: "block", objectFit: "cover" }} />
+                                    <img src={block.src} alt={block.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }} />
                                   </a>
                                 ) : (
                                   /* eslint-disable-next-line @next/next/no-img-element */
-                                  <img src={block.src} alt={block.alt || ""} style={{ width: "100%", display: "block", objectFit: "cover" }} />
+                                  <img src={block.src} alt={block.alt || ""} style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }} />
                                 )}
                               </div>
                             );
@@ -1512,7 +1536,10 @@ export default function WorkshopScene({ onHotspotClick, activeId, highlightCateg
                   —
                 </div>
               )}
-            </div>
+                </div>
+              </>,
+              document.body
+            )}
           </>
         );
       })()}

@@ -8,7 +8,7 @@
 
 export type ContentBlock =
   | { type: 'text'; text: string }
-  | { type: 'image' | 'gif'; src: string; alt?: string; link?: string }
+  | { type: 'image' | 'gif'; src: string; alt?: string; link?: string; aspectRatio?: string; style?: React.CSSProperties }
   | { type: 'gallery'; images: { src: string; alt?: string; link?: string; label?: string }[] }
   | { type: 'audio'; src: string; label: string }
   | { type: 'link'; url: string; label?: string; icon?: 'github' | 'instagram' | 'printables' | 'external' | 'linkedin' | 'mail' | 'phone'; fontSize?: string | number }
@@ -52,7 +52,7 @@ export const PATH_DATA: Record<number, PathObject> = {
       {
         type: 'gallery', images: [
           { src: "/capetown.png" },
-          { src: "/courtney.png" },
+          { src: "/courtney.png", style: { objectPosition: "center 60%" } },
           { src: "/General Pieces.png" },
         ]
       }
@@ -62,6 +62,16 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 4,
     name: "Art",
     category: "interests",
+    content: [
+      {
+        type: "gallery", images: [
+          { src: "https://matthewbellart.co.za/cdn/shop/files/BateleurEagle3_ca80cc08-ab18-4e47-a7ea-fce944195f73_2048x.png?v=1761229306", label: "Matthew Bell", link: "https://matthewbellart.co.za/" },
+          { src: "https://live-production.wcms.abc-cdn.net.au/b880f4b04fef5bfda525dea73fc34bb7?impolicy=wcms_crop_resize&cropH=2322&cropW=2323&xPos=342&yPos=0&width=862&height=862", label: "Hans Heysen" },
+          { src: "https://cdn.sanity.io/images/m2obzhc2/production/e81243a1119c335cb24add56212a5d9983478f62-3500x2198.jpg?rect=0,180,3500,1838&w=1200&h=630&q=100&fit=crop", label: "Albert Namatjira" },
+
+        ]
+      }
+    ],
     description: "Favourite Artists:",
     items: [
       "Hans Heysen",
@@ -167,7 +177,7 @@ export const PATH_DATA: Record<number, PathObject> = {
     path: 24,
     name: "Craft",
     category: "interests",
-    description: "I enjoy a chill evening creating useful little items out of fabric — putting logos onto beanies, making pouches for camping items, or crocheting a glasses case.",
+    description: "I enjoy a chill evening creating useful little items out of fabric — putting logos onto beanies, making pouches for camping items, crocheting a glasses case, etc.",
     items: ["Sewing", "Embroidery", "Crochet"],
     links: [],
   },
@@ -206,9 +216,9 @@ export const PATH_DATA: Record<number, PathObject> = {
   },
   34: {
     path: 34,
-    name: "",
+    name: "Hoff Switch",
     category: "projects",
-    description: "Tech blog space where I write about what I'm working on, interesting things I come across, the latest developments in tech. At this stage private for keeping on track of things personally - but might publicise/route through LinkedIn if people ever want to follow what I do.",
+    description: "Private space for journaling about what I'm working on, interesting things I come across, the latest developments in tech. Might publicise/route through LinkedIn if people ever want to follow what I do.",
     links: []
   },
   36: {
@@ -284,6 +294,8 @@ export const PATH_DATA: Record<number, PathObject> = {
     content: [
       { type: 'text', text: "Inspired by the point-and-click adventure games I grew up playing — every object in the workshop is a clickable hotspot telling a piece of my story." },
       { type: 'gif', src: "/transistorswitch.gif" },
+      { type: 'text', text: "The website logo is actually a working electrical circuit seen here - the transistor acting as a switch to turn on and off the light." },
+      { type: 'gif', src: "/logo.gif", aspectRatio: "1.67 / 1" },
       { type: 'link', url: "https://github.com/switchhoff/Portfolio", label: "GitHub", icon: "github" }
     ]
   },
